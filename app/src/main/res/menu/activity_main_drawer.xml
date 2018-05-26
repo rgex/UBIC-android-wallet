@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_balance"
+            android:icon="@drawable/menu_balance"
+            android:title="Balance" />
+        <item
+            android:id="@+id/nav_my_ubi"
+            android:icon="@drawable/menu_my_ubi"
+            android:title="My UBI" />
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Send" />
+        <item
+            android:id="@+id/nav_receive"
+            android:icon="@drawable/menu_receive"
+            android:title="Receive" />
+    </group>
+</menu>
