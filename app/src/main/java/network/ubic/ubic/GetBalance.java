@@ -2,12 +2,6 @@ package network.ubic.ubic;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,7 +46,6 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
                     String key = keys.next();
                     String value = amounts.getString(key);
                     balanceMap.put(Integer.parseInt(key), new BigInteger(value));
-
                 }
             } catch (final JSONException e) {
 

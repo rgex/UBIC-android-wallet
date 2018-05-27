@@ -184,10 +184,12 @@ public class MainActivity extends AppCompatActivity
         ListView balanceListView = findViewById(R.id.balance_list_view);
         List<String> balanceList = new ArrayList<String>();
 
+        Currencies currencies = new Currencies();
+
         //System.out.println(key + " : " + value);
         for (HashMap.Entry<Integer, BigInteger> entry : balanceMap.entrySet())
         {
-            balanceList.add(entry.getKey() + " : " + entry.getValue());
+            balanceList.add(currencies.getCurrency(Integer.valueOf(entry.getKey())) + " : " + (entry.getValue().divide(BigInteger.valueOf(1000000))));
         }
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
