@@ -5,6 +5,7 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/send_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -30,6 +31,7 @@
                     android:orientation="vertical">
 
                     <android.support.design.widget.TextInputEditText
+                        android:id="@+id/send_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="UBIC ADRESS" />
@@ -45,6 +47,7 @@
                             android:layout_height="wrap_content">
 
                             <android.support.design.widget.TextInputEditText
+                                android:id="@+id/send_amount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Amount" />

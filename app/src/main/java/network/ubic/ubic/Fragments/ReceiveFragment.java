@@ -1,7 +1,5 @@
 package network.ubic.ubic.Fragments;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -36,7 +34,6 @@ public class ReceiveFragment extends Fragment implements OnReceiveFragmentPopula
     private ImageView imageView;
     private static final long DOUBLE_CLICK_TIME_DELTA = 300;
     private long lastClickTime = 0;
-    private View view;
 
     public ReceiveFragment() {
         // Required empty public constructor

@@ -5,21 +5,38 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.PrivateKeyFragment">
 
-    <TextView
-        android:id="@+id/private_key_textView"
+    <LinearLayout
+        android:id="@+id/private_key_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textAlignment="center"
-        android:textSize="18sp" />
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/private_key_tap_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Double tap to copy to clipboard"
-        android:textAlignment="center"
-        android:textColor="@android:color/holo_orange_dark"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/private_key_warning_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Warning: This is your PRIVATE key. Don't share it"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/private_key_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/private_key_tap_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Double tap to copy to clipboard"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="14sp" />
+    </LinearLayout>
 </FrameLayout>

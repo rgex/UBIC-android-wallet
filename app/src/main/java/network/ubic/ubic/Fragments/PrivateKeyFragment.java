@@ -7,6 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import network.ubic.ubic.AsyncTasks.OnPrivateKeyFragmentPopulateCompleted;
+import network.ubic.ubic.AsyncTasks.PrivateKeyPopulate;
+import network.ubic.ubic.AsyncTasks.ReceiveFragmentPopulate;
+import network.ubic.ubic.PrivateKeyStore;
 import network.ubic.ubic.R;
 
 /**
@@ -17,9 +24,12 @@ import network.ubic.ubic.R;
  * Use the {@link PrivateKeyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PrivateKeyFragment extends Fragment {
+public class PrivateKeyFragment extends Fragment implements OnPrivateKeyFragmentPopulateCompleted, View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
+    private static final long DOUBLE_CLICK_TIME_DELTA = 300;
+    private long lastClickTime = 0;
+    private TextView privateKeyTextView;
 
     public PrivateKeyFragment() {
         // Required empty public constructor
@@ -48,14 +58,18 @@ public class PrivateKeyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_private_key, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_private_key, container, false);
+        privateKeyTextView = view.findViewById(R.id.private_key_textView);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        PrivateKeyStore privateKeyStore = new PrivateKeyStore();
+        PrivateKeyPopulate privateKeyPopulate = new PrivateKeyPopulate(
+                this,
+                privateKeyStore.getPrivateKey(this.getContext())
+        );
+        privateKeyPopulate.execute();
+        view.findViewById(R.id.private_key_layout).setOnClickListener(this);
+
+        return view;
     }
 
     @Override
@@ -88,5 +102,33 @@ public class PrivateKeyFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void onPrivateKeyFragmentPopulateCompleted(String privateKey) {
+        this.privateKeyTextView.setText(privateKey);
+    }
+
+    @Override
+    public void onClick(View v) {
+        long clickTime = System.currentTimeMillis();
+        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+
+            int sdk = android.os.Build.VERSION.SDK_INT;
+            if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getContext()
+                        .getSystemService(Context.CLIPBOARD_SERVICE);
+                clipboard.setText(this.privateKeyTextView.getText());
+            } else {
+                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext()
+                        .getSystemService(Context.CLIPBOARD_SERVICE);
+                android.content.ClipData clip = android.content.ClipData
+                        .newPlainText("message", this.privateKeyTextView.getText());
+                clipboard.setPrimaryClip(clip);
+            }
+
+            Toast.makeText(getActivity(), "Copied to clipboard",
+                    Toast.LENGTH_SHORT).show();
+        }
+        lastClickTime = clickTime;
     }
 }

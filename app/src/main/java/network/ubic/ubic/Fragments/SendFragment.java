@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import network.ubic.ubic.R;
 
@@ -54,6 +55,18 @@ public class SendFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_send, container, false);
 
+        view.findViewById(R.id.send_layout).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                        view.findViewById(R.id.send_address).clearFocus();
+                        view.findViewById(R.id.send_amount).clearFocus();
+                    }
+                }
+        );
 
         return view;
     }
