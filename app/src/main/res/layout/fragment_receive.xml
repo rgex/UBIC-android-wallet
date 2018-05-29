@@ -6,8 +6,11 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/receive_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical">
 
         <TextView
@@ -17,6 +20,15 @@
             android:text=""
             android:textAlignment="center"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/address_tap_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Double tap to copy to clipboard"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/qrView"

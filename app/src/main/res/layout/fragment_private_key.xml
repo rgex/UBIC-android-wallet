@@ -5,10 +5,21 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.PrivateKeyFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/private_key_textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/private_key_tap_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Double tap to copy to clipboard"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textSize="14sp" />
 
 </FrameLayout>
