@@ -7,21 +7,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import network.ubic.ubic.R;
 
 /**
+ * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SendFragment.OnFragmentInteractionListener} interface
+ * {@link PrivateKeyFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SendFragment#newInstance} factory method to
+ * Use the {@link PrivateKeyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SendFragment extends Fragment {
+public class PrivateKeyFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public SendFragment() {
+    public PrivateKeyFragment() {
         // Required empty public constructor
     }
 
@@ -29,13 +29,11 @@ public class SendFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SendFragment.
+     * @return A new instance of fragment PrivateKeyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SendFragment newInstance(String param1, String param2) {
-        SendFragment fragment = new SendFragment();
+    public static PrivateKeyFragment newInstance(String param1, String param2) {
+        PrivateKeyFragment fragment = new PrivateKeyFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -44,23 +42,13 @@ public class SendFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_send, container, false);
-
-
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+        return inflater.inflate(R.layout.fragment_private_key, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -101,5 +89,4 @@ public class SendFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }

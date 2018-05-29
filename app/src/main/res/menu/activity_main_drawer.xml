@@ -20,5 +20,9 @@
             android:id="@+id/nav_receive"
             android:icon="@drawable/menu_receive"
             android:title="Receive" />
+        <item
+            android:id="@+id/nav_private_keys"
+            android:icon="@drawable/menu_private_keys"
+            android:title="Export my private keys" />
     </group>
 </menu>

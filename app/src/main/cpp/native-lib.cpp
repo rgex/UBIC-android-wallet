@@ -17,7 +17,7 @@ Java_network_ubic_ubic_MainActivity_stringFromJNI(
 extern "C" JNIEXPORT jstring
 
 JNICALL
-Java_network_ubic_ubic_Fragments_ReceiveFragment_getAddress(
+Java_network_ubic_ubic_AsyncTasks_ReceiveFragmentPopulate_getAddress(
         JNIEnv *env,
         jobject /* this */,
         jbyteArray seed) {

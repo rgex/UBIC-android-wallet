@@ -21,6 +21,7 @@ import java.util.List;
 
 import network.ubic.ubic.Fragments.BalanceFragment;
 import network.ubic.ubic.Fragments.MyUBIFragment;
+import network.ubic.ubic.Fragments.PrivateKeyFragment;
 import network.ubic.ubic.Fragments.ReceiveFragment;
 import network.ubic.ubic.Fragments.RegisterPassportFragment;
 import network.ubic.ubic.Fragments.SendFragment;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity
                    ReceiveFragment.OnFragmentInteractionListener,
                    MyUBIFragment.OnFragmentInteractionListener,
                    RegisterPassportFragment.OnFragmentInteractionListener,
+                   PrivateKeyFragment.OnFragmentInteractionListener,
                    OnGetBalanceCompleted {
 
     // Used to load the 'native-lib' library on application startup.
@@ -90,7 +92,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -100,11 +101,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -123,6 +119,8 @@ public class MainActivity extends AppCompatActivity
             goToNavReceive();
         } else if (id == R.id.nav_send) {
             goToNavSend();
+        } else if (id == R.id.nav_private_keys) {
+            goToNavPrivateKey();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -172,6 +170,13 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
     }
 
+    public void goToNavPrivateKey() {
+        PrivateKeyFragment privateKeyF = new PrivateKeyFragment();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.contentContainer, privateKeyF);
+        transaction.commit();
+    }
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -180,6 +185,14 @@ public class MainActivity extends AppCompatActivity
     public native String stringFromJNI();
 
     public void OnGetBalanceCompleted(HashMap<Integer, BigInteger> balanceMap) {
+
+        if(balanceMap == null) {
+            return;
+        }
+
+        if(balanceMap.isEmpty()) {
+            return;
+        }
 
         ListView balanceListView = findViewById(R.id.balance_list_view);
         List<String> balanceList = new ArrayList<String>();

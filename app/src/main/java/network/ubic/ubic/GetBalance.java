@@ -48,8 +48,8 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
                     balanceMap.put(Integer.parseInt(key), new BigInteger(value));
                 }
             } catch (final JSONException e) {
-
-
+                System.out.println("JSONException");
+                e.printStackTrace();
             }
 
         } else {

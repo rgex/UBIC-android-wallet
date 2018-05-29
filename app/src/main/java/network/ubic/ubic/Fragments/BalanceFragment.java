@@ -10,10 +10,7 @@ import android.view.ViewGroup;
 
 import network.ubic.ubic.R;
 
-import com.google.android.gms.plus.PlusOneButton;
-
 /**
- * A fragment with a Google +1 button.
  * Activities that contain this fragment must implement the
  * {@link BalanceFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
@@ -32,12 +29,10 @@ public class BalanceFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment BalanceFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BalanceFragment newInstance(String param1, String param2) {
+    public static BalanceFragment newInstance() {
         BalanceFragment fragment = new BalanceFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
