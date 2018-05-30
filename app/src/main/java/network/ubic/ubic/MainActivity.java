@@ -1,5 +1,6 @@
 package network.ubic.ubic;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -7,26 +8,29 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import network.ubic.ubic.BitiAndroid.AbstractNfcActivity;
 import network.ubic.ubic.Fragments.BalanceFragment;
 import network.ubic.ubic.Fragments.MyUBIFragment;
 import network.ubic.ubic.Fragments.PrivateKeyFragment;
+import network.ubic.ubic.Fragments.ReadingPassportFragment;
 import network.ubic.ubic.Fragments.ReceiveFragment;
 import network.ubic.ubic.Fragments.RegisterPassportFragment;
 import network.ubic.ubic.Fragments.SendFragment;
+import network.ubic.ubic.Fragments.WaitForNfcFragment;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AbstractNfcActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                    BalanceFragment.OnFragmentInteractionListener,
                    SendFragment.OnFragmentInteractionListener,
@@ -34,7 +38,13 @@ public class MainActivity extends AppCompatActivity
                    MyUBIFragment.OnFragmentInteractionListener,
                    RegisterPassportFragment.OnFragmentInteractionListener,
                    PrivateKeyFragment.OnFragmentInteractionListener,
+                   WaitForNfcFragment.OnFragmentInteractionListener,
+                   ReadingPassportFragment.OnFragmentInteractionListener,
+                   Serializable,
                    OnGetBalanceCompleted {
+
+    private WaitForNfcFragment waitForNfcFragment;
+
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -48,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        System.out.println("onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -176,6 +186,33 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.contentContainer, privateKeyF);
         transaction.commit();
+    }
+
+    public void goToNavWaitForNfc(String passportNumber, String dateOfBirth, String dateOfExpiration) {
+        waitForNfcFragment = WaitForNfcFragment.newInstance(passportNumber, dateOfBirth, dateOfExpiration);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.contentContainer, waitForNfcFragment);
+        transaction.commit();
+    }
+
+    public void goToNavReadingPassport(String passportNumber, String dateOfBirth, String dateOfExpiration) {
+        ReadingPassportFragment readingassportF = ReadingPassportFragment.newInstance(passportNumber, dateOfBirth, dateOfExpiration);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.contentContainer, readingassportF);
+        transaction.commit();
+    }
+
+    public void onNewIntent(Intent intent)
+    {
+        System.out.println("MainActivity onNewIntent");
+        super.onNewIntent(intent);
+        //((TextView)view.findViewById(R.id.placeYourDeviceInstructions)).setText(getResources().getString(R.string.found_nfc_text));
+        //((TextView)view.findViewById(R.id.placeYourDeviceInstructions)).setGravity(Gravity.CENTER_HORIZONTAL);
+        if(waitForNfcFragment != null) {
+            waitForNfcFragment.readPassport();
+        }
     }
 
     /**

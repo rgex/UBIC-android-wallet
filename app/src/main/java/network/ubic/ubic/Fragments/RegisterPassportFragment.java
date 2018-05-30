@@ -2,7 +2,6 @@ package network.ubic.ubic.Fragments;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import network.ubic.ubic.MainActivity;
 import network.ubic.ubic.R;
 
 /**
@@ -35,6 +35,7 @@ public class RegisterPassportFragment extends Fragment implements DatePickerDial
     public int[] dateOfBirthIntArray = {15,6,1980};
     public String dateOfExpiration = "000000";
     public int[] dateOfExpirationIntArray = {15,6,2020};
+    public String passportNumber;
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,8 +47,6 @@ public class RegisterPassportFragment extends Fragment implements DatePickerDial
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment RegisterPassportFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -197,25 +196,18 @@ public class RegisterPassportFragment extends Fragment implements DatePickerDial
                 }
         );
 
+        passportNumber = ((EditText) view.findViewById(R.id.PassportNbr)).getText().toString();
+
         view.findViewById(R.id.ReadNfcBtn).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         try {
-
-                            Intent intent = new Intent("bondi.nfcPassportReader.jan.mrtd2.WaitingForNfcActivity");
-
-                            String passportNumber = ((EditText) view.findViewById(R.id.PassportNbr)).getText().toString();
-
-                            intent.putExtra("passportNumber", passportNumber);
-                            intent.putExtra("dateOfBirth", RegisterPassportFragment.this.dateOfBirth);
-                            intent.putExtra("dateOfExpiration", RegisterPassportFragment.this.dateOfExpiration);
-
-                            startActivity(intent);
+                            ((MainActivity)getActivity()).goToNavWaitForNfc(RegisterPassportFragment.this.passportNumber, RegisterPassportFragment.this.dateOfBirth, RegisterPassportFragment.this.dateOfExpiration);
                         }
                         catch(Exception e) {
-                            //@TODO
+                            e.printStackTrace();
                         }
 
                     }
