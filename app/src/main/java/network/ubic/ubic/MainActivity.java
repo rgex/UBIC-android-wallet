@@ -44,6 +44,7 @@ public class MainActivity extends AbstractNfcActivity
                    OnGetBalanceCompleted {
 
     private WaitForNfcFragment waitForNfcFragment;
+    private List<Integer> currenciesInWallet;
 
 
     // Used to load the 'native-lib' library on application startup.
@@ -58,6 +59,7 @@ public class MainActivity extends AbstractNfcActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        currenciesInWallet = new ArrayList<Integer>();
         System.out.println("onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -85,8 +87,6 @@ public class MainActivity extends AbstractNfcActivity
         }
 
         this.goToNavBalance();
-
-        //new GetBalance(this).execute();
     }
 
     @Override
@@ -239,14 +239,22 @@ public class MainActivity extends AbstractNfcActivity
         //System.out.println(key + " : " + value);
         for (HashMap.Entry<Integer, BigInteger> entry : balanceMap.entrySet())
         {
+            if(!currenciesInWallet.contains(entry.getKey())) {
+                currenciesInWallet.add(entry.getKey());
+            }
             balanceList.add(currencies.getCurrency(Integer.valueOf(entry.getKey())) + " : " + (entry.getValue().divide(BigInteger.valueOf(1000000))));
         }
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                balanceList );
+                balanceList
+        );
 
         balanceListView.setAdapter(arrayAdapter);
+    }
+
+    public List<Integer> getCurrenciesInWallet() {
+        return currenciesInWallet;
     }
 }

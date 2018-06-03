@@ -8,7 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import network.ubic.ubic.Currencies;
+import network.ubic.ubic.MainActivity;
 import network.ubic.ubic.R;
 
 /**
@@ -30,8 +37,6 @@ public class SendFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment SendFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -68,6 +73,26 @@ public class SendFragment extends Fragment {
                 }
         );
 
+        Currencies currencies = new Currencies();
+        List<Integer> currenciesInWallet = ((MainActivity)getActivity()).getCurrenciesInWallet();
+
+        if(currenciesInWallet.isEmpty()) {
+            view.findViewById(R.id.no_funds_error).setVisibility(View.VISIBLE);
+        } else {
+
+            List<String> spinnerArray =  new ArrayList<String>();
+            for (int currencyID : currenciesInWallet) {
+                spinnerArray.add(currencies.getCurrency(currencyID));
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                    getActivity(), android.R.layout.simple_spinner_item, spinnerArray
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Spinner sItems = (Spinner) view.findViewById(R.id.currency_spinner);
+            sItems.setAdapter(adapter);
+        }
+
         return view;
     }
 
@@ -75,14 +100,7 @@ public class SendFragment extends Fragment {
     public void onResume() {
         super.onResume();
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
+    
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
