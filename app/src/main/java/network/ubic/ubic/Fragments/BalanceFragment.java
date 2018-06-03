@@ -4,10 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import network.ubic.ubic.Currencies;
+import network.ubic.ubic.GetBalance;
+import network.ubic.ubic.MainActivity;
+import network.ubic.ubic.OnGetBalanceCompleted;
 import network.ubic.ubic.R;
 
 /**
@@ -17,9 +29,13 @@ import network.ubic.ubic.R;
  * Use the {@link BalanceFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BalanceFragment extends Fragment {
-
+public class BalanceFragment extends Fragment implements
+        SwipeRefreshLayout.OnRefreshListener, OnGetBalanceCompleted
+{
+    private View view;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private OnFragmentInteractionListener mListener;
+    private List<Integer> currenciesInWallet;
 
     public BalanceFragment() {
         // Required empty public constructor
@@ -48,21 +64,20 @@ public class BalanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_balance, container, false);
+        view = inflater.inflate(R.layout.fragment_balance, container, false);
 
+        currenciesInWallet = new ArrayList<Integer>();
+
+        swipeRefreshLayout =((SwipeRefreshLayout)view.findViewById(R.id.balance_SwipeRefreshLayout));
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        new GetBalance(this).execute();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -82,16 +97,50 @@ public class BalanceFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    @Override
+    public void onRefresh() {
+        System.out.println("onRefresh called");
+
+        new GetBalance(this).execute();
+    }
+
+
+    public void OnGetBalanceCompleted(HashMap<Integer, BigInteger> balanceMap) {
+
+        if(balanceMap == null) {
+            return;
+        }
+
+        if(balanceMap.isEmpty()) {
+            return;
+        }
+
+        ListView balanceListView = view.findViewById(R.id.balance_list_view);
+        List<String> balanceList = new ArrayList<String>();
+
+        Currencies currencies = new Currencies();
+
+        //System.out.println(key + " : " + value);
+        for (HashMap.Entry<Integer, BigInteger> entry : balanceMap.entrySet())
+        {
+            if(!currenciesInWallet.contains(entry.getKey())) {
+                currenciesInWallet.add(entry.getKey());
+            }
+            balanceList.add(currencies.getCurrency(Integer.valueOf(entry.getKey())) + " : " + (entry.getValue().divide(BigInteger.valueOf(1000000))));
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                balanceList
+        );
+
+        balanceListView.setAdapter(arrayAdapter);
+
+        ((MainActivity)getActivity()).setCurrenciesInWallet(currenciesInWallet);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

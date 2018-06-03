@@ -11,13 +11,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import network.ubic.ubic.BitiAndroid.AbstractNfcActivity;
@@ -40,12 +36,10 @@ public class MainActivity extends AbstractNfcActivity
                    PrivateKeyFragment.OnFragmentInteractionListener,
                    WaitForNfcFragment.OnFragmentInteractionListener,
                    ReadingPassportFragment.OnFragmentInteractionListener,
-                   Serializable,
-                   OnGetBalanceCompleted {
+                   Serializable {
 
     private WaitForNfcFragment waitForNfcFragment;
     private List<Integer> currenciesInWallet;
-
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -59,12 +53,13 @@ public class MainActivity extends AbstractNfcActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        currenciesInWallet = new ArrayList<Integer>();
         System.out.println("onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        currenciesInWallet = new ArrayList<Integer>();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -152,8 +147,6 @@ public class MainActivity extends AbstractNfcActivity
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.contentContainer, bf);
         transaction.commit();
-
-        new GetBalance(this).execute();
     }
 
     public void goToNavMyUbi() {
@@ -221,40 +214,11 @@ public class MainActivity extends AbstractNfcActivity
      */
     public native String stringFromJNI();
 
-    public void OnGetBalanceCompleted(HashMap<Integer, BigInteger> balanceMap) {
-
-        if(balanceMap == null) {
-            return;
-        }
-
-        if(balanceMap.isEmpty()) {
-            return;
-        }
-
-        ListView balanceListView = findViewById(R.id.balance_list_view);
-        List<String> balanceList = new ArrayList<String>();
-
-        Currencies currencies = new Currencies();
-
-        //System.out.println(key + " : " + value);
-        for (HashMap.Entry<Integer, BigInteger> entry : balanceMap.entrySet())
-        {
-            if(!currenciesInWallet.contains(entry.getKey())) {
-                currenciesInWallet.add(entry.getKey());
-            }
-            balanceList.add(currencies.getCurrency(Integer.valueOf(entry.getKey())) + " : " + (entry.getValue().divide(BigInteger.valueOf(1000000))));
-        }
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                balanceList
-        );
-
-        balanceListView.setAdapter(arrayAdapter);
-    }
-
     public List<Integer> getCurrenciesInWallet() {
         return currenciesInWallet;
+    }
+
+    public void setCurrenciesInWallet(List<Integer> currenciesInWallet) {
+        this.currenciesInWallet = currenciesInWallet;
     }
 }
