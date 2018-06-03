@@ -6,6 +6,7 @@
     tools:context=".Fragments.RegisterPassportFragment">
 
     <LinearLayout
+        android:layout_margin="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,6 +14,7 @@
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/ReadNfcBtn"
         android:id="@+id/linearLayout2">
+
 
         <LinearLayout
             android:orientation="horizontal"

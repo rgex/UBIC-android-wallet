@@ -4,9 +4,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/registerPassportButton"
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:id="@+id/send_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="REGISTER PASSPORT" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/registerPassportButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="REGISTER PASSPORT" />
+    </LinearLayout>
 </FrameLayout>
