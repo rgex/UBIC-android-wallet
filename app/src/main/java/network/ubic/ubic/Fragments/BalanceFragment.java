@@ -16,10 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import network.ubic.ubic.AsyncTasks.ReceiveFragmentPopulate;
 import network.ubic.ubic.Currencies;
-import network.ubic.ubic.GetBalance;
 import network.ubic.ubic.MainActivity;
-import network.ubic.ubic.OnGetBalanceCompleted;
 import network.ubic.ubic.R;
 
 /**
@@ -30,7 +29,7 @@ import network.ubic.ubic.R;
  * create an instance of this fragment.
  */
 public class BalanceFragment extends Fragment implements
-        SwipeRefreshLayout.OnRefreshListener, OnGetBalanceCompleted
+        SwipeRefreshLayout.OnRefreshListener, ReceiveFragmentPopulate.OnGetBalanceCompleted
 {
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -71,7 +70,7 @@ public class BalanceFragment extends Fragment implements
         swipeRefreshLayout =((SwipeRefreshLayout)view.findViewById(R.id.balance_SwipeRefreshLayout));
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        new GetBalance(this).execute();
+        new ReceiveFragmentPopulate.GetBalance(this).execute();
         return view;
     }
 
@@ -101,11 +100,15 @@ public class BalanceFragment extends Fragment implements
     public void onRefresh() {
         System.out.println("onRefresh called");
 
-        new GetBalance(this).execute();
+        new ReceiveFragmentPopulate.GetBalance(this).execute();
     }
 
 
-    public void OnGetBalanceCompleted(HashMap<Integer, BigInteger> balanceMap) {
+    public void OnGetBalanceCompleted(
+            HashMap<Integer, BigInteger> balanceMap,
+            HashMap<String, HashMap<Integer, BigInteger>> transactions,
+            boolean isReceivingUBI
+            ) {
 
         if(balanceMap == null) {
             return;
@@ -138,6 +141,30 @@ public class BalanceFragment extends Fragment implements
         balanceListView.setAdapter(arrayAdapter);
 
         ((MainActivity)getActivity()).setCurrenciesInWallet(currenciesInWallet);
+
+        ListView lastTransactionListView = view.findViewById(R.id.last_transaction_list_view);
+        List<String> transactionList = new ArrayList<String>();
+
+        System.out.println("transactions.size():" + transactions.size());
+        for (HashMap.Entry<String, HashMap<Integer, BigInteger>> entry : transactions.entrySet())
+        {
+            String entryStr;
+            entryStr = entry.getKey().substring(0,8) + " : ";
+            for (HashMap.Entry<Integer, BigInteger> entry2 : entry.getValue().entrySet())
+            {
+                entryStr += currencies.getCurrency(entry2.getKey()) + " : " +  (entry2.getValue().divide(BigInteger.valueOf(1000000))) + "\n";
+            }
+            transactionList.add(entryStr);
+        }
+
+        arrayAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                transactionList
+        );
+
+        lastTransactionListView.setAdapter(arrayAdapter);
+
         swipeRefreshLayout.setRefreshing(false);
     }
 
