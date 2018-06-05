@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import network.ubic.ubic.MainActivity;
+import network.ubic.ubic.PassportStore;
 import network.ubic.ubic.R;
 
 /**
@@ -196,12 +197,19 @@ public class RegisterPassportFragment extends Fragment implements DatePickerDial
                 }
         );
 
-        passportNumber = ((EditText) view.findViewById(R.id.PassportNbr)).getText().toString();
 
         view.findViewById(R.id.ReadNfcBtn).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onClick(View view2) {
+
+                        passportNumber = ((EditText) view.findViewById(R.id.PassportNbr)).getText().toString();
+
+                        PassportStore passportStore = new PassportStore(getContext());
+                        passportStore.setDateOfBirth(dateOfBirth);
+                        passportStore.setDateOfExpiry(dateOfExpiration);
+                        passportStore.setPassportNumber(passportNumber);
+                        passportStore.persist();
 
                         try {
                             ((MainActivity)getActivity()).goToNavWaitForNfc(RegisterPassportFragment.this.passportNumber, RegisterPassportFragment.this.dateOfBirth, RegisterPassportFragment.this.dateOfExpiration);

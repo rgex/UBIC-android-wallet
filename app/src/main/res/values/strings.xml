@@ -64,4 +64,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="passport_info_shared_pref">passport_info_shared_pref</string>
+    <string name="passport_number_shared_pref">passport_number_shared_pref</string>
+    <string name="passport_date_of_birth_shared_pref">passport_date_of_birth_shared_pref</string>
+    <string name="passport_date_of_expiry_shared_pref">passport_date_of_expiry_shared_pref</string>
 </resources>

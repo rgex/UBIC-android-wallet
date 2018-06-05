@@ -182,15 +182,15 @@ public class MainActivity extends AbstractNfcActivity
     }
 
     public void goToNavWaitForNfc(String passportNumber, String dateOfBirth, String dateOfExpiration) {
-        waitForNfcFragment = WaitForNfcFragment.newInstance(passportNumber, dateOfBirth, dateOfExpiration);
+        waitForNfcFragment = WaitForNfcFragment.newInstance();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.contentContainer, waitForNfcFragment);
         transaction.commit();
     }
 
-    public void goToNavReadingPassport(String passportNumber, String dateOfBirth, String dateOfExpiration) {
-        ReadingPassportFragment readingassportF = ReadingPassportFragment.newInstance(passportNumber, dateOfBirth, dateOfExpiration);
+    public void goToNavReadingPassport() {
+        ReadingPassportFragment readingassportF = ReadingPassportFragment.newInstance();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.contentContainer, readingassportF);

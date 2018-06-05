@@ -27,6 +27,7 @@ import network.ubic.ubic.BitiMRTD.Reader.BacInfo;
 import network.ubic.ubic.BitiMRTD.Reader.DESedeReader;
 import network.ubic.ubic.BitiMRTD.Reader.ProgressListenerInterface;
 import network.ubic.ubic.BitiMRTD.Tools.Tools;
+import network.ubic.ubic.PassportStore;
 import network.ubic.ubic.R;
 
 /**
@@ -38,9 +39,6 @@ import network.ubic.ubic.R;
  * create an instance of this fragment.
  */
 public class ReadingPassportFragment extends Fragment {
-    private static final String ARG_PARAM_PASSPORT_NUMBER = "param1";
-    private static final String ARG_PARAM_DATE_OF_BIRTH = "param2";
-    private static final String ARG_PARAM_DATE_OF_EXPIRATION = "param2";
 
     private String passportNumber;
     private String dateOfBirth;
@@ -71,12 +69,9 @@ public class ReadingPassportFragment extends Fragment {
      * @return A new instance of fragment ReadingPassportFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ReadingPassportFragment newInstance(String passportNumber, String dateOfBirth, String dateOfExpiration) {
+    public static ReadingPassportFragment newInstance() {
         ReadingPassportFragment fragment = new ReadingPassportFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM_PASSPORT_NUMBER, passportNumber);
-        args.putString(ARG_PARAM_DATE_OF_BIRTH, dateOfBirth);
-        args.putString(ARG_PARAM_DATE_OF_EXPIRATION, dateOfExpiration);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,11 +79,6 @@ public class ReadingPassportFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            passportNumber = getArguments().getString(ARG_PARAM_PASSPORT_NUMBER);
-            dateOfBirth = getArguments().getString(ARG_PARAM_DATE_OF_BIRTH);
-            dateOfExpiration = getArguments().getString(ARG_PARAM_DATE_OF_EXPIRATION);
-        }
 
         this.isActivityRunning = true;
 
@@ -115,11 +105,37 @@ public class ReadingPassportFragment extends Fragment {
         }
     }
 
+    protected void readNfc() {
+        this.asyncReader = new AsyncReader(
+                this,
+                this.passportNumber,
+                this.dateOfBirth,
+                this.dateOfExpiration
+        );
+        asyncReader.execute();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reading_passport, container, false);
+        View view = inflater.inflate(R.layout.fragment_reading_passport, container, false);
+
+        PassportStore passportStore = new PassportStore(getContext());
+
+        this.passportNumber = passportStore.getPassportNumber();
+        this.dateOfBirth = passportStore.getDateOfBirth();
+        this.dateOfExpiration = passportStore.getDateOfExpiry();
+
+        this.mrtdProgressBar = view.findViewById(R.id.mrtdProgressBar);
+
+        System.out.println("this.passportNumber: " + this.passportNumber);
+        System.out.println("this.dateOfBirth: " + this.dateOfBirth);
+        System.out.println("this.dateOfExpiration: " + this.dateOfExpiration);
+
+        this.readNfc();
+
+        return view;
     }
 
     @Override

@@ -28,10 +28,6 @@ public class WaitForNfcFragment extends Fragment {
     private static final String ARG_PARAM_DATE_OF_BIRTH = "param2";
     private static final String ARG_PARAM_DATE_OF_EXPIRATION = "param2";
 
-    private String passportNumber;
-    private String dateOfBirth;
-    private String dateOfExpiration;
-
     private OnFragmentInteractionListener mListener;
 
     public WaitForNfcFragment() {
@@ -45,12 +41,9 @@ public class WaitForNfcFragment extends Fragment {
      * @return A new instance of fragment WaitForNfcFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WaitForNfcFragment newInstance(String passportNumber, String dateOfBirth, String dateOfExpiration) {
+    public static WaitForNfcFragment newInstance() {
         WaitForNfcFragment fragment = new WaitForNfcFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM_PASSPORT_NUMBER, passportNumber);
-        args.putString(ARG_PARAM_DATE_OF_BIRTH, dateOfBirth);
-        args.putString(ARG_PARAM_DATE_OF_EXPIRATION, dateOfExpiration);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,11 +51,6 @@ public class WaitForNfcFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            passportNumber = getArguments().getString(ARG_PARAM_PASSPORT_NUMBER);
-            dateOfBirth = getArguments().getString(ARG_PARAM_DATE_OF_BIRTH);
-            dateOfExpiration = getArguments().getString(ARG_PARAM_DATE_OF_EXPIRATION);
-        }
 
         if(TagProvider.isTagReady()) {
             this.readPassport();
@@ -71,7 +59,7 @@ public class WaitForNfcFragment extends Fragment {
 
     public void readPassport()
     {
-        ((MainActivity)getActivity()).goToNavReadingPassport(passportNumber, dateOfBirth, dateOfExpiration);
+        ((MainActivity)getActivity()).goToNavReadingPassport();
     }
 
     @Override
