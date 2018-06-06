@@ -41,7 +41,7 @@ public class ReceiveFragmentPopulate extends AsyncTask<Void, Void, Void> {
 
         address = getAddress(privateKey);
         try {
-            encodeAsBitmap(address);
+            encodeAsBitmap(0x01 + address);
         }  catch (Exception e) {
             System.out.println("err1");
             e.printStackTrace();

@@ -59,7 +59,11 @@ public class WaitForNfcFragment extends Fragment {
 
     public void readPassport()
     {
-        ((MainActivity)getActivity()).goToNavReadingPassport();
+        MainActivity mainActivity = (MainActivity)getActivity();
+
+        if(mainActivity != null) {
+            mainActivity.goToNavReadingPassport();
+        }
     }
 
     @Override

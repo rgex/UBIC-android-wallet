@@ -22,6 +22,7 @@ import network.ubic.ubic.BitiAndroid.AbstractNfcActivity;
 import network.ubic.ubic.BitiAndroid.TagProvider;
 import network.ubic.ubic.BitiMRTD.Constants.MrtdConstants;
 import network.ubic.ubic.BitiMRTD.Parser.DG1Parser;
+import network.ubic.ubic.BitiMRTD.Parser.TagParser;
 import network.ubic.ubic.BitiMRTD.Reader.AbstractReader;
 import network.ubic.ubic.BitiMRTD.Reader.BacInfo;
 import network.ubic.ubic.BitiMRTD.Reader.DESedeReader;
@@ -47,8 +48,6 @@ public class ReadingPassportFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private byte[] dg1;
-    private byte[] dg2;
     private byte[] sod;
 
     private AsyncReader asyncReader;
@@ -170,18 +169,17 @@ public class ReadingPassportFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void showResult() {
-        if (this.dg1 != null && this.dg2 != null) {
-            Intent intent = new Intent("bondi.nfcPassportReader.jan.mrtd2.ResultDisplayActivity");
-            intent.putExtra("dg1", this.dg1);
-            intent.putExtra("dg2", this.dg2);
-            intent.putExtra("sod", this.sod);
-            this.setMrtdProgressBarPercentage(96);
-            startActivity(intent);
-            this.setMrtdProgressBarPercentage(100);
-        } else {
-            System.out.println("dg1 or/and dg2 is/are null");
-        }
+    public native String getPassportTransaction(byte[]  seed);
+
+    public void createRegisterPassportTransaction() {
+        this.setMrtdProgressBarPercentage(100);
+
+
+        TagParser tagParser = new TagParser(this.sod);
+        byte[] tag77 = tagParser.geTag("77").getBytes();
+
+        String passportTx64 = getPassportTransaction(tag77);
+        System.out.println("passportTx64: " + passportTx64);
     }
 
     public void showError(final String message) {
@@ -210,14 +208,6 @@ public class ReadingPassportFragment extends Fragment {
         this.mrtdProgressBar.setProgress(progress);
     }
 
-    public void setDg1(byte[] dg1) {
-        this.dg1 = dg1;
-    }
-
-    public void setDg2(byte[] dg2) {
-        this.dg2 = dg2;
-    }
-
     public void setSOD(byte[] sod) {
         this.sod = sod;
     }
@@ -230,7 +220,6 @@ public class ReadingPassportFragment extends Fragment {
         private String dateOfBirth;
         private String dateOfExpiration;
         private boolean isCanceled = false;
-        private int currentStep = 0;
 
         public AsyncReader(
                 ReadingPassportFragment readingPassportActivity,
@@ -272,42 +261,10 @@ public class ReadingPassportFragment extends Fragment {
 
                         this.readingPassportActivity.get().setMrtdProgressBarPercentage(5);
 
-                        this.currentStep = 1;
-                        byte[] dg1 = mrtd.readFile(MrtdConstants.FID_DG1);
-                        if (dg1 == null) {
-                            this.readingPassportActivity.get().showError(getResources().getString(R.string.error_dg1_is_null));
-                        }
-
-                        this.readingPassportActivity.get().setMrtdProgressBarPercentage(10);
-
-                        this.readingPassportActivity.get().setDg1(dg1);
-                        DG1Parser dg1Parser = new DG1Parser(dg1);
-                        Tools tools = new Tools();
-
-                        /*
-                        System.out.println("Document Code : ".concat(dg1Parser.getDocumentCode()));
-                        System.out.println("Issuing state : ".concat(dg1Parser.getIssuingStateCode()));
-                        System.out.println("Document Number : ".concat(dg1Parser.getDocumentNumber()));
-                        System.out.println("Gender : ".concat(dg1Parser.getGender()));
-                        System.out.println("Given names : ".concat(dg1Parser.getGivenNames()));
-                        System.out.println("Surname : ".concat(dg1Parser.getSurname()));
-                        System.out.println("Nationality : ".concat(dg1Parser.getNationalityCode()));
-                        System.out.println("Date of birth : ".concat(dg1Parser.getDateOfBirth()));
-                        System.out.println("Date of Expiry : ".concat(dg1Parser.getDateOfExpiry()));
-                        System.out.println("File content : ".concat(tools.bytesToString(dg1)));*/
-
-                        this.currentStep = 2;
-                        byte[] dg2 = mrtd.readFile(MrtdConstants.FID_DG2);
-                        if (dg2 == null) {
-                            this.readingPassportActivity.get().showError(getResources().getString(R.string.error_dg2_is_null));
-                        }
-                        this.readingPassportActivity.get().setDg2(dg2);
-
-                        this.currentStep = 3;
                         byte[] efsod = mrtd.readFile(MrtdConstants.FID_EF_SOD);
                         this.readingPassportActivity.get().setSOD(efsod);
 
-                        if (dg1 != null && dg2 != null) {
+                        if (sod != null) {
                             this.success = true;
                         }
 
@@ -344,23 +301,13 @@ public class ReadingPassportFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean result) {
             if (this.success) {
-                this.readingPassportActivity.get().showResult();
+                this.readingPassportActivity.get().createRegisterPassportTransaction();
                 //@TODO
             }
         }
 
         public void updateProgress(int progress) {
-            switch (currentStep) {
-                case 1:
-                    this.readingPassportActivity.get().setMrtdProgressBarPercentage(Math.round(progress * 10 / 100));
-                    break;
-                case 2:
-                    this.readingPassportActivity.get().setMrtdProgressBarPercentage(Math.round(progress * 75 / 100) + 10);
-                    break;
-                case 3:
-                    this.readingPassportActivity.get().setMrtdProgressBarPercentage(Math.round(progress * 10 / 100) + 85);
-                    break;
-            }
+            this.readingPassportActivity.get().setMrtdProgressBarPercentage(progress);
         }
 
         public void cancel() {
