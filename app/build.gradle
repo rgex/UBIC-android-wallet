@@ -41,7 +41,8 @@ dependencies {
     implementation 'com.android.support:cardview-v7:27.1.1'
 
     // https://mvnrepository.com/artifact/com.google.zxing/core
-    api group: 'com.google.zxing', name: 'core', version: '3.2.1'
+    api group: 'com.google.zxing', name: 'core', version: '3.3.2'
+    api group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.6.0'
 
     api 'com.madgag.spongycastle:core:1.54.0.0'
     api 'com.madgag.spongycastle:pkix:1.54.0.0'

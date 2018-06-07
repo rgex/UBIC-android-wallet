@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,7 @@ import network.ubic.ubic.Fragments.ReceiveFragment;
 import network.ubic.ubic.Fragments.RegisterPassportFragment;
 import network.ubic.ubic.Fragments.SendFragment;
 import network.ubic.ubic.Fragments.WaitForNfcFragment;
+import network.ubic.ubic.Interfaces.QrCodeCallbackInterface;
 
 public class MainActivity extends AbstractNfcActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -40,6 +44,8 @@ public class MainActivity extends AbstractNfcActivity
 
     private WaitForNfcFragment waitForNfcFragment;
     private List<Integer> currenciesInWallet;
+    private IntentIntegrator qrScan;
+    private QrCodeCallbackInterface qrcodeCallback;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -55,6 +61,13 @@ public class MainActivity extends AbstractNfcActivity
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("onCreate()");
         super.onCreate(savedInstanceState);
+        qrScan = new IntentIntegrator(this);
+        qrScan.setOrientationLocked(false);
+        qrScan.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        qrScan.setPrompt("Scan the QrCode");
+        qrScan.setCameraId(0);  // Use a specific camera of the device
+        qrScan.setBeepEnabled(false);
+        qrScan.setBarcodeImageEnabled(true);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -220,5 +233,26 @@ public class MainActivity extends AbstractNfcActivity
 
     public void setCurrenciesInWallet(List<Integer> currenciesInWallet) {
         this.currenciesInWallet = currenciesInWallet;
+    }
+
+    public void startQrCodeScan(QrCodeCallbackInterface qrcodeCallback) {
+        qrScan.initiateScan();
+        this.qrcodeCallback = qrcodeCallback;
+    }
+
+    //Getting the qr code scan results
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            //if qrcode has nothing in it
+            if (result.getContents() == null) {
+                //result content is null
+            } else {
+                //if qr contains data
+                qrcodeCallback.qrCodeResult(result.getContents());
+            }
+        } else {
+        }
     }
 }

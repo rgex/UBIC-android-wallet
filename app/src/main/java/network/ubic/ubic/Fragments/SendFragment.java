@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-
+import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
 import network.ubic.ubic.Currencies;
+import network.ubic.ubic.Interfaces.QrCodeCallbackInterface;
 import network.ubic.ubic.MainActivity;
 import network.ubic.ubic.R;
 
@@ -25,9 +26,10 @@ import network.ubic.ubic.R;
  * Use the {@link SendFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SendFragment extends Fragment {
+public class SendFragment extends Fragment implements QrCodeCallbackInterface {
 
     private OnFragmentInteractionListener mListener;
+    private View view;
 
     public SendFragment() {
         // Required empty public constructor
@@ -50,15 +52,22 @@ public class SendFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_send, container, false);
+        view = inflater.inflate(R.layout.fragment_send, container, false);
+
+        view.findViewById(R.id.scanQrCodeButton).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((MainActivity)getActivity()).startQrCodeScan(SendFragment.this);
+                    }
+                }
+        );
 
         view.findViewById(R.id.send_main_layout).setOnClickListener(
                 new View.OnClickListener() {
@@ -143,6 +152,10 @@ public class SendFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void qrCodeResult(String qrcodeContent) {
+        ((TextView)this.view.findViewById(R.id.send_address)).setText(qrcodeContent);
     }
 
 }
