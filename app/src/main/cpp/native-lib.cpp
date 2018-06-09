@@ -148,3 +148,41 @@ Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
 
     return env->NewStringUTF(base64_encode((unsigned char*)spTx.data(), spTx.size()).c_str());
 }
+
+
+extern "C" JNIEXPORT jstring
+
+JNICALL
+Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
+        JNIEnv *env,
+        jobject /* this */,
+        char * readableAddress,
+        int currency,
+        int64_t amount,
+        int64_t fee) {
+
+    Wallet &wallet = Wallet::Instance();
+
+    std::vector<TxOut> txOuts;
+
+    TxOut txOut;
+    std::vector<unsigned char> vectorAddress = wallet.readableAddressToVectorAddress(readableAddress);
+    Address address;
+    CDataStream s(SER_DISK, 1);
+    s.write((char *) vectorAddress.data(), vectorAddress.size());
+    s >> address;
+
+    txOut.setScript(address.getScript());
+
+    txOut.setAmount(uAmountAggregated);
+    txOuts.push_back(txOut);
+
+    Transaction tx;
+    tx.setTxIns();
+    tx.setTxOuts(txOuts);
+
+    CDataStream s2(SER_DISK, 1);
+    s2 << tx;
+    std::string tx64 = base64_encode((unsigned char*)s2.str().data(), (uint32_t)s2.str().size());
+    return env->NewStringUTF(tx64.c_str());
+}

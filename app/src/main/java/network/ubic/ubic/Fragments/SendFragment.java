@@ -1,6 +1,8 @@
 package network.ubic.ubic.Fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -155,7 +157,21 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface {
     }
 
     public void qrCodeResult(String qrcodeContent) {
-        ((TextView)this.view.findViewById(R.id.send_address)).setText(qrcodeContent);
+        if(qrcodeContent.substring(0, 1).equals("\01")) {
+            ((TextView) this.view.findViewById(R.id.send_address)).setText(qrcodeContent.substring(1, qrcodeContent.length()));
+        } else {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(getResources().getString(R.string.error_qr_code))
+                    .setMessage(getResources().getString(R.string.error_unsupported))
+                    .setNegativeButton("Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,
+                                            int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setCancelable(true).create().show();
+        }
     }
 
 }

@@ -68,4 +68,7 @@
     <string name="passport_number_shared_pref">passport_number_shared_pref</string>
     <string name="passport_date_of_birth_shared_pref">passport_date_of_birth_shared_pref</string>
     <string name="passport_date_of_expiry_shared_pref">passport_date_of_expiry_shared_pref</string>
+
+    <string name="error_qr_code">Error</string>
+    <string name="error_unsupported">Unsupported QrCode</string>
 </resources>
