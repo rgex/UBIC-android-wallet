@@ -105,9 +105,9 @@ add_library( # Sets the name of the library.
             src/main/cpp/Countries/Currency.h
             )
 
-include_directories(~/AndroidStudioProjects/UBIC/distribution/openssl/x86/include/)
-
 set(distribution_DIR ${CMAKE_SOURCE_DIR}/../distribution)
+
+include_directories(${distribution_DIR}/openssl/x86/include/)
 
 target_include_directories(native-lib PRIVATE ${distribution_DIR}/openssl/${ANDROID_ABI}/include)
 

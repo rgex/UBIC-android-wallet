@@ -149,13 +149,13 @@ Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
     return env->NewStringUTF(base64_encode((unsigned char*)spTx.data(), spTx.size()).c_str());
 }
 
-
+/*
 extern "C" JNIEXPORT jstring
 
 JNICALL
 Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
         JNIEnv *env,
-        jobject /* this */,
+        jobject,
         char * readableAddress,
         int currency,
         int64_t amount,
@@ -185,4 +185,4 @@ Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
     s2 << tx;
     std::string tx64 = base64_encode((unsigned char*)s2.str().data(), (uint32_t)s2.str().size());
     return env->NewStringUTF(tx64.c_str());
-}
+}*/
