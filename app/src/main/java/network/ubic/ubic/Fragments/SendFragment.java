@@ -13,9 +13,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import network.ubic.ubic.AsyncTasks.OnGetTransactionFeesCompleted;
 import network.ubic.ubic.Currencies;
 import network.ubic.ubic.Interfaces.QrCodeCallbackInterface;
 import network.ubic.ubic.MainActivity;
@@ -28,10 +32,17 @@ import network.ubic.ubic.R;
  * Use the {@link SendFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SendFragment extends Fragment implements QrCodeCallbackInterface {
+public class SendFragment extends Fragment implements QrCodeCallbackInterface, OnGetTransactionFeesCompleted {
 
+    Currencies currencies;
     private OnFragmentInteractionListener mListener;
     private View view;
+    HashMap<Integer, BigInteger> feesMap = new HashMap<Integer, BigInteger>();
+
+    public native String getTransaction(String readableAddress,
+                                        int currency,
+                                        long amount,
+                                        long fee);
 
     public SendFragment() {
         // Required empty public constructor
@@ -71,12 +82,32 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface {
                 }
         );
 
+        currencies = new Currencies();
+
+        view.findViewById(R.id.sendTxButton).setOnClickListener(
+                new View.OnClickListener() {
+
+                    final BigInteger fee = feesMap.get(currencies.getCurrency(((Spinner)SendFragment.this.view.findViewById(R.id.currency_spinner)).getSelectedItem().toString()));
+
+                    @Override
+                    public void onClick(View view) {
+                        getTransaction(
+                                ((TextView)SendFragment.this.view.findViewById(R.id.send_address)).getText().toString(),
+                                Integer.parseInt(((Spinner)SendFragment.this.view.findViewById(R.id.currency_spinner)).getSelectedItem().toString()),
+                                Long.parseLong(((TextView)SendFragment.this.view.findViewById(R.id.send_amount)).getText().toString()),
+                                fee.longValue()
+                        );
+                    }
+                }
+        );
+
         view.findViewById(R.id.send_main_layout).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(view.getW
+                                indowToken(), 0);
                         view.findViewById(R.id.send_address).clearFocus();
                         view.findViewById(R.id.send_amount).clearFocus();
                     }
@@ -96,7 +127,6 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface {
                 }
         );
 
-        Currencies currencies = new Currencies();
         List<Integer> currenciesInWallet = ((MainActivity)getActivity()).getCurrenciesInWallet();
 
         if(currenciesInWallet.isEmpty()) {
@@ -172,6 +202,10 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface {
                     })
                     .setCancelable(true).create().show();
         }
+    }
+
+    public void OnGetTransactionFeesCompleted(HashMap<Integer, BigInteger> feesMap) {
+        this.feesMap = feesMap;
     }
 
 }

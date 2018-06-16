@@ -149,24 +149,27 @@ Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
     return env->NewStringUTF(base64_encode((unsigned char*)spTx.data(), spTx.size()).c_str());
 }
 
-/*
+
 extern "C" JNIEXPORT jstring
 
 JNICALL
-Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
+Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
         JNIEnv *env,
         jobject,
-        char * readableAddress,
-        int currency,
-        int64_t amount,
-        int64_t fee) {
+        jstring readableAddress,
+        jint currency,
+        jlong amount,
+        jlong fee) {
+
+    Transaction tx;
 
     Wallet &wallet = Wallet::Instance();
-
     std::vector<TxOut> txOuts;
 
     TxOut txOut;
-    std::vector<unsigned char> vectorAddress = wallet.readableAddressToVectorAddress(readableAddress);
+    jboolean isCopy;
+    std::vector<unsigned char> vectorAddress = wallet.readableAddressToVectorAddress(
+            (env)->GetStringUTFChars(readableAddress, &isCopy));
     Address address;
     CDataStream s(SER_DISK, 1);
     s.write((char *) vectorAddress.data(), vectorAddress.size());
@@ -174,15 +177,22 @@ Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
 
     txOut.setScript(address.getScript());
 
-    txOut.setAmount(uAmountAggregated);
+    UAmount outAmount;
+    outAmount.map.insert(std::pair<uint8_t, CAmount>((uint8_t)currency, (CAmount)amount));
+    txOut.setAmount(outAmount);
     txOuts.push_back(txOut);
 
-    Transaction tx;
-    tx.setTxIns();
-    tx.setTxOuts(txOuts);
+    UAmount inAmount;
+    inAmount.map.insert(std::pair<uint8_t, CAmount>((uint8_t)currency, (CAmount)(amount + fee)));
+    TxIn txIn;
+    txIn.setAmount(inAmount);
+    txIn.setInAddress(vectorAddress);
+    std::vector<TxIn> txIns;
+    txIns.push_back(txIn);
+    tx.setTxIns(txIns);
 
     CDataStream s2(SER_DISK, 1);
     s2 << tx;
     std::string tx64 = base64_encode((unsigned char*)s2.str().data(), (uint32_t)s2.str().size());
     return env->NewStringUTF(tx64.c_str());
-}*/
+}

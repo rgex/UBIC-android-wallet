@@ -44,4 +44,13 @@ public class Currencies {
         System.out.println("currencyId: " + currencyId);
         return currencies.get(currencyId);
     }
+
+    public int getCurrency(String currencyId) {
+        for(int i= 0; i < currencies.size(); i++) {
+            if(currencies.get(i) == currencyId) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
