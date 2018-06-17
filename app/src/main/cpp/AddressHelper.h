@@ -13,6 +13,7 @@ public:
         if(script.getScriptType() == SCRIPT_LINK) {
             return script.getScript();
         }
+
         CDataStream s(SER_DISK, 1);
         s << script;
         std::vector<unsigned char> r(s.data(), s.data() + s.size());

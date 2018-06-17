@@ -12,6 +12,9 @@
 
     <string name="error_error">Error</string>
     <string name="error_nfc_is_disabled">You need to enable nfc to use this app</string>
+    <string name="error_cannot_get_fees">Couldn\'t recover current transaction fees, verify your internet connection</string>
+    <string name="error_no_selected_currency">No currency was selected</string>
+    <string name="error_invalid_amount">Invalid amount</string>
 
     <string name="title_activity_result_display">Data</string>
     <string name="title_activity_waiting_for_nfc">Waiting for NFC tag</string>

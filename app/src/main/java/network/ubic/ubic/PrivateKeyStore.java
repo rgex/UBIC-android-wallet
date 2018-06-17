@@ -20,6 +20,7 @@ public class PrivateKeyStore {
 
     KeyStore keyStore;
 
+    // this is actually a private key seed
     public byte[] getPrivateKey(Context context) {
         System.out.println("called getPrivateKey()");
         try {

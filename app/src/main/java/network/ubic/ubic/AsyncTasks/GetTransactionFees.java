@@ -55,8 +55,6 @@ public class GetTransactionFees extends AsyncTask<Void, Void, Void> {
                 e.printStackTrace();
             }
 
-        } else {
-
         }
 
         return null;

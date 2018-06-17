@@ -1,12 +1,13 @@
 #include <jni.h>
-#include <string>
 #include <iostream>
+#include <string>
 #include "Wallet.h"
 #include "Tools/Log.h"
 #include "PassportReader/PKCS7/PKCS7Parser.h"
 #include "CertStore/Cert.h"
 #include "Transaction/TransactionHelper.h"
 #include "Base64.h"
+#include "AddressHelper.h"
 
 extern "C" JNIEXPORT jstring
 
@@ -56,6 +57,7 @@ JNICALL
 Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
         JNIEnv *env,
         jobject /* this */,
+        jbyteArray seed,
         jbyteArray sod) {
 
     int len = env->GetArrayLength (sod);
@@ -156,6 +158,7 @@ JNICALL
 Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
         JNIEnv *env,
         jobject,
+        jbyteArray seed,
         jstring readableAddress,
         jint currency,
         jlong amount,
@@ -164,6 +167,15 @@ Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
     Transaction tx;
 
     Wallet &wallet = Wallet::Instance();
+
+    int len = env->GetArrayLength (seed);
+    unsigned char* seedUC = new unsigned char[len];
+    env->GetByteArrayRegion (seed, 0, len, reinterpret_cast<jbyte*>(seedUC));
+
+    std::vector<unsigned char> seedVector = std::vector<unsigned char>(seedUC, seedUC + 20);
+    wallet.setSeed(seedVector);
+    wallet.initWallet();
+
     std::vector<TxOut> txOuts;
 
     TxOut txOut;
@@ -179,6 +191,7 @@ Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
 
     UAmount outAmount;
     outAmount.map.insert(std::pair<uint8_t, CAmount>((uint8_t)currency, (CAmount)amount));
+    txOut.setScript(address.getScript());
     txOut.setAmount(outAmount);
     txOuts.push_back(txOut);
 
@@ -186,13 +199,15 @@ Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
     inAmount.map.insert(std::pair<uint8_t, CAmount>((uint8_t)currency, (CAmount)(amount + fee)));
     TxIn txIn;
     txIn.setAmount(inAmount);
-    txIn.setInAddress(vectorAddress);
+    txIn.setInAddress(AddressHelper::addressLinkFromScript(wallet.getRandomPKHScriptFromWallet()));
     std::vector<TxIn> txIns;
     txIns.push_back(txIn);
     tx.setTxIns(txIns);
 
+    Transaction* signedTx = wallet.signTransaction(&tx);
+
     CDataStream s2(SER_DISK, 1);
-    s2 << tx;
+    s2 << *signedTx;
     std::string tx64 = base64_encode((unsigned char*)s2.str().data(), (uint32_t)s2.str().size());
     return env->NewStringUTF(tx64.c_str());
 }

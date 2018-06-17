@@ -29,6 +29,7 @@ import network.ubic.ubic.BitiMRTD.Reader.DESedeReader;
 import network.ubic.ubic.BitiMRTD.Reader.ProgressListenerInterface;
 import network.ubic.ubic.BitiMRTD.Tools.Tools;
 import network.ubic.ubic.PassportStore;
+import network.ubic.ubic.PrivateKeyStore;
 import network.ubic.ubic.R;
 
 /**
@@ -169,7 +170,7 @@ public class ReadingPassportFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public native String getPassportTransaction(byte[]  seed);
+    public native String getPassportTransaction(byte[]  seed, byte[] sod);
 
     public void createRegisterPassportTransaction() {
         this.setMrtdProgressBarPercentage(100);
@@ -178,7 +179,10 @@ public class ReadingPassportFragment extends Fragment {
         TagParser tagParser = new TagParser(this.sod);
         byte[] tag77 = tagParser.geTag("77").getBytes();
 
-        String passportTx64 = getPassportTransaction(tag77);
+        String passportTx64 = getPassportTransaction(
+                (new PrivateKeyStore()).getPrivateKey(getContext()),
+                tag77
+        );
         System.out.println("passportTx64: " + passportTx64);
     }
 

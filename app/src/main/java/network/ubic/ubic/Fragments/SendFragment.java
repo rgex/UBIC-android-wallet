@@ -3,8 +3,10 @@ package network.ubic.ubic.Fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +17,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.math.BigInteger;
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import network.ubic.ubic.AsyncTasks.GetTransactionFees;
 import network.ubic.ubic.AsyncTasks.OnGetTransactionFeesCompleted;
 import network.ubic.ubic.Currencies;
 import network.ubic.ubic.Interfaces.QrCodeCallbackInterface;
 import network.ubic.ubic.MainActivity;
+import network.ubic.ubic.PrivateKeyStore;
 import network.ubic.ubic.R;
 
 /**
@@ -39,7 +45,8 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface, O
     private View view;
     HashMap<Integer, BigInteger> feesMap = new HashMap<Integer, BigInteger>();
 
-    public native String getTransaction(String readableAddress,
+    public native String getTransaction(byte[]  seed,
+                                        String readableAddress,
                                         int currency,
                                         long amount,
                                         long fee);
@@ -86,17 +93,54 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface, O
 
         view.findViewById(R.id.sendTxButton).setOnClickListener(
                 new View.OnClickListener() {
-
-                    final BigInteger fee = feesMap.get(currencies.getCurrency(((Spinner)SendFragment.this.view.findViewById(R.id.currency_spinner)).getSelectedItem().toString()));
-
                     @Override
                     public void onClick(View view) {
-                        getTransaction(
+                        String selectedItem = ((Spinner)SendFragment.this.view.findViewById(R.id.currency_spinner)).getSelectedItem().toString();
+
+                        if((selectedItem == null) || selectedItem.isEmpty()) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(getResources().getString(R.string.error_error))
+                                    .setMessage(getResources().getString(R.string.error_no_selected_currency))
+                                    .setCancelable(true).create().show();
+
+                            return;
+                        }
+
+                        int currencyId = currencies.getCurrency(selectedItem);
+                        System.out.println("currencyId:" + currencyId);
+
+                        BigInteger fee = feesMap.get(currencyId);
+
+                        if(fee == null) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(getResources().getString(R.string.error_error))
+                                    .setMessage(getResources().getString(R.string.error_cannot_get_fees))
+                                    .setCancelable(true).create().show();
+
+                            return;
+                        }
+
+                        long amount = 0;
+
+                        try {
+                            amount = Long.parseLong(((TextView)SendFragment.this.view.findViewById(R.id.send_amount)).getText().toString());
+                        } catch (Exception e) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(getResources().getString(R.string.error_error))
+                                    .setMessage(getResources().getString(R.string.error_invalid_amount))
+                                    .setCancelable(true).create().show();
+
+                            return;
+                        }
+
+                        String transaction64 = getTransaction(
+                                (new PrivateKeyStore()).getPrivateKey(getContext()),
                                 ((TextView)SendFragment.this.view.findViewById(R.id.send_address)).getText().toString(),
-                                Integer.parseInt(((Spinner)SendFragment.this.view.findViewById(R.id.currency_spinner)).getSelectedItem().toString()),
-                                Long.parseLong(((TextView)SendFragment.this.view.findViewById(R.id.send_amount)).getText().toString()),
+                                currencyId,
+                                amount,
                                 fee.longValue()
                         );
+                        System.out.println("transaction64: " + transaction64);
                     }
                 }
         );
@@ -106,8 +150,7 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface, O
                     @Override
                     public void onClick(View view) {
                         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getW
-                                indowToken(), 0);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         view.findViewById(R.id.send_address).clearFocus();
                         view.findViewById(R.id.send_amount).clearFocus();
                     }
@@ -145,6 +188,8 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface, O
             Spinner sItems = (Spinner) view.findViewById(R.id.currency_spinner);
             sItems.setAdapter(adapter);
         }
+
+        (new GetTransactionFees(this)).execute();
 
         return view;
     }
@@ -205,6 +250,14 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface, O
     }
 
     public void OnGetTransactionFeesCompleted(HashMap<Integer, BigInteger> feesMap) {
+
+        System.out.println("OnGetTransactionFeesCompleted");
+
+        for(Map.Entry<Integer, BigInteger> fee : feesMap.entrySet()) {
+            System.out.println("key:" + fee.getKey());
+            System.out.println("value:" + fee.getValue());
+        }
+
         this.feesMap = feesMap;
     }
 
