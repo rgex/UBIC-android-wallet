@@ -25,6 +25,8 @@ import java.util.Map;
 
 import network.ubic.ubic.AsyncTasks.GetTransactionFees;
 import network.ubic.ubic.AsyncTasks.OnGetTransactionFeesCompleted;
+import network.ubic.ubic.AsyncTasks.OnSendTransactionCompleted;
+import network.ubic.ubic.AsyncTasks.SendTransaction;
 import network.ubic.ubic.Currencies;
 import network.ubic.ubic.Interfaces.QrCodeCallbackInterface;
 import network.ubic.ubic.MainActivity;
@@ -38,7 +40,10 @@ import network.ubic.ubic.R;
  * Use the {@link SendFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SendFragment extends Fragment implements QrCodeCallbackInterface, OnGetTransactionFeesCompleted {
+public class SendFragment extends Fragment implements
+        QrCodeCallbackInterface,
+        OnGetTransactionFeesCompleted,
+        OnSendTransactionCompleted {
 
     Currencies currencies;
     private OnFragmentInteractionListener mListener;
@@ -141,6 +146,8 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface, O
                                 fee.longValue()
                         );
                         System.out.println("transaction64: " + transaction64);
+
+                        (new SendTransaction(SendFragment.this, transaction64)).execute();
                     }
                 }
         );
@@ -261,4 +268,7 @@ public class SendFragment extends Fragment implements QrCodeCallbackInterface, O
         this.feesMap = feesMap;
     }
 
+    public void onSendTransactionCompleted(int responseCode, String response) {
+        System.out.println("onSendTransactionCompleted code: " + responseCode + " reponse: " + response);
+    }
 }
