@@ -194,6 +194,7 @@ Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
     txOut.setScript(address.getScript());
     txOut.setAmount(outAmount);
     txOuts.push_back(txOut);
+    tx.setTxOuts(txOuts);
 
     UAmount inAmount;
     inAmount.map.insert(std::pair<uint8_t, CAmount>((uint8_t)currency, (CAmount)(amount + fee)));
@@ -203,6 +204,8 @@ Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
     std::vector<TxIn> txIns;
     txIns.push_back(txIn);
     tx.setTxIns(txIns);
+
+    tx.setNetwork(NET_CURRENT);
 
     Transaction* signedTx = wallet.signTransaction(&tx);
 

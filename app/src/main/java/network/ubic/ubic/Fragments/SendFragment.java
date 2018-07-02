@@ -3,10 +3,8 @@ package network.ubic.ubic.Fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.math.BigInteger;
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -106,6 +105,13 @@ public class SendFragment extends Fragment implements
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(getResources().getString(R.string.error_error))
                                     .setMessage(getResources().getString(R.string.error_no_selected_currency))
+                                    .setNegativeButton("Ok",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog,
+                                                                    int id) {
+                                                    dialog.cancel();
+                                                }
+                                            })
                                     .setCancelable(true).create().show();
 
                             return;
@@ -120,19 +126,49 @@ public class SendFragment extends Fragment implements
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(getResources().getString(R.string.error_error))
                                     .setMessage(getResources().getString(R.string.error_cannot_get_fees))
+                                    .setNegativeButton("Ok",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog,
+                                                                    int id) {
+                                                    dialog.cancel();
+                                                }
+                                            })
                                     .setCancelable(true).create().show();
 
                             return;
                         }
 
-                        long amount = 0;
+                        if(((TextView)SendFragment.this.view.findViewById(R.id.send_address)).getText().toString().isEmpty()) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(getResources().getString(R.string.error_error))
+                                    .setMessage(getResources().getString(R.string.error_empty_address))
+                                    .setNegativeButton("Ok",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog,
+                                                                    int id) {
+                                                    dialog.cancel();
+                                                }
+                                            })
+                                    .setCancelable(true).create().show();
+
+                            return;
+                        }
+
+                        double amount = 0;
 
                         try {
-                            amount = Long.parseLong(((TextView)SendFragment.this.view.findViewById(R.id.send_amount)).getText().toString());
+                            amount = Double.parseDouble(((TextView)SendFragment.this.view.findViewById(R.id.send_amount)).getText().toString());
                         } catch (Exception e) {
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(getResources().getString(R.string.error_error))
                                     .setMessage(getResources().getString(R.string.error_invalid_amount))
+                                    .setNegativeButton("Ok",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog,
+                                                                    int id) {
+                                                    dialog.cancel();
+                                                }
+                                            })
                                     .setCancelable(true).create().show();
 
                             return;
@@ -142,11 +178,12 @@ public class SendFragment extends Fragment implements
                                 (new PrivateKeyStore()).getPrivateKey(getContext()),
                                 ((TextView)SendFragment.this.view.findViewById(R.id.send_address)).getText().toString(),
                                 currencyId,
-                                amount,
+                                (long)(amount * 1000000),
                                 fee.longValue()
                         );
                         System.out.println("transaction64: " + transaction64);
 
+                        SendFragment.this.view.findViewById(R.id.sendTransactionProgressBar).setVisibility(View.VISIBLE);
                         (new SendTransaction(SendFragment.this, transaction64)).execute();
                     }
                 }
@@ -270,5 +307,58 @@ public class SendFragment extends Fragment implements
 
     public void onSendTransactionCompleted(int responseCode, String response) {
         System.out.println("onSendTransactionCompleted code: " + responseCode + " reponse: " + response);
+
+        try {
+            JSONObject jsonObj = new JSONObject(response);
+            boolean success = jsonObj.getBoolean("success");
+
+            if(success) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getResources().getString(R.string.success))
+                        .setMessage(getResources().getString(R.string.transaction_was_send))
+                        .setNegativeButton("Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .setCancelable(true).create().show();
+            } else {
+                String errorMessage;
+
+                if(jsonObj.getString("error").isEmpty()) {
+                    errorMessage = jsonObj.getString("error").toString();
+                } else {
+                    errorMessage = getResources().getString(R.string.error_unknown_error);
+                }
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getResources().getString(R.string.error_error))
+                        .setMessage(errorMessage)
+                        .setNegativeButton("Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .setCancelable(true).create().show();
+            }
+        } catch (Exception e) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(getResources().getString(R.string.error_error))
+                    .setMessage(getResources().getString(R.string.error_invalid_server_response))
+                    .setNegativeButton("Ok",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                    .setCancelable(true).create().show();
+        }
+
+        view.findViewById(R.id.sendTransactionProgressBar).setVisibility(View.GONE);
     }
 }
