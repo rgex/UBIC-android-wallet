@@ -199,6 +199,7 @@ Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
     UAmount inAmount;
     inAmount.map.insert(std::pair<uint8_t, CAmount>((uint8_t)currency, (CAmount)(amount + fee)));
     TxIn txIn;
+    txIn.setNonce(0);
     txIn.setAmount(inAmount);
     txIn.setInAddress(AddressHelper::addressLinkFromScript(wallet.getRandomPKHScriptFromWallet()));
     std::vector<TxIn> txIns;

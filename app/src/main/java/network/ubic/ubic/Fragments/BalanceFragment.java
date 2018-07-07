@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import network.ubic.ubic.AsyncTasks.ReceiveFragmentPopulate;
+import network.ubic.ubic.AsyncTasks.GetBalance;
+import network.ubic.ubic.AsyncTasks.OnGetBalanceCompleted;
 import network.ubic.ubic.Currencies;
 import network.ubic.ubic.MainActivity;
 import network.ubic.ubic.R;
@@ -29,7 +30,7 @@ import network.ubic.ubic.R;
  * create an instance of this fragment.
  */
 public class BalanceFragment extends Fragment implements
-        SwipeRefreshLayout.OnRefreshListener, ReceiveFragmentPopulate.OnGetBalanceCompleted
+        SwipeRefreshLayout.OnRefreshListener, OnGetBalanceCompleted
 {
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -70,7 +71,7 @@ public class BalanceFragment extends Fragment implements
         swipeRefreshLayout =((SwipeRefreshLayout)view.findViewById(R.id.balance_SwipeRefreshLayout));
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        new ReceiveFragmentPopulate.GetBalance(this).execute();
+        new GetBalance(this).execute();
         return view;
     }
 
@@ -100,7 +101,7 @@ public class BalanceFragment extends Fragment implements
     public void onRefresh() {
         System.out.println("onRefresh called");
 
-        new ReceiveFragmentPopulate.GetBalance(this).execute();
+        new GetBalance(this).execute();
     }
 
 
