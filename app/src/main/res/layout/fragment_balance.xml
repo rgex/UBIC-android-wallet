@@ -27,6 +27,15 @@
                     android:textColor="?attr/colorAccent"
                     android:textSize="24sp" />
 
+                    <TextView
+                        android:id="@+id/emptyBalanceText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Your wallet is empty :-("
+                        android:textAlignment="center"
+                        android:textColor="?attr/colorError"
+                        android:visibility="gone"
+                        android:textSize="14sp" />
                     <ListView
                         android:id="@+id/balance_list_view"
                         android:layout_width="wrap_content"

@@ -20,6 +20,7 @@ import network.ubic.ubic.AsyncTasks.GetBalance;
 import network.ubic.ubic.AsyncTasks.OnGetBalanceCompleted;
 import network.ubic.ubic.Currencies;
 import network.ubic.ubic.MainActivity;
+import network.ubic.ubic.PrivateKeyStore;
 import network.ubic.ubic.R;
 
 /**
@@ -71,7 +72,8 @@ public class BalanceFragment extends Fragment implements
         swipeRefreshLayout =((SwipeRefreshLayout)view.findViewById(R.id.balance_SwipeRefreshLayout));
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        new GetBalance(this).execute();
+        PrivateKeyStore privateKeyStore = new PrivateKeyStore();
+        new GetBalance(this, privateKeyStore.getPrivateKey(this.getContext())).execute();
         return view;
     }
 
@@ -101,22 +103,23 @@ public class BalanceFragment extends Fragment implements
     public void onRefresh() {
         System.out.println("onRefresh called");
 
-        new GetBalance(this).execute();
+        PrivateKeyStore privateKeyStore = new PrivateKeyStore();
+        new GetBalance(this, privateKeyStore.getPrivateKey(this.getContext())).execute();
     }
-
 
     public void OnGetBalanceCompleted(
             HashMap<Integer, BigInteger> balanceMap,
             HashMap<String, HashMap<Integer, BigInteger>> transactions,
-            boolean isReceivingUBI
+            boolean isReceivingUBI,
+            boolean isEmptyAddress
             ) {
 
-        if(balanceMap == null) {
+        if(balanceMap == null || balanceMap.isEmpty() || isEmptyAddress) {
+            view.findViewById(R.id.emptyBalanceText).setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setRefreshing(false);
             return;
-        }
-
-        if(balanceMap.isEmpty()) {
-            return;
+        } else {
+            view.findViewById(R.id.emptyBalanceText).setVisibility(View.GONE);
         }
 
         ListView balanceListView = view.findViewById(R.id.balance_list_view);

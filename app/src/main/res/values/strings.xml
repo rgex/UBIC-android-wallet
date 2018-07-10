@@ -8,7 +8,7 @@
     <string name="private_key_shared_pref">private_key_shared_pref</string>
     <string name="iv_key_shared_pref">iv_key_shared_pref</string>
 
-    <string name="no_funds_info">You can\'t make a payment, your wallet is empty</string>
+    <string name="no_funds_info">You cannot make a payment, your wallet is empty</string>
 
     <string name="error_error">Error</string>
     <string name="error_nfc_is_disabled">You need to enable nfc to use this app</string>
@@ -36,6 +36,8 @@
 
     <string name="waiting_for_nfc_text">Please place your device on the inner cover of the passport</string>
     <string name="found_nfc_text">Found NFC Tag!</string>
+
+    <string name="congratulation_ubi">Congratulation! you are receiving a UBI</string>
 
     <string name="reading_passport_progress">Reading passport content</string>
 

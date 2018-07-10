@@ -10,10 +10,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ProgressBar
+            android:id="@+id/my_ubi_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity = "center"
+            android:visibility="visible"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:id="@+id/no_ubi_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <Button
             android:id="@+id/registerPassportButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="REGISTER PASSPORT" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:id="@+id/is_receiving_ubi_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:textSize="26dp"
+            android:textAlignment="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/congratulation_ubi"/>
+    </LinearLayout>
     </LinearLayout>
 </FrameLayout>

@@ -16,15 +16,18 @@ import network.ubic.ubic.MainActivity;
 
 public class GetBalance extends AsyncTask<Void, Void, Void> {
     private String baseUrl = "https://ubic.network";
+    private byte[] privateKey;
 
     private String TAG = MainActivity.class.getSimpleName();
     private HashMap<Integer, BigInteger> balanceMap = new HashMap<Integer, BigInteger>();
     HashMap<String, HashMap<Integer, BigInteger>> transactions = new HashMap<String, HashMap<Integer, BigInteger>>();
     boolean isReceivingUBI;
     private OnGetBalanceCompleted listener;
+    private boolean isEmptyAddress = false;
 
-    public GetBalance(OnGetBalanceCompleted listener) {
+    public GetBalance(OnGetBalanceCompleted listener, byte[] privateKey) {
         this.listener = listener;
+        this.privateKey = privateKey;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... arg0) {
         HttpHandler sh = new HttpHandler();
         // Making a request to url and getting response
-        String url = baseUrl + "/api/addresses/qWeMZA73N7HYiUDqvbZuXfJV5ornPW7PQ/";
+        String url = baseUrl + "/api/addresses/" + getAddress(privateKey);
         String jsonStr = sh.makeServiceCall(url);
 
         Log.e(TAG, "Response from url: " + jsonStr);
@@ -45,39 +48,44 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
             try {
                 JSONObject jsonObj = new JSONObject(jsonStr);
 
-                // BALANCE
-                JSONObject amounts = jsonObj.getJSONObject("amount");
-                Iterator<String> keys = amounts.keys();
-                while (keys.hasNext()) {
-                    String key = keys.next();
-                    String value = amounts.getString(key);
-                    balanceMap.put(Integer.parseInt(key), new BigInteger(value));
-                }
+                if(jsonObj.has("error")) {
+                    isEmptyAddress = true;
+                } else {
 
-                // IS RECEIVING UBI
-                isReceivingUBI = jsonObj.getBoolean("is_receiving_ubi");
+                    // BALANCE
+                    JSONObject amounts = jsonObj.getJSONObject("amount");
+                    Iterator<String> keys = amounts.keys();
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        String value = amounts.getString(key);
+                        balanceMap.put(Integer.parseInt(key), new BigInteger(value));
+                    }
 
-                // BALANCE
-                JSONArray transactionsArray = jsonObj.getJSONArray("last_transactions");
-                System.out.println("transactionsArray.length():" + transactionsArray.length());
-                for (int i=0; i < transactionsArray.length(); i++) {
+                    // IS RECEIVING UBI
+                    isReceivingUBI = jsonObj.getBoolean("is_receiving_ubi");
 
-                    String transactionID = transactionsArray.getJSONObject(i).getString("transaction_id");
+                    // BALANCE
+                    JSONArray transactionsArray = jsonObj.getJSONArray("last_transactions");
+                    System.out.println("transactionsArray.length():" + transactionsArray.length());
+                    for (int i = 0; i < transactionsArray.length(); i++) {
 
-                    System.out.println(transactionsArray.getJSONObject(i).toString());
+                        String transactionID = transactionsArray.getJSONObject(i).getString("transaction_id");
 
-                    try {
-                        amounts = transactionsArray.getJSONObject(i).getJSONObject("amount");
-                        keys = amounts.keys();
-                        while (keys.hasNext()) {
-                            String key = keys.next();
-                            String value = amounts.getString(key);
-                            HashMap<Integer, BigInteger> map2 = new HashMap<Integer, BigInteger>();
-                            map2.put(Integer.parseInt(key), new BigInteger(value));
-                            transactions.put(transactionID, map2);
+                        System.out.println(transactionsArray.getJSONObject(i).toString());
+
+                        try {
+                            amounts = transactionsArray.getJSONObject(i).getJSONObject("amount");
+                            keys = amounts.keys();
+                            while (keys.hasNext()) {
+                                String key = keys.next();
+                                String value = amounts.getString(key);
+                                HashMap<Integer, BigInteger> map2 = new HashMap<Integer, BigInteger>();
+                                map2.put(Integer.parseInt(key), new BigInteger(value));
+                                transactions.put(transactionID, map2);
+                            }
+                        } catch (Exception e) {
+                            // Amount is probably empty
                         }
-                    } catch (Exception e) {
-                        // Amount is probably empty
                     }
                 }
 
@@ -96,6 +104,8 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        listener.OnGetBalanceCompleted(balanceMap, transactions, isReceivingUBI);
+        listener.OnGetBalanceCompleted(balanceMap, transactions, isReceivingUBI, isEmptyAddress);
     }
+
+    public native String getAddress(byte[]  seed);
 }

@@ -5,5 +5,5 @@ import java.util.HashMap;
 
 public interface OnGetBalanceCompleted {
 
-    void OnGetBalanceCompleted(HashMap<Integer, BigInteger> balanceMap, HashMap<String, HashMap<Integer, BigInteger>> transactions, boolean isReceivingUBI);
+    void OnGetBalanceCompleted(HashMap<Integer, BigInteger> balanceMap, HashMap<String, HashMap<Integer, BigInteger>> transactions, boolean isReceivingUBI, boolean isEmptyAddress);
 }
