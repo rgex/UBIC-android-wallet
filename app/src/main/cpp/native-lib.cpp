@@ -8,6 +8,7 @@
 #include "Transaction/TransactionHelper.h"
 #include "Base64.h"
 #include "AddressHelper.h"
+#include <android/log.h>
 
 extern "C" JNIEXPORT jstring
 
@@ -40,6 +41,7 @@ Java_network_ubic_ubic_AsyncTasks_ReceiveFragmentPopulate_getAddress(
     std::vector<unsigned char> seedVector = std::vector<unsigned char>(seedUC, seedUC + 20);
     wallet.setSeed(seedVector);
 
+    __android_log_print(ANDROID_LOG_VERBOSE, "foo", "seedUC: %s", Hexdump::vectorToHexString(seedVector).c_str());
 
     std::cout << "seedUC" << std::endl;
     wallet.initWallet();
@@ -69,6 +71,8 @@ Java_network_ubic_ubic_AsyncTasks_GetBalance_getAddress(
     std::vector<unsigned char> seedVector = std::vector<unsigned char>(seedUC, seedUC + 20);
     wallet.setSeed(seedVector);
 
+
+    __android_log_print(ANDROID_LOG_VERBOSE, "foo", "seedUC: %s", Hexdump::vectorToHexString(seedVector).c_str());
 
     std::cout << "seedUC" << std::endl;
     wallet.initWallet();
@@ -189,7 +193,8 @@ Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
         jstring readableAddress,
         jint currency,
         jlong amount,
-        jlong fee) {
+        jlong fee,
+        jint nonce) {
 
     Transaction tx;
 
@@ -224,9 +229,9 @@ Java_network_ubic_ubic_Fragments_SendFragment_getTransaction(
     tx.setTxOuts(txOuts);
 
     UAmount inAmount;
-    inAmount.map.insert(std::pair<uint8_t, CAmount>((uint8_t)currency, (CAmount)(amount + fee)));
+    inAmount.map.insert(std::pair<uint8_t, CAmount>((uint8_t)currency, (CAmount)(amount + (fee/5)))); // the transaction will be about 180 bytes, the fee is the fee for 1kb
     TxIn txIn;
-    txIn.setNonce(0);
+    txIn.setNonce(nonce);
     txIn.setAmount(inAmount);
     txIn.setInAddress(AddressHelper::addressLinkFromScript(wallet.getRandomPKHScriptFromWallet()));
     std::vector<TxIn> txIns;

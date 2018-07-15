@@ -31,7 +31,8 @@ import network.ubic.ubic.R;
  * create an instance of this fragment.
  */
 public class BalanceFragment extends Fragment implements
-        SwipeRefreshLayout.OnRefreshListener, OnGetBalanceCompleted
+        SwipeRefreshLayout.OnRefreshListener,
+        OnGetBalanceCompleted
 {
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -111,7 +112,8 @@ public class BalanceFragment extends Fragment implements
             HashMap<Integer, BigInteger> balanceMap,
             HashMap<String, HashMap<Integer, BigInteger>> transactions,
             boolean isReceivingUBI,
-            boolean isEmptyAddress
+            boolean isEmptyAddress,
+            int nonce
             ) {
 
         if(balanceMap == null || balanceMap.isEmpty() || isEmptyAddress) {

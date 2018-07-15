@@ -22,7 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import network.ubic.ubic.AsyncTasks.GetBalance;
 import network.ubic.ubic.AsyncTasks.GetTransactionFees;
+import network.ubic.ubic.AsyncTasks.OnGetBalanceCompleted;
 import network.ubic.ubic.AsyncTasks.OnGetTransactionFeesCompleted;
 import network.ubic.ubic.AsyncTasks.OnSendTransactionCompleted;
 import network.ubic.ubic.AsyncTasks.SendTransaction;
@@ -42,18 +44,21 @@ import network.ubic.ubic.R;
 public class SendFragment extends Fragment implements
         QrCodeCallbackInterface,
         OnGetTransactionFeesCompleted,
+        OnGetBalanceCompleted,
         OnSendTransactionCompleted {
 
     Currencies currencies;
     private OnFragmentInteractionListener mListener;
     private View view;
-    HashMap<Integer, BigInteger> feesMap = new HashMap<Integer, BigInteger>();
+    private HashMap<Integer, BigInteger> feesMap = new HashMap<Integer, BigInteger>();
+    private int nonce = 0;
 
     public native String getTransaction(byte[]  seed,
                                         String readableAddress,
                                         int currency,
                                         long amount,
-                                        long fee);
+                                        long fee,
+                                        int nonce);
 
     public SendFragment() {
         // Required empty public constructor
@@ -179,7 +184,8 @@ public class SendFragment extends Fragment implements
                                 ((TextView)SendFragment.this.view.findViewById(R.id.send_address)).getText().toString(),
                                 currencyId,
                                 (long)(amount * 1000000),
-                                fee.longValue()
+                                fee.longValue(),
+                                nonce
                         );
                         System.out.println("transaction64: " + transaction64);
 
@@ -233,6 +239,8 @@ public class SendFragment extends Fragment implements
             sItems.setAdapter(adapter);
         }
 
+        PrivateKeyStore privateKeyStore = new PrivateKeyStore();
+        new GetBalance(this, privateKeyStore.getPrivateKey(this.getContext())).execute();
         (new GetTransactionFees(this)).execute();
 
         return view;
@@ -291,6 +299,16 @@ public class SendFragment extends Fragment implements
                     })
                     .setCancelable(true).create().show();
         }
+    }
+
+    public void OnGetBalanceCompleted(
+            HashMap<Integer, BigInteger> balanceMap,
+            HashMap<String, HashMap<Integer, BigInteger>> transactions,
+            boolean isReceivingUBI,
+            boolean isEmptyAddress,
+            int nonce
+    ) {
+        this.nonce = nonce;
     }
 
     public void OnGetTransactionFeesCompleted(HashMap<Integer, BigInteger> feesMap) {

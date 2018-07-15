@@ -7,15 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-
 import network.ubic.ubic.AsyncTasks.GetBalance;
 import network.ubic.ubic.AsyncTasks.OnGetBalanceCompleted;
 import network.ubic.ubic.MainActivity;
 import network.ubic.ubic.PrivateKeyStore;
 import network.ubic.ubic.R;
-
-import com.google.android.gms.plus.PlusOneButton;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -126,7 +122,8 @@ public class MyUBIFragment extends Fragment implements OnGetBalanceCompleted {
             HashMap<Integer, BigInteger> balanceMap,
             HashMap<String, HashMap<Integer, BigInteger>> transactions,
             boolean isReceivingUBI,
-            boolean isEmptyAddress
+            boolean isEmptyAddress,
+            int nonce
     ) {
         this.view.findViewById(R.id.my_ubi_progress_bar).setVisibility(View.GONE);
 

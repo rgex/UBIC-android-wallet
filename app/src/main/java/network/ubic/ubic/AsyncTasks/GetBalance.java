@@ -24,6 +24,7 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
     boolean isReceivingUBI;
     private OnGetBalanceCompleted listener;
     private boolean isEmptyAddress = false;
+    private int nonce;
 
     public GetBalance(OnGetBalanceCompleted listener, byte[] privateKey) {
         this.listener = listener;
@@ -63,6 +64,9 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
 
                     // IS RECEIVING UBI
                     isReceivingUBI = jsonObj.getBoolean("is_receiving_ubi");
+
+                    // NONCE
+                    nonce = jsonObj.getInt("nonce");
 
                     // BALANCE
                     JSONArray transactionsArray = jsonObj.getJSONArray("last_transactions");
@@ -104,7 +108,7 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        listener.OnGetBalanceCompleted(balanceMap, transactions, isReceivingUBI, isEmptyAddress);
+        listener.OnGetBalanceCompleted(balanceMap, transactions, isReceivingUBI, isEmptyAddress, nonce);
     }
 
     public native String getAddress(byte[]  seed);

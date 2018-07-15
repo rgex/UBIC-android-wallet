@@ -2,15 +2,10 @@ package network.ubic.ubic.AsyncTasks;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-
-import java.math.BigInteger;
-import java.util.HashMap;
-
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
 
