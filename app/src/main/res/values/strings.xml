@@ -18,6 +18,8 @@
     <string name="error_invalid_amount">Invalid amount</string>
     <string name="error_unknown_error">Unknown error</string>
     <string name="error_invalid_server_response">Invalid server response</string>
+    <string name="error_passport_unknown_error">Unknown error</string>
+    <string name="error_passport_invalid_server_response">Invalid server response</string>
 
     <string name="success">Success</string>
     <string name="transaction_was_send">Transaction was send</string>
@@ -31,6 +33,9 @@
     <string name="passport_number_text">Passport No.</string>
     <string name="date_of_birth_text">Date of birth</string>
     <string name="date_of_expiry_text">Date of expiry</string>
+
+    <string name="uploading_passport_transaction">Uploading Passport transaction</string>
+    <string name="uploading_passport_transaction_done">Done! in some minutes you should start receive your UBI</string>
 
     <string name="next_button_text">Next</string>
 

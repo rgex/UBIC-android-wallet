@@ -345,7 +345,7 @@ public class SendFragment extends Fragment implements
             } else {
                 String errorMessage;
 
-                if(jsonObj.getString("error").isEmpty()) {
+                if(!jsonObj.getString("error").isEmpty()) {
                     errorMessage = jsonObj.getString("error").toString();
                 } else {
                     errorMessage = getResources().getString(R.string.error_unknown_error);

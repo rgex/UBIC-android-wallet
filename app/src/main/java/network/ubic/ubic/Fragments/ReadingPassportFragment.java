@@ -14,10 +14,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
+import android.widget.TextClock;
+import android.widget.TextView;
+
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 
+import network.ubic.ubic.AsyncTasks.OnSendTransactionCompleted;
+import network.ubic.ubic.AsyncTasks.SendTransaction;
 import network.ubic.ubic.BitiAndroid.AbstractNfcActivity;
 import network.ubic.ubic.BitiAndroid.TagProvider;
 import network.ubic.ubic.BitiMRTD.Constants.MrtdConstants;
@@ -40,7 +47,7 @@ import network.ubic.ubic.R;
  * Use the {@link ReadingPassportFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReadingPassportFragment extends Fragment {
+public class ReadingPassportFragment extends Fragment implements OnSendTransactionCompleted {
 
     private String passportNumber;
     private String dateOfBirth;
@@ -49,6 +56,7 @@ public class ReadingPassportFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    View view;
     private byte[] sod;
 
     private AsyncReader asyncReader;
@@ -119,7 +127,18 @@ public class ReadingPassportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_reading_passport, container, false);
+
+        this.view = inflater.inflate(R.layout.fragment_reading_passport, container, false);
+
+        this.view.findViewById(R.id.ReadingPassportLayout).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+        );
 
         PassportStore passportStore = new PassportStore(getContext());
 
@@ -127,7 +146,7 @@ public class ReadingPassportFragment extends Fragment {
         this.dateOfBirth = passportStore.getDateOfBirth();
         this.dateOfExpiration = passportStore.getDateOfExpiry();
 
-        this.mrtdProgressBar = view.findViewById(R.id.mrtdProgressBar);
+        this.mrtdProgressBar = this.view.findViewById(R.id.mrtdProgressBar);
 
         System.out.println("this.passportNumber: " + this.passportNumber);
         System.out.println("this.dateOfBirth: " + this.dateOfBirth);
@@ -135,7 +154,7 @@ public class ReadingPassportFragment extends Fragment {
 
         this.readNfc();
 
-        return view;
+        return this.view;
     }
 
     @Override
@@ -184,6 +203,12 @@ public class ReadingPassportFragment extends Fragment {
                 tag77
         );
         System.out.println("passportTx64: " + passportTx64);
+
+        this.view.findViewById(R.id.mrtdProgressBar).setVisibility(View.GONE);
+        this.view.findViewById(R.id.uploadPassportTransactionProgressBar).setVisibility(View.VISIBLE);
+        ((TextView)this.view.findViewById(R.id.readingPassportTextView)).setText(R.string.uploading_passport_transaction);
+
+        (new SendTransaction(ReadingPassportFragment.this, passportTx64)).execute();
     }
 
     public void showError(final String message) {
@@ -328,5 +353,59 @@ public class ReadingPassportFragment extends Fragment {
         public boolean isCanceled() {
             return this.isCanceled;
         }
+    }
+
+
+    public void onSendTransactionCompleted(int responseCode, String response) {
+        System.out.println("onSendTransactionCompleted code: " + responseCode + " reponse: " + response);
+
+        try {
+            JSONObject jsonObj = new JSONObject(response);
+            boolean success = jsonObj.getBoolean("success");
+
+            if(success) {
+                ((TextView)this.view.findViewById(R.id.readingPassportTextView)).setText(R.string.uploading_passport_transaction_done);
+            } else {
+                String errorMessage;
+
+                ((TextView)this.view.findViewById(R.id.readingPassportTextView)).setText(R.string.error_error);
+
+                if(!jsonObj.getString("error").isEmpty()) {
+                    errorMessage = jsonObj.getString("error").toString();
+                } else {
+                    errorMessage = getResources().getString(R.string.error_passport_unknown_error);
+                }
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getResources().getString(R.string.error_error))
+                        .setMessage(errorMessage)
+                        .setNegativeButton("Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .setCancelable(true).create().show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            ((TextView)this.view.findViewById(R.id.readingPassportTextView)).setText(R.string.error_error);
+
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(getResources().getString(R.string.error_error))
+                    .setMessage(getResources().getString(R.string.error_passport_invalid_server_response))
+                    .setNegativeButton("Ok",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                    .setCancelable(true).create().show();
+        }
+
+        view.findViewById(R.id.uploadPassportTransactionProgressBar).setVisibility(View.GONE);
     }
 }

@@ -14,6 +14,10 @@ android {
                 cppFlags "-DANDROID_STL=c++_shared"
             }
         }
+
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
     }
     buildTypes {
         release {
