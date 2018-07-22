@@ -1,9 +1,14 @@
 package network.ubic.ubic.Fragments;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -148,6 +153,39 @@ public class RegisterPassportFragment extends Fragment implements DatePickerDial
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
+
+        if (mNfcAdapter == null || !mNfcAdapter.isEnabled()) {
+            System.out.println("failed to get NFC adapter, NFC disabled?");
+
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(getResources().getString(R.string.error_error))
+                    .setMessage(getResources().getString(R.string.error_nfc_is_disabled))
+                    .setCancelable(true)
+                    .setPositiveButton("enable", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle(getResources().getString(R.string.success))
+                                        .setMessage(getResources().getString(R.string.go_to_nfc_settings))
+                                        .setNegativeButton("Ok",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog,
+                                                                        int id) {
+                                                        dialog.cancel();
+                                                    }
+                                                })
+                                        .setCancelable(true).create().show();
+                            }
+                        }
+                    }).create().show();
+        }
+
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_register_passport, container, false);
 

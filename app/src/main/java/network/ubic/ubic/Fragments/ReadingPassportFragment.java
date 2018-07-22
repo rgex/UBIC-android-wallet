@@ -86,6 +86,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        System.out.println("oncreate ReadingPassportFragment");
         super.onCreate(savedInstanceState);
 
         this.isActivityRunning = true;
@@ -127,6 +128,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        System.out.println("onCreateView ReadingPassportFragment");
 
         this.view = inflater.inflate(R.layout.fragment_reading_passport, container, false);
 

@@ -24,9 +24,6 @@ import network.ubic.ubic.R;
  * create an instance of this fragment.
  */
 public class WaitForNfcFragment extends Fragment {
-    private static final String ARG_PARAM_PASSPORT_NUMBER = "param1";
-    private static final String ARG_PARAM_DATE_OF_BIRTH = "param2";
-    private static final String ARG_PARAM_DATE_OF_EXPIRATION = "param2";
 
     private OnFragmentInteractionListener mListener;
 

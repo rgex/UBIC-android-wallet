@@ -1,6 +1,6 @@
-<android.support.v4.widget.SwipeRefreshLayout
-    android:layout_width="match_parent"
+<android.support.v4.widget.SwipeRefreshLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/balance_SwipeRefreshLayout"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -29,15 +29,32 @@
                     android:textColor="?attr/colorAccent"
                     android:textSize="24sp" />
 
-                    <TextView
-                        android:id="@+id/emptyBalanceText"
+                    <LinearLayout
+                        android:id="@+id/balance_is_empty_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Your wallet is empty :-("
-                        android:textAlignment="center"
-                        android:textColor="?attr/colorError"
+                        android:orientation="vertical"
                         android:visibility="gone"
-                        android:textSize="14sp" />
+                        >
+                        <TextView
+                            android:id="@+id/textView7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Your wallet is empty, register your passport to receive a UBI"
+                            android:textAlignment="center"
+                            android:textSize="18sp"
+                            tools:layout_editor_absoluteX="0dp"
+                            tools:layout_editor_absoluteY="1dp" />
+
+                        <Button
+                            android:id="@+id/balance_register_passport_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Register a passport"
+                            tools:layout_editor_absoluteX="0dp"
+                            tools:layout_editor_absoluteY="16dp" />
+                    </LinearLayout>
+
                     <ListView
                         android:id="@+id/balance_list_view"
                         android:layout_width="wrap_content"

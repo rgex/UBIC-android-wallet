@@ -74,6 +74,15 @@ public class BalanceFragment extends Fragment implements
         swipeRefreshLayout =((SwipeRefreshLayout)view.findViewById(R.id.balance_SwipeRefreshLayout));
         swipeRefreshLayout.setOnRefreshListener(this);
 
+        this.view.findViewById(R.id.balance_register_passport_button).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((MainActivity)getActivity()).goToNavRegisterPassport();
+                    }
+                }
+        );
+
         view.findViewById(R.id.balance_layout).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -128,11 +137,11 @@ public class BalanceFragment extends Fragment implements
             ) {
 
         if(balanceMap == null || balanceMap.isEmpty() || isEmptyAddress) {
-            view.findViewById(R.id.emptyBalanceText).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.balance_is_empty_layout).setVisibility(View.VISIBLE);
             swipeRefreshLayout.setRefreshing(false);
             return;
         } else {
-            view.findViewById(R.id.emptyBalanceText).setVisibility(View.GONE);
+            view.findViewById(R.id.balance_is_empty_layout).setVisibility(View.GONE);
         }
 
         ListView balanceListView = view.findViewById(R.id.balance_list_view);
