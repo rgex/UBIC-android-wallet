@@ -67,8 +67,15 @@ public abstract class AbstractNfcActivity extends AppCompatActivity
 
     public void onNewIntent(Intent intent)
     {
-        Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        TagProvider.setTag(IsoDep.get(tagFromIntent));
+        try {
+            Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            if (tagFromIntent != null) {
+                TagProvider.setTag(IsoDep.get(tagFromIntent));
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
         System.out.println("Got new intent!");
     }
 }
