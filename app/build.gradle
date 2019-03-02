@@ -6,17 +6,13 @@ android {
         applicationId "network.ubic.ubic"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.1"
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags "-DANDROID_STL=c++_shared"
+                cppFlags ""
             }
-        }
-
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
         }
     }
     buildTypes {
@@ -45,8 +41,7 @@ dependencies {
     implementation 'com.android.support:cardview-v7:27.1.1'
 
     // https://mvnrepository.com/artifact/com.google.zxing/core
-    api group: 'com.google.zxing', name: 'core', version: '3.3.2'
-    api group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.6.0'
+    api group: 'com.google.zxing', name: 'core', version: '3.2.1'
 
     api 'com.madgag.spongycastle:core:1.54.0.0'
     api 'com.madgag.spongycastle:pkix:1.54.0.0'

@@ -26,7 +26,7 @@ public abstract class AbstractNfcActivity extends AppCompatActivity
 
         if (mNfcAdapter == null || !mNfcAdapter.isEnabled()) {
             System.out.println("failed to get NFC adapter, NFC disabled?");
-/*
+
             new AlertDialog.Builder(AbstractNfcActivity.this)
                     .setTitle(getResources().getString(R.string.error_error))
                             .setMessage(getResources().getString(R.string.error_nfc_is_disabled))
@@ -38,7 +38,6 @@ public abstract class AbstractNfcActivity extends AppCompatActivity
                                             startActivity(intent);
                                         }
                                     }).create().show();
-                                    */
         }
         else {
             pendingIntent = PendingIntent.getActivity(
@@ -67,15 +66,8 @@ public abstract class AbstractNfcActivity extends AppCompatActivity
 
     public void onNewIntent(Intent intent)
     {
-        try {
-            Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            if (tagFromIntent != null) {
-                TagProvider.setTag(IsoDep.get(tagFromIntent));
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
+        Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        TagProvider.setTag(IsoDep.get(tagFromIntent));
         System.out.println("Got new intent!");
     }
 }

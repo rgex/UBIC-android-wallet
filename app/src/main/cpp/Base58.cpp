@@ -72,8 +72,9 @@ bool Base58::DecodeBase58(const unsigned char* b58, unsigned char* decoded, uint
 
     *decodedLength = vch.size();
     std::copy(vch.begin(), vch.end(), decoded);
-    return true;
+
 }
+
 
 std::string Base58::EncodeBase58(const unsigned char* pbegin, const unsigned char* pend)
 {

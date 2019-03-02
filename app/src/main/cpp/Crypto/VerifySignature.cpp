@@ -6,6 +6,7 @@
 #include "../Tools/Hexdump.h"
 #include "../Wallet.h"
 #include "ECCtools.h"
+#include "../../../../../../../Téléchargements/openssl_for_ios_and_android-master/tools/openssl-1.1.0f/include/openssl/bio.h"
 
 bool VerifySignature::verify(unsigned char* msg, size_t mlen, unsigned char* sig, size_t slen, EVP_PKEY* pkey)
 {

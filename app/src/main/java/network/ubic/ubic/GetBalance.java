@@ -1,26 +1,29 @@
-package network.ubic.ubic.AsyncTasks;
+package network.ubic.ubic;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Toast;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import network.ubic.ubic.HttpHandler;
-import network.ubic.ubic.MainActivity;
-
-public class GetTransactionFees extends AsyncTask<Void, Void, Void> {
-
+public class GetBalance extends AsyncTask<Void, Void, Void> {
     private String baseUrl = "https://ubic.network";
 
     private String TAG = MainActivity.class.getSimpleName();
-    private OnGetTransactionFeesCompleted listener;
-    private HashMap<Integer, BigInteger> feesMap = new HashMap<Integer, BigInteger>();
+    private HashMap<Integer, BigInteger> balanceMap = new HashMap<Integer, BigInteger>();
+    private OnGetBalanceCompleted listener;
 
-    public GetTransactionFees(OnGetTransactionFeesCompleted listener) {
+    public GetBalance(OnGetBalanceCompleted listener) {
         this.listener = listener;
     }
 
@@ -34,7 +37,7 @@ public class GetTransactionFees extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... arg0) {
         HttpHandler sh = new HttpHandler();
         // Making a request to url and getting response
-        String url = baseUrl + "/api/fees";
+        String url = baseUrl + "/api/addresses/xx/";
         String jsonStr = sh.makeServiceCall(url);
 
         Log.e(TAG, "Response from url: " + jsonStr);
@@ -42,18 +45,22 @@ public class GetTransactionFees extends AsyncTask<Void, Void, Void> {
             try {
                 JSONObject jsonObj = new JSONObject(jsonStr);
 
-                JSONObject amounts = jsonObj.getJSONObject("fees");
+                // Getting JSON Array node
+                JSONObject amounts = jsonObj.getJSONObject("amount");
+
                 Iterator<String> keys = amounts.keys();
                 while (keys.hasNext()) {
                     String key = keys.next();
-                    JSONObject value = amounts.getJSONObject(key);
-                    feesMap.put(Integer.parseInt(key), new BigInteger(value.getString("fee")));
-                }
+                    String value = amounts.getString(key);
+                    balanceMap.put(Integer.parseInt(key), new BigInteger(value));
 
+                }
             } catch (final JSONException e) {
-                System.out.println("JSONException");
-                e.printStackTrace();
+
+
             }
+
+        } else {
 
         }
 
@@ -63,6 +70,6 @@ public class GetTransactionFees extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        listener.OnGetTransactionFeesCompleted(feesMap);
+        listener.OnGetBalanceCompleted(balanceMap);
     }
 }
