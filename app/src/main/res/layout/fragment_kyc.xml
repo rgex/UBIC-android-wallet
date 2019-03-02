@@ -1,0 +1,67 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/send_main_layout"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:id="@+id/send_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:drawableStart="@mipmap/qr_scan"
+            android:theme="@style/ButtonStyle"
+            android:id="@+id/scanQrCodeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SCAN QR CODE" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:theme="@style/EditTextStyle"
+                        android:id="@+id/challenge_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="or enter the challenge here" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_weight=".70"
+                            android:layout_height="wrap_content">
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:theme="@style/ButtonStyle"
+                        android:id="@+id/verifyKYCButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Verify" />
+
+
+                </LinearLayout>
+
+            </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

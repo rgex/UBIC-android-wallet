@@ -121,6 +121,8 @@ NtpRskSignatureVerificationObject* NtpRsk::signWithNtpRsk(NtpRskSignatureRequest
     ntpRskSignatureVerificationObject->setNm(ntpRskSignatureRequestObject->getNm());
     ntpRskSignatureVerificationObject->setE(ntpRskSignatureRequestObject->getE());
     ntpRskSignatureVerificationObject->setN(ntpRskSignatureRequestObject->getN());
+    ntpRskSignatureVerificationObject->setMdAlg(ntpRskSignatureRequestObject->getMdAlg());
+    ntpRskSignatureVerificationObject->setSignedPayload(ntpRskSignatureRequestObject->getSignedPayload());
 
 
     return ntpRskSignatureVerificationObject;
@@ -167,6 +169,7 @@ bool NtpRsk::verifyNtpRsk(NtpRskSignatureVerificationObject *ntpRskSignatureVeri
         std::cout << "BN_cmp(XT, t1) failed" << std::endl;
         std::cout << "XT " << BN_bn2dec(XT) <<  std::endl;
         std::cout << "t1 " << BN_bn2dec(t1) << std::endl;
+        BN_CTX_free(ctx);
         return false;
     }
 
@@ -182,6 +185,7 @@ bool NtpRsk::verifyNtpRsk(NtpRskSignatureVerificationObject *ntpRskSignatureVeri
 
     if(BN_cmp(XT, t2) != 0) {
         std::cout << "BN_cmp(XT, t2) failed";
+        BN_CTX_free(ctx);
         return false;
     }
 
@@ -197,6 +201,7 @@ bool NtpRsk::verifyNtpRsk(NtpRskSignatureVerificationObject *ntpRskSignatureVeri
 
     if(BN_cmp(XT, t3) != 0) {
         std::cout << "BN_cmp(XT, t3) failed" << std::endl;
+        BN_CTX_free(ctx);
         return false;
     }
 
@@ -212,6 +217,7 @@ bool NtpRsk::verifyNtpRsk(NtpRskSignatureVerificationObject *ntpRskSignatureVeri
 
     if(BN_cmp(XT, t4) != 0) {
         std::cout << "BN_cmp(XT, t4) failed" << std::endl;
+        BN_CTX_free(ctx);
         return false;
     }
 
@@ -227,9 +233,11 @@ bool NtpRsk::verifyNtpRsk(NtpRskSignatureVerificationObject *ntpRskSignatureVeri
 
     if(BN_cmp(XT, t5) != 0) {
         std::cout << "BN_cmp(XT, t5) failed" << std::endl;
+        BN_CTX_free(ctx);
         return false;
     }
 
+    BN_CTX_free(ctx);
     return true;
 }
 

@@ -7,6 +7,7 @@
 #include "TxIn.h"
 #include "TxOut.h"
 #include "Transaction.h"
+#include "../Scripts/DeactivateCertificateScript.h";
 
 class TransactionHelper {
 public:

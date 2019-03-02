@@ -6,6 +6,7 @@
     tools:context=".Fragments.RegisterPassportFragment">
 
     <LinearLayout
+        android:layout_margin="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,11 +15,12 @@
         android:layout_above="@+id/ReadNfcBtn"
         android:id="@+id/linearLayout2">
 
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="74dp"
-            android:background="#c2d7e1"
+            android:background="@color/ubicDarkBlue"
             android:weightSum="1"
             android:padding="6dp">
 
@@ -34,8 +36,8 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/passport_info_alert_text"
                 android:id="@+id/textView5"
-                android:autoText="false"
-                android:textSize="15sp"
+                android:textSize="14sp"
+                android:textColor="@color/ubicWhite"
                 android:paddingLeft="8dp"
                 android:paddingTop="4dp" />
         </LinearLayout>
@@ -67,6 +69,9 @@
                     android:layout_height="50dp">
 
                     <TextView
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ubicWhite"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -86,6 +91,9 @@
                     android:layout_gravity="center_horizontal">
 
                     <TextView
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ubicWhite"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -105,6 +113,9 @@
                     android:layout_gravity="center_horizontal">
 
                     <TextView
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ubicWhite"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -133,6 +144,7 @@
                     android:layout_gravity="center_horizontal">
 
                     <EditText
+                        android:theme="@style/EditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -153,6 +165,7 @@
                     android:layout_gravity="center_horizontal">
 
                     <EditText
+                        android:theme="@style/EditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="date"
@@ -171,6 +184,7 @@
                     android:layout_gravity="center_horizontal">
 
                     <EditText
+                        android:theme="@style/EditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="date"
@@ -187,15 +201,12 @@
 
         <Button
             android:id="@+id/ReadNfcBtn"
+            android:text="@string/next_button_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/linearLayout2"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/linearLayout2"
-            android:layout_marginBottom="41dp"
-            android:text="@string/next_button_text" />
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="16dp"
+            android:theme="@style/ButtonStyle"/>
 
     </LinearLayout>
 

@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        app:elevation="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -21,5 +22,18 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/qr_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@mipmap/qr_scan"
+        android:padding="0dp"
+        app:borderWidth="0dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/ubicWhite"
+        app:maxImageSize="32dp"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

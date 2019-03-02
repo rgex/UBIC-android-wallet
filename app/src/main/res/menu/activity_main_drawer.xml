@@ -13,6 +13,10 @@
             android:icon="@drawable/menu_my_ubi"
             android:title="My UBI" />
         <item
+            android:id="@+id/nav_my_kyc"
+            android:icon="@drawable/menu_kyc"
+            android:title="KYC verification" />
+        <item
             android:id="@+id/nav_send"
             android:icon="@drawable/ic_menu_send"
             android:title="Send" />
@@ -20,5 +24,9 @@
             android:id="@+id/nav_receive"
             android:icon="@drawable/menu_receive"
             android:title="Receive" />
+        <item
+            android:id="@+id/nav_private_keys"
+            android:icon="@drawable/menu_private_keys"
+            android:title="Export my private key" />
     </group>
 </menu>

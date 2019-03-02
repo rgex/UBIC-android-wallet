@@ -19,6 +19,7 @@
 #include "Tools/Log.h"
 #include "Config.h"
 #include "FS/FS.h"
+#include "Scripts/PkhInScript.h"
 
 void Wallet::setSeed(std::vector<unsigned char> newSeed) {
     this->seed = newSeed;
@@ -95,6 +96,11 @@ std::vector<unsigned char> Wallet::signWithAddress(std::vector<unsigned char> ad
         Log(LOG_LEVEL_ERROR) << "Address not found " << address;
         return std::vector<unsigned char> ();
     }
+}
+
+std::vector<unsigned char> Wallet::sign(std::vector<unsigned char> msg) {
+    std::vector<unsigned char> privateKey = (std::vector<unsigned char>)this->privateKeys.at(0);
+    return CreateSignature::sign(privateKey, msg);
 }
 
 std::vector<unsigned char> Wallet::getRandomPrivateKeyFromWallet() {

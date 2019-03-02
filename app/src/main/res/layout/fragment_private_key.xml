@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    tools:context=".Fragments.PrivateKeyFragment">
+
+    <LinearLayout
+        android:id="@+id/private_key_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:background="@color/ubicDarkBlue"
+            android:weightSum="1"
+            android:padding="6dp">
+
+            <ImageView
+                android:layout_width="67dp"
+                android:layout_height="match_parent"
+                android:id="@+id/imageView"
+                android:src="@drawable/ic_info_outline_white_48px" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Warning: This is your PRIVATE key. Don't share it"
+                android:id="@+id/textView5"
+                android:textSize="18sp"
+                android:textColor="@color/ubicWhite"
+                android:paddingLeft="14dp"
+                android:paddingTop="4dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/private_key_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/ubicWhite"
+            android:textSize="18sp"
+            android:paddingTop="10sp"
+            android:paddingBottom="10sp"
+        />
+
+        <TextView
+            android:id="@+id/private_key_tap_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Double tap to copy to clipboard"
+            android:textAlignment="center"
+            android:textColor="@color/ubicBlueGrey"
+            android:textSize="18sp" />
+    </LinearLayout>
+</FrameLayout>

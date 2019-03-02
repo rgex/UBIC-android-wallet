@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#00a0e3</color>
+    <color name="colorPrimaryDark">#00a0e3</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorLightgrey">#e9f0f3</color>
+    <color name="ubicWhite">#ffffff</color>
+    <color name="ubicBlack">#000000</color>
+    <color name="ubicDarkBlue">#017eb2</color>
+    <color name="ubicBlueGrey">#a1c0ce</color>
+    <color name="ubicGreen">#33ec72</color>
+    <color name="ubicPink">#FF4081</color>
 </resources>

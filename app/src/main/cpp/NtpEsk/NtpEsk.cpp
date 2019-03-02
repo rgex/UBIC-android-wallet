@@ -1,7 +1,7 @@
 #include <openssl/rand.h>
 #include <iostream>
-#include <cstring>
 #include "NtpEsk.h"
+#include "../Tools/Log.h"
 
 using namespace std;
 
@@ -16,7 +16,7 @@ bool NtpEsk::verifyNtpEsk(NtpEskSignatureVerificationObject *ntpEskSignatureVeri
             || ntpEskSignatureVerificationObject->getMessageHash().size() < 2
             || ntpEskSignatureVerificationObject->getNewMessageHash().size() < 2
             ) {
-        std::cout << "ntpEskSignatureVerificationObject invalid";
+        Log(LOG_LEVEL_ERROR) << "ntpEskSignatureVerificationObject invalid";
         return false;
     }
 
@@ -40,12 +40,14 @@ bool NtpEsk::verifyNtpEsk(NtpEskSignatureVerificationObject *ntpEskSignatureVeri
 
     unsigned char minHash[1] = {'\x01'};
     if(BN_cmp(nm, BN_bin2bn(minHash, 1, NULL)) != 1) {
-        std::cout << "new hash is smaller or equal to 1";
+        Log(LOG_LEVEL_ERROR) << "new hash is smaller or equal to 1";
+        BN_CTX_free(ctx);
         return false;
     }
 
     if(BN_cmp(m, BN_bin2bn(minHash, 1, NULL)) != 1) {
-        std::cout << "hash smaller or equal to 1";
+        Log(LOG_LEVEL_ERROR) << "hash smaller or equal to 1";
+        BN_CTX_free(ctx);
         return false;
     }
 
@@ -87,6 +89,8 @@ bool NtpEsk::verifyNtpEsk(NtpEskSignatureVerificationObject *ntpEskSignatureVeri
     BIGNUM *calculatedrp = BN_new();
     EC_POINT_get_affine_coordinates_GFp(curveParams, calculatedRp, calculatedrp, NULL, NULL);
 
+    BN_CTX_free(ctx);
+
     if(BN_cmp(calculatedrp, rp) == 0) {
         return true;
     } else {
@@ -98,13 +102,13 @@ bool NtpEsk::verifyNtpEsk(NtpEskSignatureVerificationObject *ntpEskSignatureVeri
 NtpEskSignatureVerificationObject *NtpEsk::signWithNtpEsk(NtpEskSignatureRequestObject *ntpEskSignatureRequestObject) {
 
     if(
-        ntpEskSignatureRequestObject->getPubKey() == NULL
-       || ntpEskSignatureRequestObject->getCurveParams() == NULL
-       || ntpEskSignatureRequestObject->getR() == NULL
-       || ntpEskSignatureRequestObject->getS() == NULL
-       || ntpEskSignatureRequestObject->getMessageHash().size() == 0
-       || ntpEskSignatureRequestObject->getNewMessageHash().size() == 0
-    ) {
+            ntpEskSignatureRequestObject->getPubKey() == NULL
+            || ntpEskSignatureRequestObject->getCurveParams() == NULL
+            || ntpEskSignatureRequestObject->getR() == NULL
+            || ntpEskSignatureRequestObject->getS() == NULL
+            || ntpEskSignatureRequestObject->getMessageHash().size() == 0
+            || ntpEskSignatureRequestObject->getNewMessageHash().size() == 0
+            ) {
         return NULL;
     }
 
@@ -187,6 +191,8 @@ NtpEskSignatureVerificationObject *NtpEsk::signWithNtpEsk(NtpEskSignatureRequest
     response->setR(R);
     response->setRp(rp);
     response->setSp(sp);
+    response->setMdAlg(ntpEskSignatureRequestObject->getMdAlg());
+    response->setSignedPayload(ntpEskSignatureRequestObject->getSignedPayload());
 
     return response;
 }

@@ -50,7 +50,13 @@ add_library( # Sets the name of the library.
             src/main/cpp/AddressHelper.h
 
             src/main/cpp/UAmount.h
-            src/main/cpp/UScript.h
+
+            src/main/cpp/Scripts/AddCertificateScript.h
+            src/main/cpp/Scripts/DeactivateCertificateScript.h
+            src/main/cpp/Scripts/KycRequestScript.h
+            src/main/cpp/Scripts/NtpskAlreadyUsedScript.h
+            src/main/cpp/Scripts/PkhInScript.h
+            src/main/cpp/Scripts/UScript.h
 
             src/main/cpp/prevector.h
 
@@ -96,11 +102,22 @@ add_library( # Sets the name of the library.
 
             src/main/cpp/support/allocators/zeroafterfree.h
 
+            src/main/cpp/CertStore/Cert.h
+            src/main/cpp/CertStore/Cert.cpp
+
+            src/main/cpp/PassportReader/PKCS7/PKCS7Parser.h
+            src/main/cpp/PassportReader/PKCS7/PKCS7Parser.cpp
+
+
+            src/main/cpp/PassportReader/LDS/LDSParser.h
+            src/main/cpp/PassportReader/LDS/LDSParser.cpp
+
+            src/main/cpp/Countries/Currency.h
             )
 
-include_directories(~/AndroidStudioProjects/UBIC/distribution/openssl/x86/include/)
-
 set(distribution_DIR ${CMAKE_SOURCE_DIR}/../distribution)
+
+include_directories(${distribution_DIR}/openssl/x86/include/)
 
 target_include_directories(native-lib PRIVATE ${distribution_DIR}/openssl/${ANDROID_ABI}/include)
 

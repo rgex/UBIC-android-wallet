@@ -6,22 +6,36 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/receive_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/receive_address_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text=""
             android:textAlignment="center"
+            android:textColor="@color/ubicWhite"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/address_tap_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Double tap to copy to clipboard"
+            android:textAlignment="center"
+            android:textColor="@color/ubicBlueGrey"
             android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/qrView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
             android:scaleType="fitCenter"
             android:src="@color/common_google_signin_btn_text_dark_disabled" />
     </LinearLayout>

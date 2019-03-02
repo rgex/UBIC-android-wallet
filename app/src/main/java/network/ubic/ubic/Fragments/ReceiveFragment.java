@@ -10,17 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-
+import network.ubic.ubic.AsyncTasks.OnReceiveFragmentPopulateCompleted;
+import network.ubic.ubic.AsyncTasks.ReceiveFragmentPopulate;
 import network.ubic.ubic.PrivateKeyStore;
 import network.ubic.ubic.R;
-
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.WHITE;
 
 /**
  * A fragment with a Google +1 button.
@@ -30,17 +25,15 @@ import static android.graphics.Color.WHITE;
  * Use the {@link ReceiveFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReceiveFragment extends Fragment {
+public class ReceiveFragment extends Fragment implements OnReceiveFragmentPopulateCompleted, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private TextView receiveAddressTextView;
     private ImageView imageView;
+    private static final long DOUBLE_CLICK_TIME_DELTA = 300;
+    private long lastClickTime = 0;
 
     public ReceiveFragment() {
         // Required empty public constructor
@@ -50,16 +43,12 @@ public class ReceiveFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ReceiveFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ReceiveFragment newInstance(String param1, String param2) {
+    public static ReceiveFragment newInstance() {
         ReceiveFragment fragment = new ReceiveFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,8 +57,6 @@ public class ReceiveFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
     }
@@ -79,20 +66,16 @@ public class ReceiveFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_receive, container, false);
-
-        PrivateKeyStore privateKeyStore = new PrivateKeyStore();
-
-        String address = getAddress(privateKeyStore.getPrivateKey(getActivity().getApplicationContext()));
-
         receiveAddressTextView = view.findViewById(R.id.receive_address_textView);
         imageView = view.findViewById(R.id.qrView);
-        receiveAddressTextView.setText(address);
 
-        try {
-            imageView.setImageBitmap(encodeAsBitmap(address));
-        } catch (Exception e) {
-
-        }
+        PrivateKeyStore privateKeyStore = new PrivateKeyStore();
+        ReceiveFragmentPopulate receiveFragmentPopulate = new ReceiveFragmentPopulate(
+                this,
+                privateKeyStore.getPrivateKey(this.getContext())
+        );
+        receiveFragmentPopulate.execute();
+        view.findViewById(R.id.receive_layout).setOnClickListener(this);
 
         return view;
     }
@@ -101,13 +84,6 @@ public class ReceiveFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -142,30 +118,39 @@ public class ReceiveFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    Bitmap encodeAsBitmap(String str) throws WriterException {
-        BitMatrix result;
+    public void onReceiveFragmentPopulateCompleted(Bitmap qrCode, String address) {
+        System.out.println("onReceiveFragmentPopulateCompleted");
+        receiveAddressTextView.setText(address);
+
         try {
-            result = new MultiFormatWriter().encode(str,
-                    BarcodeFormat.QR_CODE, 350, 350, null);
-        } catch (IllegalArgumentException iae) {
-            // Unsupported format
-            return null;
+            imageView.setImageBitmap(qrCode);
+        } catch (Exception e) {
+
         }
-        int w = result.getWidth();
-        int h = result.getHeight();
-        int[] pixels = new int[w * h];
-        for (int y = 0; y < h; y++) {
-            int offset = y * w;
-            for (int x = 0; x < w; x++) {
-                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
-            }
-        }
-        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, 350, 0, 0, w, h);
-        return bitmap;
     }
 
+    @Override
+    public void onClick(View v) {
+        long clickTime = System.currentTimeMillis();
+        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
 
-    public native String getAddress(byte[]  seed);
+            int sdk = android.os.Build.VERSION.SDK_INT;
+            if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getContext()
+                        .getSystemService(Context.CLIPBOARD_SERVICE);
+                clipboard.setText(receiveAddressTextView.getText());
+            } else {
+                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext()
+                        .getSystemService(Context.CLIPBOARD_SERVICE);
+                android.content.ClipData clip = android.content.ClipData
+                        .newPlainText("message", receiveAddressTextView.getText());
+                clipboard.setPrimaryClip(clip);
+            }
+
+            Toast.makeText(getActivity(), "Copied to clipboard",
+                    Toast.LENGTH_SHORT).show();
+        }
+        lastClickTime = clickTime;
+    }
 
 }
