@@ -37,6 +37,6 @@
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
             android:scaleType="fitCenter"
-            android:src="@color/common_google_signin_btn_text_dark_disabled" />
+            android:src="@color/zxing_result_view" />
     </LinearLayout>
 </FrameLayout>
