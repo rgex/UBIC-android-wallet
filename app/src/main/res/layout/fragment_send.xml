@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:visibility="gone"
             android:layout_height="74dp"
-            android:background="#c2d7e1"
+            android:background="@color/ubicDarkBlue"
             android:weightSum="1"
             android:padding="6dp">
 
@@ -29,14 +29,14 @@
                 android:src="@drawable/ic_info_outline_white_48px" />
 
             <TextView
-                android:theme="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/no_funds_info"
                 android:id="@+id/textView5"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:paddingLeft="8dp"
+                android:textColor="@color/ubicWhite"
                 android:paddingTop="4dp" />
         </LinearLayout>
 
@@ -62,7 +62,7 @@
                         android:id="@+id/send_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="UBIC ADRESS" />
+                        android:hint="UBIC ADDRESS" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
