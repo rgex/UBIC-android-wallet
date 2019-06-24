@@ -1,8 +1,8 @@
 # UBIC Wallet
 
-UBIC is a crypto-project that is meant to democratize currency creation minting new currency in favor of everyone, not only in favor of banks. 
+UBIC is a crypto-project that is meant to democratize money creation - minting new currency in favor of everyone, not only in favor of the financial sector. 
 
-UBIC works like basic income on a blockchain, but can also be implemented by other projects for KYC-applications. UBIC will soon allow reliable pseudonymous voting (one person, one vote) and other applications as well that require a functionality to avoid sybil attacks.
+UBIC works like a basic income on a blockchain, but may also be implemented by other projects for KYC-applications. UBIC will soon allow reliable pseudonymous voting (one person, one vote) and other applications as well that require a functionality to avoid sybil attacks.
 
 Sybil attacks - people recieving multiple basic incomes at once - are harder on UBIC then elsewhere because you are required to proof your uniqueness with a Non-transferable proof of Signatur-Knowledge connected to your unique E-Passport. 
 
