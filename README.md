@@ -11,8 +11,8 @@ Your identity is NOT revealed that way to other participants of the system.
 The UBIC-Smartphone-Wallet is still in an early stage but does provide all basic functionalities a Wallet requires. You can send transactions, receive them and register a passport in order to get your UBIC cryptoUBI.
 
 If you like the idea of the project you can support its development on github: 
- - github.com/rgex/UBIC-android-wallet &	
- - github.com/UBIC-repo
+ - http://github.com/rgex/UBIC-android-wallet
+ - http://github.com/UBIC-repo
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"	
      alt="Get it on Google Play"	
