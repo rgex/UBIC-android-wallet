@@ -129,6 +129,24 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp">
 
+
+                    <TextView
+                        android:id="@+id/pendingTransactionTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pending"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/ubicWhite"
+                        android:textSize="36sp" />
+
+                    <ListView
+                        android:id="@+id/pending_transaction_list_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:divider="@null"
+                        />
+
                     <TextView
                         android:id="@+id/transactionTextView"
                         android:layout_width="match_parent"

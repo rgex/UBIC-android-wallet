@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import network.ubic.ubic.R;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -127,8 +129,11 @@ public class MyUBIFragment extends Fragment implements OnGetBalanceCompleted {
 
     public void OnGetBalanceCompleted(
             HashMap<Integer, BigInteger> balanceMap,
-            Map<Integer, HashMap<Integer, BigInteger>> transactions,
+
+            Map<Integer, Pair<String, HashMap<Integer, BigInteger>>> transactions,
+            Map<Integer, Pair<String, HashMap<Integer, BigInteger>>> pendingTransactions,
             boolean isReceivingUBI,
+            List<Pair<String, BigInteger>> ubiExpirationDate,
             boolean isEmptyAddress,
             int nonce
     ) {

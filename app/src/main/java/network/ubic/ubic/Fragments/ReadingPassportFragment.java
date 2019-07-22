@@ -255,6 +255,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
         System.out.println("passportTx64: " + passportTx64);
 
         this.view.findViewById(R.id.mrtdProgressBar).setVisibility(View.GONE);
+        this.view.findViewById(R.id.percentageDisplay).setVisibility(View.GONE);
         this.view.findViewById(R.id.uploadPassportTransactionProgressBar).setVisibility(View.VISIBLE);
         ((TextView)this.view.findViewById(R.id.readingPassportTextView)).setText(R.string.uploading_passport_transaction);
 
@@ -364,8 +365,8 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
                         byte[] dg1;
                         byte[] dg2;
                         int authMode = (new ChallengeParser(challenge)).getAuthenticationMode();
-System.out.println("challenge: " + challenge);
-System.out.println("authMode: " + authMode);
+                        System.out.println("challenge: " + challenge);
+                        System.out.println("authMode: " + authMode);
 
                         if(authMode == 2) {
                             dg2 = mrtd.readFile(MrtdConstants.FID_DG2);
@@ -424,6 +425,12 @@ System.out.println("authMode: " + authMode);
                     this.readingPassportActivity.get().createAndSendRegisterPassportTransaction();
                 } else {
                     this.readingPassportActivity.get().createAndSendKYCTransaction();
+                }
+            } else {
+                if(challenge.isEmpty()) {
+                    ((MainActivity) getActivity()).goToNavRegisterPassport();
+                } else {
+                    ((MainActivity) getActivity()).goToNavKYCPassport(challenge);
                 }
             }
         }

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -224,6 +225,19 @@ public class SendFragment extends Fragment implements
                 }
         );
 
+        view.findViewById(R.id.send_layout_scrollview).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                        view.findViewById(R.id.send_address).clearFocus();
+                        view.findViewById(R.id.send_amount).clearFocus();
+                    }
+                }
+        );
+
         List<Integer> currenciesInWallet = ((MainActivity)getActivity()).getCurrenciesInWallet();
 
         if(currenciesInWallet.isEmpty()) {
@@ -307,8 +321,10 @@ public class SendFragment extends Fragment implements
 
     public void OnGetBalanceCompleted(
             HashMap<Integer, BigInteger> balanceMap,
-            Map<Integer, HashMap<Integer, BigInteger>> transactions,
+            Map<Integer, Pair<String, HashMap<Integer, BigInteger>>> transactions,
+            Map<Integer, Pair<String, HashMap<Integer, BigInteger>>> pendingTransactions,
             boolean isReceivingUBI,
+            List<Pair<String, BigInteger>> ubiExpirationDate,
             boolean isEmptyAddress,
             int nonce
     ) {

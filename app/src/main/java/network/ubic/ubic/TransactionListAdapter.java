@@ -47,18 +47,26 @@ public class TransactionListAdapter extends ArrayAdapter<TransactionListItem> {
         }
 
         TransactionListItem transactionListItem = data.get(position);
+        System.out.println("transactionListItem.getTransactionType():" + transactionListItem.getTransactionType());
 
-        if(transactionListItem.getTransactionSign() == -1) {
+        if(transactionListItem.getTransactionType().equals("registerPassport")) {
+            holder.transactionSign.setText("+");
+            holder.transactionAmount.setText("Register passport");
+            holder.transactionSign.setTextColor(ContextCompat.getColor(getContext(), R.color.ubicGreen));
+        } else if(transactionListItem.getTransactionSign() == -1) {
             holder.transactionSign.setText("-");
             holder.transactionSign.setTextColor(ContextCompat.getColor(getContext(), R.color.ubicPink));
             holder.transactionSign.setTypeface(Typeface.DEFAULT_BOLD);
+            holder.transactionAmount.setText(transactionListItem.getTransactionAmount());
         } else if(transactionListItem.getTransactionSign()== 1) {
             holder.transactionSign.setText("+");
             holder.transactionSign.setTextColor(ContextCompat.getColor(getContext(), R.color.ubicGreen));
+            holder.transactionAmount.setText(transactionListItem.getTransactionAmount());
         } else {
             holder.transactionSign.setText(" ");
+            holder.transactionAmount.setText(transactionListItem.getTransactionAmount());
         }
-        holder.transactionAmount.setText(transactionListItem.getTransactionAmount());
+
         holder.transactionDate.setText(transactionListItem.getTransactionDate());
 
         return row;

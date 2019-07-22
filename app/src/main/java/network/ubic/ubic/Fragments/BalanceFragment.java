@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.format.DateUtils;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,8 +142,10 @@ public class BalanceFragment extends Fragment implements
 
     public void OnGetBalanceCompleted(
             HashMap<Integer, BigInteger> balanceMap,
-            Map<Integer, HashMap<Integer, BigInteger>> transactions,
+            Map<Integer, Pair<String, HashMap<Integer, BigInteger>>> transactions,
+            Map<Integer, Pair<String, HashMap<Integer, BigInteger>>> pendingTransactions,
             boolean isReceivingUBI,
+            List<Pair<String, BigInteger>> ubiExpirationDate,
             boolean isEmptyAddress,
             int nonce
             ) {
@@ -193,22 +196,60 @@ public class BalanceFragment extends Fragment implements
 
             ((MainActivity) getActivity()).setCurrenciesInWallet(currenciesInWallet);
 
+
+            // Pending Transactions
+            ListView pendingTransactionListView = view.findViewById(R.id.pending_transaction_list_view);
+            ArrayList<TransactionListItem> pendingTransactionList = new ArrayList();
+
+            System.out.println("pending transactions.size():" + pendingTransactions.size());
+
+            if(pendingTransactions.size() == 0) {
+                view.findViewById(R.id.pendingTransactionTextView).setVisibility(View.GONE);
+            } else {
+                view.findViewById(R.id.pendingTransactionTextView).setVisibility(View.VISIBLE);
+            }
+
+            NavigableMap<Integer, Pair<String, HashMap<Integer, BigInteger>>> reveresedPendingTransactions = ((TreeMap)pendingTransactions).descendingMap();
+
+            for (HashMap.Entry<Integer, Pair<String, HashMap<Integer, BigInteger>>> entry : reveresedPendingTransactions.entrySet()) {
+                TransactionListItem entryItem = new TransactionListItem();
+                for (HashMap.Entry<Integer, BigInteger> entry2 : entry.getValue().second.entrySet()) {
+                    BigDecimal entryDec = new BigDecimal(entry2.getValue().abs());
+                    entryItem.setTransactionSign(entry2.getValue().signum());
+                    entryItem.setTransactionAmount((entryDec.divide(BigDecimal.valueOf(1000000), 2, BigDecimal.ROUND_DOWN) + " " + currencies.getCurrency(entry2.getKey())));
+                }
+                long now = System.currentTimeMillis();
+                entryItem.setTransactionDate(DateUtils.getRelativeTimeSpanString((long)entry.getKey() * 1000, now, DateUtils.DAY_IN_MILLIS).toString());
+                entryItem.setTransactionType(entry.getValue().first);
+                pendingTransactionList.add(entryItem);
+            }
+
+            TransactionListAdapter pendingTransactionListAdapter = new TransactionListAdapter(
+                    getActivity(),
+                    R.layout.transaction_list_item,
+                    pendingTransactionList
+            );
+
+            pendingTransactionListView.setAdapter(pendingTransactionListAdapter);
+            setListViewHeightBasedOnChildren(pendingTransactionListView);
+
+            // Last Transactions
             ListView lastTransactionListView = view.findViewById(R.id.last_transaction_list_view);
             ArrayList<TransactionListItem> transactionList = new ArrayList();
 
             System.out.println("transactions.size():" + transactions.size());
-            NavigableMap<Integer, HashMap<Integer, BigInteger>> reveresedTransactions = ((TreeMap)transactions).descendingMap();
+            NavigableMap<Integer, Pair<String, HashMap<Integer, BigInteger>>> reveresedTransactions = ((TreeMap)transactions).descendingMap();
 
-            for (HashMap.Entry<Integer, HashMap<Integer, BigInteger>> entry : reveresedTransactions.entrySet()) {
+            for (HashMap.Entry<Integer, Pair<String, HashMap<Integer, BigInteger>>> entry : reveresedTransactions.entrySet()) {
                 TransactionListItem entryItem = new TransactionListItem();
-                for (HashMap.Entry<Integer, BigInteger> entry2 : entry.getValue().entrySet()) {
+                for (HashMap.Entry<Integer, BigInteger> entry2 : entry.getValue().second.entrySet()) {
                     BigDecimal entryDec = new BigDecimal(entry2.getValue().abs());
-
-                    long now = System.currentTimeMillis();
-                    entryItem.setTransactionDate(DateUtils.getRelativeTimeSpanString((long)entry.getKey() * 1000, now, DateUtils.DAY_IN_MILLIS).toString());
                     entryItem.setTransactionSign(entry2.getValue().signum());
                     entryItem.setTransactionAmount((entryDec.divide(BigDecimal.valueOf(1000000), 2, BigDecimal.ROUND_DOWN) + " " + currencies.getCurrency(entry2.getKey())));
                 }
+                long now = System.currentTimeMillis();
+                entryItem.setTransactionDate(DateUtils.getRelativeTimeSpanString((long)entry.getKey() * 1000, now, DateUtils.DAY_IN_MILLIS).toString());
+                entryItem.setTransactionType(entry.getValue().first);
                 transactionList.add(entryItem);
             }
 

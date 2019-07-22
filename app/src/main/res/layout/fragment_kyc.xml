@@ -13,11 +13,11 @@
         android:orientation="vertical">
 
         <Button
-            android:drawableStart="@mipmap/qr_scan"
+            android:drawableStart="@mipmap/qr_scan_48"
             android:theme="@style/ButtonStyle"
             android:id="@+id/scanQrCodeButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:text="SCAN QR CODE" />
 
             <android.support.design.widget.TextInputLayout

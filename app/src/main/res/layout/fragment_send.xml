@@ -5,113 +5,122 @@
     android:id="@+id/send_main_layout"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_margin="10dp"
-        android:id="@+id/send_layout"
+    <ScrollView
+        android:id="@+id/send_layout_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/no_funds_error"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="74dp"
-            android:background="@color/ubicDarkBlue"
-            android:weightSum="1"
-            android:padding="6dp">
-
-            <ImageView
-                android:layout_width="67dp"
-                android:layout_height="match_parent"
-                android:id="@+id/imageView"
-                android:src="@drawable/ic_info_outline_white_48px" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/no_funds_info"
-                android:id="@+id/textView5"
-                android:textSize="16sp"
-                android:paddingLeft="8dp"
-                android:textColor="@color/ubicWhite"
-                android:paddingTop="4dp" />
-        </LinearLayout>
-
-        <Button
-            android:drawableStart="@mipmap/qr_scan"
-            android:theme="@style/ButtonStyle"
-            android:id="@+id/scanQrCodeButton"
+            android:id="@+id/send_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SCAN QR CODE" />
+            android:layout_margin="10dp"
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
+                android:id="@+id/no_funds_error"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="74dp"
+                android:background="@color/ubicDarkBlue"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:visibility="gone"
+                android:weightSum="1">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="67dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_info_outline_white_48px" />
+
+                <TextView
+                    android:id="@+id/textView5"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="4dp"
+                    android:text="@string/no_funds_info"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/ubicWhite"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-                    <android.support.design.widget.TextInputEditText
-                        android:theme="@style/EditTextStyle"
-                        android:id="@+id/send_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="UBIC ADDRESS" />
+            <Button
+                android:id="@+id/scanQrCodeButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:drawableStart="@mipmap/qr_scan_48"
+                android:text="SCAN QR CODE"
+                android:theme="@style/ButtonStyle" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_weight=".70"
-                            android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                            <android.support.design.widget.TextInputEditText
-                                android:theme="@style/EditTextStyle"
-                                android:textColor="@color/ubicWhite"
-                                android:textColorHint="@color/ubicWhite"
-                                android:textColorHighlight="@color/ubicWhite"
-                                android:id="@+id/send_amount"
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Amount" />
-                        </android.support.design.widget.TextInputLayout>
+                                android:orientation="horizontal">
 
-                        <Spinner
-                            android:id="@+id/currency_spinner"
-                            android:layout_weight=".30"
-                            android:layout_width="0dp"
-                            android:gravity="center"
-                            android:layout_height="match_parent" />
+                                <android.support.design.widget.TextInputEditText
+                                    android:theme="@style/EditTextStyle"
+                                    android:id="@+id/send_address"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="UBIC ADDRESS" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <android.support.design.widget.TextInputEditText
+                                    android:id="@+id/send_amount"
+                                    android:layout_width="90dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".70"
+                                    android:hint="Amount"
+                                    android:theme="@style/EditTextStyle" />
+
+                                <Spinner
+                                    android:id="@+id/currency_spinner"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".30"
+                                    android:gravity="center" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/sendTxButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Send"
+                            android:theme="@style/ButtonStyle" />
+
+
+                        <ProgressBar
+                            android:id="@+id/sendTransactionProgressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:visibility="invisible" />
                     </LinearLayout>
 
-                    <Button
-                        android:theme="@style/ButtonStyle"
-                        android:id="@+id/sendTxButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Send" />
+                </android.support.design.widget.TextInputLayout>
 
-
-                    <ProgressBar
-                        android:id="@+id/sendTransactionProgressBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity = "center"
-                        android:visibility="invisible"
-                        />
-                </LinearLayout>
-
-            </android.support.design.widget.TextInputLayout>
-
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

@@ -4,6 +4,7 @@ public class TransactionListItem {
     private int transactionSign; // 0 = -, 1 = +
     private String transactionAmount;
     private String transactionDate;
+    private String transactionType = "";
 
     public int getTransactionSign() {
         return transactionSign;
@@ -27,5 +28,13 @@ public class TransactionListItem {
 
     public void setTransactionDate(String transactionDate) {
         this.transactionDate = transactionDate;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 }

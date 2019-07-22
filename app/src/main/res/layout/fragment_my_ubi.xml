@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="It appears that you are not reveiving a UBI. Register a passport to get one. If you just registered your passport please wait some minutes"
+                android:text="It appears that you are not receiving a UBI. Register a passport to get one. If you just registered your passport please wait some minutes"
                 android:textStyle="bold"
                 android:textAlignment="center"
                 android:textAllCaps="false"

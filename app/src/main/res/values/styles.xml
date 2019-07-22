@@ -20,6 +20,7 @@
     <style name="EditTextStyle" parent="android:Widget.EditText">
         <item name="android:textColor">@color/ubicWhite</item>
         <item name="android:editTextColor">@color/ubicWhite</item>
+        <item name="android:textColorHint">@color/ubicWhite</item>
         <item name="android:colorControlNormal">@color/ubicDarkBlue</item>
     </style>
 
