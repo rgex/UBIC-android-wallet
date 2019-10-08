@@ -44,8 +44,6 @@ Java_network_ubic_ubic_AsyncTasks_ReceiveFragmentPopulate_getAddress(
     std::vector<unsigned char> seedVector = std::vector<unsigned char>(seedUC, seedUC + 20);
     wallet.setSeed(seedVector);
 
-    __android_log_print(ANDROID_LOG_VERBOSE, "foo", "seedUC: %s", Hexdump::vectorToHexString(seedVector).c_str());
-
     std::cout << "seedUC" << std::endl;
     wallet.initWallet();
     std::cout << "initWallet" << std::endl;
@@ -73,9 +71,6 @@ Java_network_ubic_ubic_AsyncTasks_GetBalance_getAddress(
 
     std::vector<unsigned char> seedVector = std::vector<unsigned char>(seedUC, seedUC + 20);
     wallet.setSeed(seedVector);
-
-
-    __android_log_print(ANDROID_LOG_VERBOSE, "foo", "seedUC: %s", Hexdump::vectorToHexString(seedVector).c_str());
 
     std::cout << "seedUC" << std::endl;
     wallet.initWallet();
