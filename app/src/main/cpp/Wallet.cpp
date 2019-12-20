@@ -80,9 +80,12 @@ bool Wallet::generateWallet() {
 }
 
 bool Wallet::initWallet() {
+    this->privateKeys = std::vector< std::vector<unsigned char> >();
+    this->publicKeys = std::vector< std::vector<unsigned char> >();
+    this->addressesScript = std::vector< std::vector<unsigned char> >();
+    this->addressesLink = std::vector< std::vector<unsigned char> >();
+    
     return this->generateWallet();
-
-    return true;
 }
 
 std::vector<unsigned char> Wallet::signWithAddress(std::vector<unsigned char> address, std::vector<unsigned char> msg) {
