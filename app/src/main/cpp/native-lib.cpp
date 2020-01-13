@@ -173,9 +173,29 @@ Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
     std::vector<TxIn> pTxIns;
     pTxIns.push_back(*pTxIn);
     registerPassportTx->setTxIns(pTxIns);
+        
+    TransactionForNetwork registerPassportNetworkTx;
+    registerPassportNetworkTx.setTransaction(*registerPassportTx);
+    registerPassportNetworkTx.setAdditionalPayloadType(1);
+    
+    BIO *mem = BIO_new(BIO_s_mem());
+    i2d_X509_bio(mem, pkcs7Parser->getDscCertificate());
+
+    char* x509Buffer;
+    long x509BufferLength = BIO_get_mem_data(mem, &x509Buffer);
+
+    char* x509BufferCopy = (char*)malloc(x509BufferLength + 10);
+    std::memcpy(x509BufferCopy, x509Buffer, x509BufferLength);
+    BIO_set_close(mem, BIO_CLOSE);
+    BIO_free(mem);
+
+    std::vector<unsigned char> x509Vector(x509BufferCopy, x509BufferCopy + x509BufferLength);
+    printf("x509BufferLength:%d \n", x509BufferLength);
+    
+    registerPassportNetworkTx.setAdditionalPayload(x509Vector);
 
     CDataStream spTx(SER_DISK, 1);
-    spTx << *registerPassportTx;
+    spTx << *registerPassportNetworkTx;
 
     return env->NewStringUTF(base64_encode((unsigned char*)spTx.data(), spTx.size()).c_str());
 }
