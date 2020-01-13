@@ -79,7 +79,7 @@
                 android:divider="@null"
                 />
         </LinearLayout>
-
+<!--
         <Button
             android:id="@+id/add_new_private_key"
             android:layout_width="match_parent"
@@ -92,7 +92,7 @@
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="16dp" />
+            tools:layout_editor_absoluteY="16dp" />-->
 
         <TextView
             android:id="@+id/private_key_tap_textView"
