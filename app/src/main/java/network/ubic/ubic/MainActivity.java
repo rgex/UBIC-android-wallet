@@ -109,7 +109,7 @@ public class MainActivity extends AbstractNfcActivity
             String privateKeyStr = new String(privateKeyStore.getPrivateKey(getBaseContext()), "ASCII");
 
             System.out.println("privateKeyStore.getPrivateKey(getBaseContext())");
-            System.out.println(privateKeyStr);
+            //System.out.println(privateKeyStr);
         } catch (Exception e) {
         }
 
