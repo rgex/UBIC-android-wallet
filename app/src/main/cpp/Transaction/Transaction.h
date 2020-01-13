@@ -16,6 +16,7 @@ private:
     uint8_t network; // To avoid a transaction from the testnet being broadcasted on the main net
     std::vector<TxIn> txIns;
     std::vector<TxOut> txOuts;
+    uint32_t timestamp = 0; // only used within the transaction pool
 public:
     void addTxIn(TxIn txIn);
     void setTxIns(std::vector<TxIn> txIns);
@@ -25,6 +26,8 @@ public:
     std::vector <TxOut> getTxOuts();
     uint8_t getNetwork() const;
     void setNetwork(uint8_t network);
+    uint32_t getTimestamp();
+    void setTimestamp(uint32_t timestamp);
 
     ADD_SERIALIZE_METHODS;
 
@@ -33,6 +36,46 @@ public:
         READWRITE(network);
         READWRITE(txIns);
         READWRITE(txOuts);
+    }
+};
+
+class TransactionForNetwork {
+private:
+    Transaction transaction;
+    uint8_t additionalPayloadType = 0;
+    std::vector<unsigned char> additionalPayload = std::vector<unsigned char>(); // is intended to contain the DSC certificate for register passport transactions
+public:
+    void setTransaction(Transaction transaction) {
+        this->transaction = transaction;
+    }
+
+    Transaction getTransaction() {
+        return this->transaction;
+    }
+
+    void setAdditionalPayload(std::vector<unsigned char> additionalPayload) {
+        this->additionalPayload = additionalPayload;
+    }
+
+    std::vector<unsigned char> getAdditionalPayload() {
+        return this->additionalPayload;
+    }
+
+    void setAdditionalPayloadType(uint8_t additionalPayloadType) {
+        this->additionalPayloadType = additionalPayloadType;
+    }
+
+    uint8_t getAdditionalPayloadType() {
+        return this->additionalPayloadType;
+    }
+
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action) {
+        READWRITE(transaction);
+        READWRITE(additionalPayloadType);
+        READWRITE(additionalPayload);
     }
 };
 
