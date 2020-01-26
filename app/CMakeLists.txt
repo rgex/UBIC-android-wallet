@@ -117,13 +117,17 @@ add_library( # Sets the name of the library.
 
 set(distribution_DIR ${CMAKE_SOURCE_DIR}/../distribution)
 
-include_directories(${distribution_DIR}/openssl/x86/include/)
+#include_directories(${distribution_DIR}/openssl/${ANDROID_ABI}/include/)
+include_directories(${distribution_DIR}/openssl/${ANDROID_ABI}/usr/local/include/)
 
-target_include_directories(native-lib PRIVATE ${distribution_DIR}/openssl/${ANDROID_ABI}/include)
+include_directories(${CMAKE_SOURCE_DIR})
+
+#target_include_directories(native-lib PRIVATE ${distribution_DIR}/openssl/${ANDROID_ABI}/include)
+target_include_directories(native-lib PRIVATE ${distribution_DIR}/openssl/${ANDROID_ABI}/usr/local/include/)
 
 add_library(libcrypto STATIC IMPORTED)
 
-set_target_properties(libcrypto PROPERTIES IMPORTED_LOCATION ${distribution_DIR}/openssl/${ANDROID_ABI}/lib/libcrypto.a)
+set_target_properties(libcrypto PROPERTIES IMPORTED_LOCATION ${distribution_DIR}/openssl/${ANDROID_ABI}/usr/local/lib/libcrypto.a)
 
 
 # Searches for a specified prebuilt library and stores the path as a
@@ -146,6 +150,7 @@ find_library( # Sets the name of the path variable.
 target_link_libraries( # Specifies the target library.
                        native-lib
                        libcrypto
+        #crypto
 
                        # Links the target library to the log library
                        # included in the NDK.

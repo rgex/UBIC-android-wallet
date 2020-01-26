@@ -9,6 +9,9 @@
     <string name="iv_key_shared_pref">iv_key_shared_pref</string>
     <string name="no_funds_info">You cannot make a payment, your wallet is empty</string>
 
+    <string name="empty_balance_message">Your wallet is empty, register your passport to receive a UBI</string>
+    <string name="empty_balance_passport_pending">You are member of the UBI program and you will receive UBIC coins soon, be patient</string>
+
     <string name="error_error">Error</string>
     <string name="error_nfc_is_disabled">You need to enable nfc to use this functionality</string>
     <string name="go_to_nfc_settings">Go into your settings to activate NFC</string>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.format.DateUtils;
@@ -15,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -51,6 +53,10 @@ public class BalanceFragment extends Fragment implements
     private SwipeRefreshLayout swipeRefreshLayout;
     private OnFragmentInteractionListener mListener;
     private List<Integer> currenciesInWallet;
+
+    Handler handler = new Handler();
+    Runnable runnable;
+    int delay = 20*1000;
 
     public BalanceFragment() {
         // Required empty public constructor
@@ -112,7 +118,25 @@ public class BalanceFragment extends Fragment implements
 
     @Override
     public void onResume() {
+        final Context context = this.getContext();
+        final OnGetBalanceCompleted onGetBalanceCompletedListener = this;
+
+        handler.postDelayed( runnable = new Runnable() {
+            public void run() {
+                PrivateKeyStore privateKeyStore = new PrivateKeyStore();
+                new GetBalance(onGetBalanceCompletedListener, privateKeyStore.getPrivateKey(context)).execute();
+
+                handler.postDelayed(runnable, delay);
+            }
+        }, delay);
+
         super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        handler.removeCallbacks(runnable); //stop handler when activity not visible
+        super.onPause();
     }
 
     @Override
@@ -160,6 +184,22 @@ public class BalanceFragment extends Fragment implements
             if (balanceMap == null || balanceMap.isEmpty() || isEmptyAddress) {
                 view.findViewById(R.id.balance_is_empty_layout).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.transaction_layout).setVisibility(View.GONE);
+
+                view.findViewById(R.id.balance_register_passport_button).setVisibility(View.VISIBLE);
+                ((TextView)view.findViewById(R.id.empty_balance_text_view)).setText(getResources().getString(R.string.empty_balance_message));
+
+                if (pendingTransactions.size() > 0) {
+                    for(HashMap.Entry<Integer, Pair<String, HashMap<Integer, BigInteger>>> pendingTransaction  : pendingTransactions.entrySet()) {
+                        if(pendingTransaction.getValue().first.equals("registerPassport")) {
+                            ((TextView)view.findViewById(R.id.empty_balance_text_view)).setText(getResources().getString(R.string.empty_balance_passport_pending));
+                            view.findViewById(R.id.balance_register_passport_button).setVisibility(View.GONE);
+                        }
+                    }
+                }
+                if(isReceivingUBI) {
+                    ((TextView)view.findViewById(R.id.empty_balance_text_view)).setText(getResources().getString(R.string.empty_balance_passport_pending));
+                    view.findViewById(R.id.balance_register_passport_button).setVisibility(View.GONE);
+                }
                 swipeRefreshLayout.setRefreshing(false);
                 return;
             } else {

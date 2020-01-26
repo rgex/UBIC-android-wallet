@@ -19,7 +19,10 @@ import network.ubic.ubic.HttpHandler;
 import network.ubic.ubic.MainActivity;
 
 public class GetBalance extends AsyncTask<Void, Void, Void> {
+
     private String baseUrl = "https://ubic.network";
+    //private String baseUrl = "http://192.168.178.35:8888/ubic.network";
+
     private byte[] privateKey;
 
     private String TAG = MainActivity.class.getSimpleName();
@@ -60,13 +63,20 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
                     isEmptyAddress = true;
                 } else {
 
+                    JSONObject amounts;
+                    Iterator<String> keys;
                     // BALANCE
-                    JSONObject amounts = jsonObj.getJSONObject("amount");
-                    Iterator<String> keys = amounts.keys();
-                    while (keys.hasNext()) {
-                        String key = keys.next();
-                        String value = amounts.getString(key);
-                        balanceMap.put(Integer.parseInt(key), new BigInteger(value));
+                    try {
+                        amounts = jsonObj.getJSONObject("amount");
+                        keys = amounts.keys();
+                        while (keys.hasNext()) {
+                            String key = keys.next();
+                            String value = amounts.getString(key);
+                            balanceMap.put(Integer.parseInt(key), new BigInteger(value));
+                        }
+                    } catch (final JSONException e) {
+                        System.out.println("JSONException on amounts (Not important)");
+                        e.printStackTrace();
                     }
 
                     // IS RECEIVING UBI

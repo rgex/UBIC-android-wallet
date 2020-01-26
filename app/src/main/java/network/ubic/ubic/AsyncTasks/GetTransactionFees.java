@@ -15,6 +15,7 @@ import network.ubic.ubic.MainActivity;
 public class GetTransactionFees extends AsyncTask<Void, Void, Void> {
 
     private String baseUrl = "https://ubic.network";
+    //private String baseUrl = "http://192.168.178.35:8888/ubic.network";
 
     private String TAG = MainActivity.class.getSimpleName();
     private OnGetTransactionFeesCompleted listener;

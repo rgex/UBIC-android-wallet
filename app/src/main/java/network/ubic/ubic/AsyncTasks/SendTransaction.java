@@ -20,6 +20,7 @@ import network.ubic.ubic.MainActivity;
 public class SendTransaction extends AsyncTask<Void, Void, Void> {
 
     private String baseUrl = "https://ubic.network/api/send";
+    //private String baseUrl = "http://192.168.178.35:8888/ubic.network/api/send";
 
     private String TAG = MainActivity.class.getSimpleName();
     private OnSendTransactionCompleted listener;
