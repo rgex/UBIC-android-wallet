@@ -8,9 +8,11 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.security.KeyStore;
 import java.security.SecureRandom;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -20,14 +22,11 @@ public class PrivateKeyStore {
 
     KeyStore keyStore;
 
-    // this is actually a private key seed
-    public byte[] getPrivateKey(Context context) {
-        System.out.println("called getPrivateKey()");
+    private KeyStore.SecretKeyEntry getEncryptionKey(Context context) {
+        String alias = "ubickey_new";
         try {
             keyStore = KeyStore.getInstance("AndroidKeyStore");
             keyStore.load(null);
-
-            String alias = "ubickey";
 
             // Create the keys if necessary
             if (!keyStore.containsAlias(alias)) {
@@ -40,7 +39,7 @@ public class PrivateKeyStore {
                         keyGenerator = KeyGenerator
                                 .getInstance("AES", "AndroidKeyStore");
                         KeyPairGeneratorSpec keyGenParameterSpec = new KeyPairGeneratorSpec.Builder(context)
-                        .setAlias(alias).build();
+                                .setAlias(alias).build();
                         keyGenerator.init(keyGenParameterSpec);
 
                     } else {
@@ -64,79 +63,9 @@ public class PrivateKeyStore {
                 }
             }
 
-            SharedPreferences sharedPref = context.getSharedPreferences(
-                    context.getResources().getString(
-                            R.string.private_key_shared_pref),
-                    Context.MODE_PRIVATE
-            );
-
-            String privateKey = sharedPref.getString(
-                    context.getResources().getString(R.string.private_key_shared_pref),
-                    ""
-            );
-
             KeyStore.SecretKeyEntry secretKeyEntry = (KeyStore.SecretKeyEntry) keyStore
                     .getEntry(alias, null);
-
-            System.out.println("secretKeyEntry.toString():");
-            System.out.println(secretKeyEntry.toString());
-
-
-            Cipher inCipher = Cipher.getInstance("AES/GCM/NoPadding");
-            inCipher.init(Cipher.ENCRYPT_MODE, secretKeyEntry.getSecretKey());
-            byte[] iv;
-
-            if (privateKey.isEmpty()) {
-                System.out.println("privateKey.isEmpty");
-                try {
-                    iv = inCipher.getIV();
-                    byte[] newKey = getNewKey();
-
-                    System.out.println("ivLength:" + iv.length);
-                    System.out.println("privateKeyStr:");
-                    System.out.println(Base64.encodeToString(newKey, Base64.DEFAULT));
-                    SharedPreferences.Editor editor = sharedPref.edit();
-
-                    String privateKeyEncrypted = Base64.encodeToString(inCipher.doFinal(newKey), Base64.DEFAULT);
-                    System.out.println("outCipher.doFinal():");
-                    System.out.println(privateKeyEncrypted);
-                    editor.putString(
-                            context.getResources().getString(R.string.private_key_shared_pref),
-                            privateKeyEncrypted
-                    );
-
-                    String iv64 = Base64.encodeToString(iv, Base64.DEFAULT);
-                    System.out.println("iv64Length:" + iv64.getBytes().length);
-                    editor.putString(
-                            context.getResources().getString(R.string.iv_key_shared_pref),
-                            iv64
-                    );
-                    editor.commit();
-
-                    return newKey;
-                } catch (Exception e) {
-                    System.out.println("Exception PrivateKeyStore0;");
-                    e.printStackTrace();
-                    System.out.println(e.getMessage());
-                    System.out.println("Exception PrivateKeyStore0;");
-                    return null;
-                }
-            } else {
-                iv = Base64.decode(sharedPref.getString(
-                        context.getResources().getString(R.string.iv_key_shared_pref),
-                        ""
-                ), Base64.DEFAULT);
-            }
-
-
-            System.out.println("iv final Length:" + iv.length);
-
-            GCMParameterSpec spec = new GCMParameterSpec(128, iv);
-
-            Cipher outCipher = Cipher.getInstance("AES/GCM/NoPadding");
-            outCipher.init(Cipher.DECRYPT_MODE, secretKeyEntry.getSecretKey(), spec);
-
-            return outCipher.doFinal(Base64.decode(privateKey,Base64.DEFAULT));
+            return secretKeyEntry;
         } catch (Exception e) {
 
             System.out.println("Exception PrivateKeyStore;");
@@ -146,7 +75,191 @@ public class PrivateKeyStore {
         }
     }
 
-    private byte[] getNewKey() {
+    private boolean insertWallet(Context context, JSONObject jsonWallet) {
+
+        try {
+            SharedPreferences sharedPref = context.getSharedPreferences(
+                    context.getResources().getString(
+                            R.string.private_key_shared_pref_new),
+                    Context.MODE_PRIVATE
+            );
+
+            String wallet = sharedPref.getString(
+                    context.getResources().getString(R.string.private_key_shared_pref_new),
+                    ""
+            );
+
+            String jsonWalletString = jsonWallet.toString();
+
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            KeyStore.SecretKeyEntry secretKeyEntry = getEncryptionKey(context);
+            Cipher inCipher = Cipher.getInstance("AES/GCM/NoPadding");
+            inCipher.init(Cipher.ENCRYPT_MODE, secretKeyEntry.getSecretKey());
+
+            String walletEncrypted = Base64.encodeToString(inCipher.doFinal(jsonWalletString.getBytes()), Base64.DEFAULT);
+
+            editor.putString(
+                    context.getResources().getString(R.string.private_key_shared_pref_new),
+                    walletEncrypted
+            );
+
+            byte[] iv;
+            iv = inCipher.getIV();
+            String iv64 = Base64.encodeToString(iv, Base64.DEFAULT);
+            System.out.println("iv64Length:" + iv64.getBytes().length);
+            editor.putString(
+                    context.getResources().getString(R.string.iv_key_shared_pref_new),
+                    iv64
+            );
+            editor.commit();
+        } catch (Exception e) {
+            System.out.println("");
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public JSONObject getWallet(Context context) {
+
+        JSONObject wallet = new JSONObject();
+
+        try {
+            SharedPreferences sharedPref = context.getSharedPreferences(
+                    context.getResources().getString(
+                            R.string.private_key_shared_pref_new),
+                    Context.MODE_PRIVATE
+            );
+
+            String walletEncrypted = sharedPref.getString(
+                    context.getResources().getString(R.string.private_key_shared_pref_new),
+                    ""
+            );
+
+            if (walletEncrypted.isEmpty()) {
+                return wallet;
+            }
+
+            byte[] iv = Base64.decode(sharedPref.getString(
+                    context.getResources().getString(R.string.iv_key_shared_pref_new),
+                    ""
+            ), Base64.DEFAULT);
+
+            GCMParameterSpec spec = new GCMParameterSpec(128, iv);
+
+            Cipher outCipher = Cipher.getInstance("AES/GCM/NoPadding");
+            KeyStore.SecretKeyEntry secretKeyEntry = getEncryptionKey(context);
+            outCipher.init(Cipher.DECRYPT_MODE, secretKeyEntry.getSecretKey(), spec);
+
+            byte[] rawWallet = outCipher.doFinal(Base64.decode(walletEncrypted, Base64.DEFAULT));
+
+            wallet = new JSONObject(new String(rawWallet));
+            return wallet;
+        } catch (Exception e) {
+            System.out.println("Failed to get the wallet");
+            e.printStackTrace();
+            return wallet;
+        }
+    }
+
+    private boolean createNewWallet(Context context) {
+
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getResources().getString(
+                        R.string.private_key_shared_pref_new),
+                Context.MODE_PRIVATE
+        );
+
+        String wallet = sharedPref.getString(
+                context.getResources().getString(R.string.private_key_shared_pref_new),
+                ""
+        );
+
+        try {
+            // Check again that the shared pref is really empty!
+            if (wallet.isEmpty()) {
+                PrivateKeyStoreOld privateKeyStoreOld = new PrivateKeyStoreOld();
+                byte[] firstPrivateKey = privateKeyStoreOld.getPrivateKey(context);
+
+                System.out.println("privateKey.isEmpty");
+                try {
+                    String privateKeyString = Base64.encodeToString(firstPrivateKey, Base64.DEFAULT);
+
+                    JSONObject jsonWallet = new JSONObject();
+                    JSONArray allPrivKeyList = new JSONArray();
+                    allPrivKeyList.put(privateKeyString);
+
+                    jsonWallet.put("current", privateKeyString);
+                    jsonWallet.put("all", (Object)allPrivKeyList);
+                    insertWallet(context, jsonWallet);
+                } catch (Exception e) {
+                    System.out.println("Exception PrivateKeyStore0;");
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                    System.out.println("Exception PrivateKeyStore0;");
+                    return false;
+                }
+
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("failed to generate new wallet");
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+    }
+
+    // this is actually a private key seed
+    public byte[] getPrivateKey(Context context) {
+        System.out.println("called getPrivateKey()");
+        try {
+
+            SharedPreferences sharedPref = context.getSharedPreferences(
+                    context.getResources().getString(
+                            R.string.private_key_shared_pref_new),
+                    Context.MODE_PRIVATE
+            );
+
+            String walletEncrypted = sharedPref.getString(
+                    context.getResources().getString(R.string.private_key_shared_pref_new),
+                    ""
+            );
+
+            if (walletEncrypted.isEmpty()) {
+                createNewWallet(context);
+            }
+
+            JSONObject wallet = getWallet(context);
+            byte[] currentPrivateKey = Base64.decode(wallet.getString("current").getBytes(), Base64.DEFAULT);
+
+            return currentPrivateKey;
+
+        } catch (Exception e) {
+
+            System.out.println("Exception PrivateKeyStore;");
+            e.printStackTrace();
+            System.out.print(e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean addPrivateKey(Context context, byte[] newKey) {
+        try {
+            String privateKeyString = Base64.encodeToString(newKey, Base64.DEFAULT);
+            JSONObject wallet = getWallet(context);
+            wallet.getJSONArray("all").put(privateKeyString);
+            insertWallet(context, wallet);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public byte[] generateNewKey() {
         SecureRandom random = new SecureRandom();
         return random.generateSeed(20);
     }

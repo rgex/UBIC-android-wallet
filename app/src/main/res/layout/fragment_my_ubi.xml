@@ -4,110 +4,115 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/my_ubi_layout"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_margin="10dp"
-            android:id="@+id/no_internet_my_ubi_layout"
+            android:id="@+id/my_ubi_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:visibility="gone"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/no_internet_my_ubi_textView"
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:id="@+id/no_internet_my_ubi_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="No internet connectivity :-("
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/ubicWhite"
-                android:textSize="20sp"  />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_margin="10dp"
-            android:id="@+id/loading_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <ProgressBar
-                android:id="@+id/my_ubi_progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity = "center"
-                android:visibility="visible"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_margin="10dp"
-            android:id="@+id/no_ubi_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/no_ubi_textView"
+                android:background="@color/colorPrimary"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/no_internet_my_ubi_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/no_internet_connectivity"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/ubicWhite"
+                    android:textSize="20sp"  />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:id="@+id/loading_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="It appears that you are not receiving a UBI. Register a passport to get one. If you just registered your passport please wait some minutes"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/ubicWhite"
-                android:layout_marginBottom="16dp"
-                android:textSize="20sp"  />
-            <Button
-                android:id="@+id/registerPassportButton"
+                android:orientation="vertical">
+                <ProgressBar
+                    android:id="@+id/my_ubi_progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity = "center"
+                    android:visibility="visible"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:id="@+id/no_ubi_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/ubicWhite"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:padding="16sp"
-                android:text="Register a passport"
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="16dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_margin="10dp"
-            android:id="@+id/is_receiving_ubi_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="vertical">
-            <TextView
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/ubicWhite"
-                android:textSize="20sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/congratulation_ubi"/>
-            <Button
-                android:id="@+id/registerAnotherPassportButton"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/no_ubi_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/it_appears_that_you_are_not_receiving_a_ubi"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/ubicWhite"
+                    android:layout_marginBottom="16dp"
+                    android:textSize="20sp"  />
+                <Button
+                    android:id="@+id/registerPassportButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/ubicWhite"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:padding="16sp"
+                    android:text="@string/register_a_passport"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="16dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:id="@+id/is_receiving_ubi_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/ubicWhite"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:padding="16sp"
-                android:text="Register another passport"
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="16dp"/>
+                android:visibility="gone"
+                android:orientation="vertical">
+                <TextView
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/ubicWhite"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/congratulation_ubi"/>
+                <Button
+                    android:id="@+id/registerAnotherPassportButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/ubicWhite"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:padding="16sp"
+                    android:text="@string/register_another_passport"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="16dp"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </FrameLayout>

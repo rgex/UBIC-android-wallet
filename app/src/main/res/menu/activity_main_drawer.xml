@@ -27,6 +27,6 @@
         <item
             android:id="@+id/nav_private_keys"
             android:icon="@drawable/menu_private_keys"
-            android:title="Export my private key" />
+            android:title="Manage my private keys" />
     </group>
 </menu>

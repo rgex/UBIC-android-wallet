@@ -29,6 +29,7 @@ import network.ubic.ubic.BitiAndroid.AbstractNfcActivity;
 import network.ubic.ubic.Fragments.BalanceFragment;
 import network.ubic.ubic.Fragments.KycFragment;
 import network.ubic.ubic.Fragments.MyUBIFragment;
+import network.ubic.ubic.Fragments.NewPrivateKeyFragment;
 import network.ubic.ubic.Fragments.PrivateKeyFragment;
 import network.ubic.ubic.Fragments.ReadingPassportFragment;
 import network.ubic.ubic.Fragments.ReceiveFragment;
@@ -48,6 +49,7 @@ public class MainActivity extends AbstractNfcActivity
                    WaitForNfcFragment.OnFragmentInteractionListener,
                    ReadingPassportFragment.OnFragmentInteractionListener,
                    KycFragment.OnFragmentInteractionListener,
+                   NewPrivateKeyFragment.OnFragmentInteractionListener,
                    QrCodeCallbackInterface,
                    Serializable {
 
@@ -108,8 +110,6 @@ public class MainActivity extends AbstractNfcActivity
         try {
             String privateKeyStr = new String(privateKeyStore.getPrivateKey(getBaseContext()), "ASCII");
 
-            System.out.println("privateKeyStore.getPrivateKey(getBaseContext())");
-            //System.out.println(privateKeyStr);
         } catch (Exception e) {
         }
 
@@ -205,6 +205,15 @@ public class MainActivity extends AbstractNfcActivity
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.contentContainer, kycF);
+        transaction.commitAllowingStateLoss();
+    }
+
+    public void goToNavNewPrivateKey() {
+        findViewById(R.id.qr_fab).setVisibility(View.GONE);
+        NewPrivateKeyFragment newPrivateKeyF = new NewPrivateKeyFragment();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.contentContainer, newPrivateKeyF);
         transaction.commitAllowingStateLoss();
     }
 
@@ -339,7 +348,7 @@ public class MainActivity extends AbstractNfcActivity
             new AlertDialog.Builder(this)
                     .setTitle(getResources().getString(R.string.error_qr_code))
                     .setMessage(getResources().getString(R.string.error_unsupported))
-                    .setNegativeButton("Ok",
+                    .setNegativeButton(getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int id) {

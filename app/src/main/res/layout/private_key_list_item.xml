@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,41 +14,69 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-        <TextView
-            android:id="@+id/transactionSign"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:width="36dp"
-            android:paddingRight="6dp"
-            android:textAlignment="center"
-            android:text="-"
-            android:textSize="36sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/transactionAmount"
-                android:textStyle="bold"
+                android:id="@+id/address_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="127,672.56 UDE"
+                android:text="qxxxxxx"
                 android:textColor="@color/ubicWhite"
-                android:textSize="20sp" />
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/transactionDate"
+                android:id="@+id/private_key_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="4dp"
-                android:text="1 week ago"
-                android:textColor="@color/ubicBlueGrey"
-                android:textStyle="bold"
-                android:textSize="14sp" />
+                android:text="@string/private_key"
+                android:textColor="@color/ubicWhite"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/private_key_preview_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:text="afafff ffafff"
+                android:textColor="@color/ubicWhite"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+                <Button
+                    android:theme="@style/ButtonStyle"
+                    android:id="@+id/setAsDefault"
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:layout_height="wrap_content"
+                    android:textSize="6pt"
+                    android:text="@string/set_as_default_button" />
+
+                <Button
+                    android:theme="@style/ButtonStyle"
+                    android:id="@+id/exportToK"
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:layout_height="wrap_content"
+                    android:textSize="6pt"
+                    android:text="@string/copy_to_clipboard_button" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
         </LinearLayout>
+
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -35,9 +35,9 @@ public class TransactionListAdapter extends ArrayAdapter<TransactionListItem> {
             row = inflater.inflate(layoutResourceId, parent, false);
 
             holder = new ViewHolder();
-            holder.transactionSign = (TextView)row.findViewById(R.id.transactionSign);
-            holder.transactionAmount = (TextView)row.findViewById(R.id.transactionAmount);
-            holder.transactionDate = (TextView)row.findViewById(R.id.transactionDate);
+            holder.transactionSign = (TextView)row.findViewById(R.id.is_primary);
+            holder.transactionAmount = (TextView)row.findViewById(R.id.address_preview);
+            holder.transactionDate = (TextView)row.findViewById(R.id.private_key_preview);
 
             row.setTag(holder);
         }

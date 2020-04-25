@@ -144,6 +144,7 @@ public class MyUBIFragment extends Fragment implements OnGetBalanceCompleted {
         if(!(connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected())) {
             this.view.findViewById(R.id.no_internet_my_ubi_layout).setVisibility(View.VISIBLE);
         } else {
+            this.view.findViewById(R.id.no_internet_my_ubi_layout).setVisibility(View.INVISIBLE);
             if (isReceivingUBI) {
                 this.view.findViewById(R.id.is_receiving_ubi_layout).setVisibility(View.VISIBLE);
             } else {

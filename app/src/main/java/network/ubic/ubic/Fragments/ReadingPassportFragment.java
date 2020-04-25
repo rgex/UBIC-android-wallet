@@ -271,7 +271,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
                             .setTitle(getResources().getString(R.string.error_error))
                             .setMessage(message)
                             .setCancelable(false)
-                            .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     //@TODO
@@ -479,7 +479,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getResources().getString(R.string.error_error))
                         .setMessage(errorMessage)
-                        .setNegativeButton("Ok",
+                        .setNegativeButton(getResources().getString(R.string.ok),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog,
                                                         int id) {
@@ -496,7 +496,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
             new AlertDialog.Builder(getActivity())
                     .setTitle(getResources().getString(R.string.error_error))
                     .setMessage(getResources().getString(R.string.error_passport_invalid_server_response))
-                    .setNegativeButton("Ok",
+                    .setNegativeButton(getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int id) {

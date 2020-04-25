@@ -115,7 +115,7 @@ public class SendFragment extends Fragment implements
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(getResources().getString(R.string.error_error))
                                     .setMessage(getResources().getString(R.string.error_no_selected_currency))
-                                    .setNegativeButton("Ok",
+                                    .setNegativeButton(getResources().getString(R.string.ok),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog,
                                                                     int id) {
@@ -136,7 +136,7 @@ public class SendFragment extends Fragment implements
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(getResources().getString(R.string.error_error))
                                     .setMessage(getResources().getString(R.string.error_cannot_get_fees))
-                                    .setNegativeButton("Ok",
+                                    .setNegativeButton(getResources().getString(R.string.ok),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog,
                                                                     int id) {
@@ -152,7 +152,7 @@ public class SendFragment extends Fragment implements
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(getResources().getString(R.string.error_error))
                                     .setMessage(getResources().getString(R.string.error_empty_address))
-                                    .setNegativeButton("Ok",
+                                    .setNegativeButton(getResources().getString(R.string.ok),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog,
                                                                     int id) {
@@ -172,7 +172,7 @@ public class SendFragment extends Fragment implements
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(getResources().getString(R.string.error_error))
                                     .setMessage(getResources().getString(R.string.error_invalid_amount))
-                                    .setNegativeButton("Ok",
+                                    .setNegativeButton(getResources().getString(R.string.ok),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog,
                                                                     int id) {
@@ -308,7 +308,7 @@ public class SendFragment extends Fragment implements
             new AlertDialog.Builder(getActivity())
                     .setTitle(getResources().getString(R.string.error_qr_code))
                     .setMessage(getResources().getString(R.string.error_unsupported))
-                    .setNegativeButton("Ok",
+                    .setNegativeButton(getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,
                                             int id) {
@@ -354,7 +354,7 @@ public class SendFragment extends Fragment implements
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getResources().getString(R.string.success))
                         .setMessage(getResources().getString(R.string.transaction_was_send))
-                        .setNegativeButton("Ok",
+                        .setNegativeButton(getResources().getString(R.string.ok),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog,
                                                         int id) {
@@ -374,7 +374,7 @@ public class SendFragment extends Fragment implements
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getResources().getString(R.string.error_error))
                         .setMessage(errorMessage)
-                        .setNegativeButton("Ok",
+                        .setNegativeButton(getResources().getString(R.string.ok),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog,
                                                         int id) {
@@ -387,7 +387,7 @@ public class SendFragment extends Fragment implements
             new AlertDialog.Builder(getActivity())
                     .setTitle(getResources().getString(R.string.error_error))
                     .setMessage(getResources().getString(R.string.error_invalid_server_response))
-                    .setNegativeButton("Ok",
+                    .setNegativeButton(getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int id) {

@@ -5,13 +5,15 @@ import android.os.AsyncTask;
 public class PrivateKeyPopulate extends AsyncTask<Void, Void, Void> {
 
     private byte[] privateKey;
+    private String address;
     private String privateKeyString;
     private OnPrivateKeyFragmentPopulateCompleted listener;
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    public PrivateKeyPopulate(OnPrivateKeyFragmentPopulateCompleted listener, byte[] privateKey) {
+    public PrivateKeyPopulate(OnPrivateKeyFragmentPopulateCompleted listener, byte[] privateKey, String address) {
         this.listener = listener;
         this.privateKey = privateKey;
+        this.address = address;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class PrivateKeyPopulate extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        listener.onPrivateKeyFragmentPopulateCompleted(privateKeyString);
+        listener.onPrivateKeyFragmentPopulateCompleted(privateKeyString, this.address);
     }
 
     public static String bytesToHex(byte[] bytes) {

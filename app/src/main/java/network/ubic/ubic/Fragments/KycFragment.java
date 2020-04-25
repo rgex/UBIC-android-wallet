@@ -157,7 +157,7 @@ public class KycFragment extends Fragment implements
             new AlertDialog.Builder(getActivity())
                     .setTitle(getResources().getString(R.string.error_qr_code))
                     .setMessage(getResources().getString(R.string.error_unsupported))
-                    .setNegativeButton("Ok",
+                    .setNegativeButton(getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,
                                             int id) {

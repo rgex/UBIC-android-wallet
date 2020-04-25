@@ -177,7 +177,7 @@ public class RegisterPassportFragment extends Fragment implements DatePickerDial
                                 new AlertDialog.Builder(getActivity())
                                         .setTitle(getResources().getString(R.string.success))
                                         .setMessage(getResources().getString(R.string.go_to_nfc_settings))
-                                        .setNegativeButton("Ok",
+                                        .setNegativeButton(getResources().getString(R.string.ok),
                                                 new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog,
                                                                         int id) {

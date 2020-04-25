@@ -10,8 +10,6 @@
         android:id="@+id/private_key_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
         android:orientation="vertical">
 
         <LinearLayout
@@ -32,75 +30,106 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Warning: This is your PRIVATE key. Don't share it"
+                android:text="@string/warning_this_is_your_private_key_don_t_share_it"
                 android:id="@+id/textView5"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/ubicWhite"
                 android:paddingLeft="14dp"
                 android:paddingTop="4dp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/private_key_textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/ubicWhite"
-            android:textSize="18sp"
-            android:paddingTop="10sp"
-            android:paddingBottom="10sp"
-        />
-
-
-        <LinearLayout
-            android:id="@+id/transaction_layout"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <TextView
-                android:id="@+id/transactionTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Transactions"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:textColor="@color/ubicWhite"
-                android:textSize="36sp" />
-
-            <ListView
-                android:id="@+id/last_transaction_list_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@null"
-                />
-        </LinearLayout>
-<!--
         <Button
-            android:id="@+id/add_new_private_key"
+            android:id="@+id/addNewPrivateKeyButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/ubicWhite"
             android:fontFamily="sans-serif"
             android:textStyle="bold"
             android:padding="16sp"
-            android:text="Add new private key"
+            android:text="@string/add_new_private_key"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="16dp" />-->
+            tools:layout_editor_absoluteY="16dp" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ubicDarkBlue"
+        android:weightSum="1"
+        android:padding="6dp">
         <TextView
-            android:id="@+id/private_key_tap_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Double tap to copy to clipboard"
+            android:text="Currently in use"
             android:textAlignment="center"
-            android:textColor="@color/ubicBlueGrey"
-            android:textSize="18sp" />
+            android:textColor="@color/ubicWhite"
+            android:textSize="16sp"
+            android:paddingTop="10sp"
+            android:paddingBottom="10sp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/address_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="qxxxxxx"
+                    android:textColor="@color/ubicWhite"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/private_key_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="4dp"
+                    android:text="@string/private_key"
+                    android:textColor="@color/ubicWhite"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/private_key_preview_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="4dp"
+                    android:text="afafff ffafff"
+                    android:textColor="@color/ubicWhite"
+                    android:textSize="13sp" />
+
+                    <Button
+                        android:theme="@style/ButtonStyle"
+                        android:id="@+id/copyCurrentPrivateKeyToClipboard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:text="@string/copy_to_clipboard_button" />
+                </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/other_private_keys_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/other_private_keys"
+            android:textAlignment="center"
+            android:textColor="@color/ubicWhite"
+            android:textSize="16sp"
+            android:paddingTop="10sp"
+            android:paddingBottom="10sp"
+        />
+
+        <ListView
+            android:id="@+id/private_key_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null"
+            />
+
     </LinearLayout>
 </FrameLayout>

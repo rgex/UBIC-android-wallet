@@ -143,11 +143,11 @@ public class ReceiveFragment extends Fragment implements OnReceiveFragmentPopula
                 android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext()
                         .getSystemService(Context.CLIPBOARD_SERVICE);
                 android.content.ClipData clip = android.content.ClipData
-                        .newPlainText("message", receiveAddressTextView.getText());
+                        .newPlainText(getResources().getString(R.string.message), receiveAddressTextView.getText());
                 clipboard.setPrimaryClip(clip);
             }
 
-            Toast.makeText(getActivity(), "Copied to clipboard",
+            Toast.makeText(getActivity(), getResources().getString(R.string.copied_to_clipboard),
                     Toast.LENGTH_SHORT).show();
         }
         lastClickTime = clickTime;

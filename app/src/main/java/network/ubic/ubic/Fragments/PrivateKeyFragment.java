@@ -4,17 +4,37 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
+import android.util.Base64;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 import network.ubic.ubic.AsyncTasks.OnPrivateKeyFragmentPopulateCompleted;
 import network.ubic.ubic.AsyncTasks.PrivateKeyPopulate;
 import network.ubic.ubic.AsyncTasks.ReceiveFragmentPopulate;
+import network.ubic.ubic.MainActivity;
+import network.ubic.ubic.PrivateKeyListAdapter;
+import network.ubic.ubic.PrivateKeyListItem;
 import network.ubic.ubic.PrivateKeyStore;
 import network.ubic.ubic.R;
+import network.ubic.ubic.TransactionListAdapter;
+import network.ubic.ubic.TransactionListItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,12 +44,15 @@ import network.ubic.ubic.R;
  * Use the {@link PrivateKeyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PrivateKeyFragment extends Fragment implements OnPrivateKeyFragmentPopulateCompleted, View.OnClickListener {
+public class PrivateKeyFragment extends Fragment implements OnPrivateKeyFragmentPopulateCompleted {
 
     private OnFragmentInteractionListener mListener;
     private static final long DOUBLE_CLICK_TIME_DELTA = 300;
     private long lastClickTime = 0;
-    private TextView privateKeyTextView;
+    private TextView privateKeyTextView1;
+    private TextView addressTextView;
+    private String privateKey;
+    private View view;
 
     public PrivateKeyFragment() {
         // Required empty public constructor
@@ -58,16 +81,80 @@ public class PrivateKeyFragment extends Fragment implements OnPrivateKeyFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_private_key, container, false);
-        privateKeyTextView = view.findViewById(R.id.private_key_textView);
+        this.view = inflater.inflate(R.layout.fragment_private_key, container, false);
+        privateKeyTextView1 = view.findViewById(R.id.private_key_preview_1);
+        addressTextView = view.findViewById(R.id.address_preview);
+
+        this.view.findViewById(R.id.copyCurrentPrivateKeyToClipboard).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                            int sdk = android.os.Build.VERSION.SDK_INT;
+                            if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                                android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getContext()
+                                        .getSystemService(Context.CLIPBOARD_SERVICE);
+                                clipboard.setText(PrivateKeyFragment.this.privateKey);
+                            } else {
+                                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext()
+                                        .getSystemService(Context.CLIPBOARD_SERVICE);
+                                android.content.ClipData clip = android.content.ClipData
+                                        .newPlainText(getResources().getString(R.string.message), PrivateKeyFragment.this.privateKey);
+                                clipboard.setPrimaryClip(clip);
+                            }
+
+                            Toast.makeText(PrivateKeyFragment.this.getActivity(), PrivateKeyFragment.this.getResources().getString(R.string.copied_to_clipboard),
+                                    Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        this.view.findViewById(R.id.addNewPrivateKeyButton).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((MainActivity)getActivity()).goToNavNewPrivateKey();
+                    }
+                }
+        );
 
         PrivateKeyStore privateKeyStore = new PrivateKeyStore();
+        byte[] privateKey = privateKeyStore.getPrivateKey(this.getContext());
         PrivateKeyPopulate privateKeyPopulate = new PrivateKeyPopulate(
                 this,
-                privateKeyStore.getPrivateKey(this.getContext())
+                privateKey,
+                getAddress(privateKey)
         );
         privateKeyPopulate.execute();
-        view.findViewById(R.id.private_key_layout).setOnClickListener(this);
+
+        try {
+            // List other private keys
+            ArrayList<PrivateKeyListItem> privateKeyListItems = new ArrayList();
+
+            JSONObject wallet = privateKeyStore.getWallet(getContext());
+            JSONArray allList = wallet.getJSONArray("all");
+
+            for (int i = 0; i < allList.length(); i++) {
+                String privKey = allList.getString(i);
+                PrivateKeyListItem entryItem = new PrivateKeyListItem();
+                entryItem.setPrivateKey(bytesToHex(Base64.decode(privKey, Base64.DEFAULT)));
+                entryItem.setAddress(getAddress(Base64.decode(privKey, Base64.DEFAULT)));
+                privateKeyListItems.add(entryItem);
+            }
+
+
+            PrivateKeyListAdapter privateKeyListAdapter = new PrivateKeyListAdapter(
+                    getActivity(),
+                    R.layout.private_key_list_item,
+                    privateKeyListItems
+            );
+
+            ListView privateKeyListView = view.findViewById(R.id.private_key_list_view);
+            privateKeyListView.setAdapter(privateKeyListAdapter);
+            setListViewHeightBasedOnChildren(privateKeyListView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return view;
     }
@@ -104,31 +191,44 @@ public class PrivateKeyFragment extends Fragment implements OnPrivateKeyFragment
         void onFragmentInteraction(Uri uri);
     }
 
-    public void onPrivateKeyFragmentPopulateCompleted(String privateKey) {
-        this.privateKeyTextView.setText(privateKey);
+    public void onPrivateKeyFragmentPopulateCompleted(String privateKey, String address) {
+        System.out.println("Currently in use address: " + address);
+        this.privateKeyTextView1.setText(privateKey);
+        this.addressTextView.setText(address);
+        this.privateKey = privateKey;
     }
 
-    @Override
-    public void onClick(View v) {
-        long clickTime = System.currentTimeMillis();
-        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
 
-            int sdk = android.os.Build.VERSION.SDK_INT;
-            if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-                android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getContext()
-                        .getSystemService(Context.CLIPBOARD_SERVICE);
-                clipboard.setText(this.privateKeyTextView.getText());
-            } else {
-                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext()
-                        .getSystemService(Context.CLIPBOARD_SERVICE);
-                android.content.ClipData clip = android.content.ClipData
-                        .newPlainText("message", this.privateKeyTextView.getText());
-                clipboard.setPrimaryClip(clip);
-            }
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            Toast.makeText(getActivity(), "Copied to clipboard",
-                    Toast.LENGTH_SHORT).show();
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
         }
-        lastClickTime = clickTime;
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
+
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for ( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
+
+    public native String getAddress(byte[]  seed);
 }

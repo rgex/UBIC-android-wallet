@@ -16,7 +16,7 @@
         tools:layout_editor_absoluteY="8dp">
 
         <TextView
-            android:id="@+id/transactionSign"
+            android:id="@+id/is_primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
@@ -33,7 +33,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/transactionAmount"
+                android:id="@+id/address_preview"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/transactionDate"
+                android:id="@+id/private_key_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="4dp"

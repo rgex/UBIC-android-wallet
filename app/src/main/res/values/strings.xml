@@ -6,7 +6,9 @@
     <string name="nav_header_subtitle">Beta wallet</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="private_key_shared_pref">private_key_shared_pref</string>
+    <string name="private_key_shared_pref_new">wallet_shared_pref_new</string>
     <string name="iv_key_shared_pref">iv_key_shared_pref</string>
+    <string name="iv_key_shared_pref_new">iv_key_shared_pref_new</string>
     <string name="no_funds_info">You cannot make a payment, your wallet is empty</string>
 
     <string name="empty_balance_message">Your wallet is empty, register your passport to receive a UBI</string>
@@ -31,7 +33,7 @@
     <string name="title_activity_waiting_for_nfc">Waiting for NFC tag</string>
     <string name="title_activity_reading_passport">Reading</string>
 
-    <string name="passport_info_alert_text">The nfc chip of the passport is password protected, you need to provide following information</string>
+    <string name="passport_info_alert_text">The NFC chip of the passport is password protected, you need to provide following information</string>
 
     <string name="passport_number_text">Passport No.</string>
     <string name="date_of_birth_text">Date of birth</string>
@@ -81,8 +83,6 @@
     <string name="error_lost_connexion">Lost connexion, please try again</string>
     <string name="error_nfc_exception">An error occurred, please try again. If the problem persists write us at panda@panda.cat</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="passport_info_shared_pref">passport_info_shared_pref</string>
     <string name="passport_number_shared_pref">passport_number_shared_pref</string>
@@ -91,4 +91,26 @@
     <string name="passport_challenge_shared_pref">passport_challenge_shared_pref</string>
     <string name="error_qr_code">Error</string>
     <string name="error_unsupported">Unsupported QrCode</string>
+    <string name="add_new_private_key">Add a new private key</string>
+    <string name="warning_this_is_your_private_key_don_t_share_it">Important: Please make a backup of your private key and don\'t share it with others</string>
+    <string name="it_appears_that_you_are_not_receiving_a_ubi">It appears that you are not receiving a UBI. Register a passport to get one. If you just registered your passport please wait some minutes</string>
+    <string name="register_a_passport">Register a passport</string>
+    <string name="register_another_passport">Register another passport</string>
+    <string name="no_internet_connectivity">No internet connectivity :-(</string>
+    <string name="set_as_default_button">Set as default</string>
+    <string name="copy_to_clipboard_button">copy to clipboard</string>
+    <string name="ubic_address_placeholder">UBIC ADDRESS</string>
+    <string name="generate_new_private_key_button">Generate new private key</string>
+    <string name="private_key_placeholder">Private key...</string>
+    <string name="import_button">Import</string>
+    <string name="ok">Ok</string>
+
+    <string name="cannot_import_invalid_privatekey">Cannot import the private key, it is invalid</string>
+    <string name="not_enough_space_for_import">For security reasons, at least 50MB of free disk space are required to import a new private key</string>
+    <string name="error">Error</string>
+
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="message">message</string>
+    <string name="private_key">Private key:</string>
+    <string name="other_private_keys">Other private keys</string>
 </resources>

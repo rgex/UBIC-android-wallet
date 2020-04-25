@@ -83,19 +83,55 @@ Java_network_ubic_ubic_AsyncTasks_GetBalance_getAddress(
 extern "C" JNIEXPORT jstring
 
 JNICALL
+Java_network_ubic_ubic_Fragments_PrivateKeyFragment_getAddress(
+        JNIEnv *env,
+        jobject /* this */,
+        jbyteArray seed) {
+
+    std::cout << "C++:" << std::endl;
+
+    Wallet& wallet = Wallet::Instance();
+
+    int len = env->GetArrayLength (seed);
+    std::cout << "Length:" << len << std::endl;
+    unsigned char* seedUC = new unsigned char[len];
+    env->GetByteArrayRegion (seed, 0, len, reinterpret_cast<jbyte*>(seedUC));
+
+    std::vector<unsigned char> seedVector = std::vector<unsigned char>(seedUC, seedUC + 20);
+    wallet.setSeed(seedVector);
+
+    std::cout << "seedUC" << std::endl;
+    wallet.initWallet();
+    std::cout << "initWallet" << std::endl;
+    Address address = wallet.getRandomAddressFromWallet();
+
+    return env->NewStringUTF(wallet.readableAddressFromAddress(address).c_str());
+}
+
+extern "C" JNIEXPORT jstring
+
+JNICALL
 Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
         JNIEnv *env,
         jobject /* this */,
         jbyteArray seed,
         jbyteArray sod) {
 
+
+    Wallet& wallet = Wallet::Instance();
+    int lenSeed = env->GetArrayLength (seed);
+    unsigned char* seedUC = new unsigned char[lenSeed];
+    env->GetByteArrayRegion (seed, 0, lenSeed, reinterpret_cast<jbyte*>(seedUC));
+
+    std::vector<unsigned char> seedVector = std::vector<unsigned char>(seedUC, seedUC + 20);
+    wallet.setSeed(seedVector);
+    wallet.initWallet();
+
     int len = env->GetArrayLength (sod);
     std::cout << "Length:" << len << std::endl;
     unsigned char* sodUC = new unsigned char[len];
     env->GetByteArrayRegion (sod, 0, len, reinterpret_cast<jbyte*>(sodUC));
 
-    Wallet& wallet = Wallet::Instance();
-    wallet.initWallet();
     PKCS7Parser* pkcs7Parser = new PKCS7Parser((char*)sodUC, len);
 
     if(pkcs7Parser->hasError()) {

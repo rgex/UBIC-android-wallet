@@ -77,7 +77,7 @@
                                     android:id="@+id/send_address"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="UBIC ADDRESS" />
+                                    android:hint="@string/ubic_address_placeholder" />
                             </LinearLayout>
 
                             <LinearLayout
