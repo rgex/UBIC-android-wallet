@@ -48,31 +48,6 @@
 
     <string name="reading_passport_progress">读取护照内容中</string>
 
-    <string name="information_tab_text">信息</string>
-    <string name="image_tab_text">图像</string>
-    <string name="security_tab_text">安全</string>
-
-    <string name="information_document_type">文件类型</string>
-    <string name="information_issued_by">发行于</string>
-    <string name="information_document_number">文件号码</string>
-    <string name="information_date_of_expiry">到期日期</string>
-    <string name="information_gender">性别</string>
-    <string name="information_gender_male">男</string>
-    <string name="information_gender_female">女</string>
-    <string name="information_nationality">国籍</string>
-    <string name="information_surname">姓</string>
-    <string name="information_given_names">名</string>
-    <string name="information_date_of_birth">出生日期</string>
-
-    <string name="information_issuer_country">发行国家</string>
-    <string name="information_certification_authority">认证机构</string>
-    <string name="information_issuer_organization">发行组织</string>
-    <string name="information_issuer_organizational_unit">组织单位</string>
-    <string name="information_signature_algorithm">签署算法</string>
-    <string name="information_lds_hash_algorithm">LDS哈希算法</string>
-    <string name="information_valid_from">证书有效期始于</string>
-    <string name="information_valid_until">证书有效期至</string>
-
     <string name="error_dg1_is_null">应用程序错误\'DG1 \'，请重试。 如果问题仍然存在，请发送电子邮件至panda@panda.cat</string>
     <string name="error_dg2_is_null">应用程序错误\'DG2 \'，请重试。 如果问题仍然存在，请发送电子邮件至panda@panda.cat</string>
     <string name="error_mutual_authentication_failed">认证失败，请检查护照号码/出生日期/有效期。 如果问题仍然存在，请发送电子邮件至panda@panda.cat</string>
