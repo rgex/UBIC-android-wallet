@@ -5,10 +5,6 @@
     <string name="nav_header_title">UBIC</string>
     <string name="nav_header_subtitle">Beta wallet</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="private_key_shared_pref">private_key_shared_pref</string>
-    <string name="private_key_shared_pref_new">wallet_shared_pref_new</string>
-    <string name="iv_key_shared_pref">iv_key_shared_pref</string>
-    <string name="iv_key_shared_pref_new">iv_key_shared_pref_new</string>
     <string name="no_funds_info">You cannot make a payment, your wallet is empty</string>
 
     <string name="empty_balance_message">Your wallet is empty, register your passport to receive a UBI</string>
@@ -52,43 +48,22 @@
 
     <string name="reading_passport_progress">Reading passport content</string>
 
-    <string name="information_tab_text">Information</string>
-    <string name="image_tab_text">Image</string>
-    <string name="security_tab_text">Security</string>
-
-    <string name="information_document_type">Document type</string>
-    <string name="information_issued_by">Issued by</string>
-    <string name="information_document_number">Document No.</string>
-    <string name="information_date_of_expiry">Date of expiry</string>
-    <string name="information_gender">Gender</string>
-    <string name="information_gender_male">Male</string>
-    <string name="information_gender_female">Female</string>
-    <string name="information_nationality">Nationality</string>
-    <string name="information_surname">Surname</string>
-    <string name="information_given_names">Given names</string>
-    <string name="information_date_of_birth">Date of birth</string>
-
-    <string name="information_issuer_country">Issuer country</string>
-    <string name="information_certification_authority">Certification authority</string>
-    <string name="information_issuer_organization">Issuer organization</string>
-    <string name="information_issuer_organizational_unit">Organizational unit</string>
-    <string name="information_signature_algorithm">Signature algorithm</string>
-    <string name="information_lds_hash_algorithm">LDS hash algorithm</string>
-    <string name="information_valid_from">Certificate valid from</string>
-    <string name="information_valid_until">certificate valid until</string>
-
     <string name="error_dg1_is_null">Application error \'DG1\', please try again. If the problem persists report it us at panda@panda.cat</string>
     <string name="error_dg2_is_null">Application error \'DG2\', please try again. If the problem persists report it us at panda@panda.cat</string>
     <string name="error_mutual_authentication_failed">Authentication failed, please check the passport No. / date of birth / date of expiry. If the problem persists write us at panda@panda.cat</string>
-    <string name="error_lost_connexion">Lost connexion, please try again</string>
+    <string name="error_lost_connexion">Lost connection, please try again</string>
     <string name="error_nfc_exception">An error occurred, please try again. If the problem persists write us at panda@panda.cat</string>
 
-
+    <string name="private_key_shared_pref">private_key_shared_pref</string>
+    <string name="private_key_shared_pref_new">wallet_shared_pref_new</string>
+    <string name="iv_key_shared_pref">iv_key_shared_pref</string>
+    <string name="iv_key_shared_pref_new">iv_key_shared_pref_new</string>
     <string name="passport_info_shared_pref">passport_info_shared_pref</string>
     <string name="passport_number_shared_pref">passport_number_shared_pref</string>
     <string name="passport_date_of_birth_shared_pref">passport_date_of_birth_shared_pref</string>
     <string name="passport_date_of_expiry_shared_pref">passport_date_of_expiry_shared_pref</string>
     <string name="passport_challenge_shared_pref">passport_challenge_shared_pref</string>
+
     <string name="error_qr_code">Error</string>
     <string name="error_unsupported">Unsupported QrCode</string>
     <string name="add_new_private_key">Add a new private key</string>
@@ -112,5 +87,11 @@
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="message">message</string>
     <string name="private_key">Private key:</string>
-    <string name="other_private_keys">Other private keys</string>
+    <string name="other_private_keys">Other private keys:</string>
+
+    <string name="cannot_import_privatekey_unknown_error">Cannot import the private key for an unknown reason</string>
+    <string name="private_key_was_imported">The private key was successfully imported</string>
+    <string name="successfully_set_the_new_default_privatekey">Successfully set the new default private key</string>
+
+
 </resources>

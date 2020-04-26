@@ -3,13 +3,10 @@ package network.ubic.ubic.Fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +14,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import org.spongycastle.util.encoders.Hex;
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import network.ubic.ubic.AsyncTasks.GetBalance;
-import network.ubic.ubic.AsyncTasks.OnGetBalanceCompleted;
 import network.ubic.ubic.MainActivity;
 import network.ubic.ubic.PrivateKeyStore;
 import network.ubic.ubic.R;
-import org.spongycastle.util.encoders.Hex;
 
 /**
  * A fragment with a Google +1 button.
@@ -140,7 +129,39 @@ public class NewPrivateKeyFragment extends Fragment {
                             return;
                         }
 
-                        privateKeyStore.addPrivateKey(getActivity().getBaseContext(), privKeyBytes);
+                        if(privateKeyStore.addPrivateKey(getActivity().getBaseContext(), privKeyBytes)) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(getResources().getString(R.string.success))
+                                    .setMessage(getResources().getString(R.string.private_key_was_imported))
+                                    .setNegativeButton(getResources().getString(R.string.ok),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog,
+                                                                    int id) {
+                                                    dialog.cancel();
+                                                }
+                                            })
+                                    .setCancelable(true).create().show();
+                            try {
+                                ((MainActivity) NewPrivateKeyFragment.this.getActivity()).goToNavPrivateKey();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            return;
+                        } else {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(getResources().getString(R.string.error))
+                                    .setMessage(getResources().getString(R.string.cannot_import_privatekey_unknown_error))
+                                    .setNegativeButton(getResources().getString(R.string.ok),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog,
+                                                                    int id) {
+                                                    dialog.cancel();
+                                                }
+                                            })
+                                    .setCancelable(true).create().show();
+                            return;
+                        }
                     }
                 }
         );

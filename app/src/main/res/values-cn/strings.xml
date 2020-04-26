@@ -1,0 +1,120 @@
+<resources>
+    <string name="app_name">UBIC 钱包</string>
+    <string name="navigation_drawer_open">打开导航栏</string>
+    <string name="navigation_drawer_close">关闭导航栏</string>
+    <string name="nav_header_title">UBIC</string>
+    <string name="nav_header_subtitle">Beta 钱包</string>
+    <string name="nav_header_desc">导航标题</string>
+    <string name="no_funds_info">无法付款，您的钱包是空的</string>
+
+    <string name="empty_balance_message">您的钱包是空的，请注册护照以接收UBI</string>
+    <string name="empty_balance_passport_pending">您是UBI项目的成员，请耐心等待，您将很快收到UBIC币</string>
+
+    <string name="error_error">Error</string>
+    <string name="error_nfc_is_disabled">您需要启用NFC才能使用此功能</string>
+    <string name="go_to_nfc_settings">进入设置激活NFC</string>
+    <string name="error_cannot_get_fees">无法收回当前的交易手续费用，请检查您的互联网连接</string>
+    <string name="error_no_selected_currency">未选择货币</string>
+    <string name="error_empty_address">地址不能为空</string>
+    <string name="error_invalid_amount">无效金额</string>
+    <string name="error_unknown_error">未知错误</string>
+    <string name="error_invalid_server_response">无效的服务器响应</string>
+    <string name="error_passport_unknown_error">未知错误</string>
+    <string name="error_passport_invalid_server_response">无效的服务器响应</string>
+
+    <string name="success">成功</string>
+    <string name="transaction_was_send">交易已发送</string>
+
+    <string name="title_activity_result_display">数据</string>
+    <string name="title_activity_waiting_for_nfc">等待NFC标签</string>
+    <string name="title_activity_reading_passport">读取中</string>
+
+    <string name="passport_info_alert_text">护照的NFC芯片受密码保护，您需要提供以下信息</string>
+
+    <string name="passport_number_text">护照号码</string>
+    <string name="date_of_birth_text">出生日期</string>
+    <string name="date_of_expiry_text">护照到期日期</string>
+
+    <string name="uploading_kyc_transaction">上传KYC交易中</string>
+    <string name="uploading_passport_transaction">上传护照交易中</string>
+    <string name="uploading_passport_transaction_done">完成！ 您就在几分钟之内开始收到您的UBI</string>
+
+    <string name="next_button_text">下一步</string>
+
+    <string name="waiting_for_nfc_text">请把您的设备放在护照的封面内页上</string>
+    <string name="found_nfc_text">找到NFC标签！</string>
+
+    <string name="congratulation_ubi">恭喜！ 您已在接收UBI</string>
+
+    <string name="reading_passport_progress">读取护照内容中</string>
+
+    <string name="information_tab_text">信息</string>
+    <string name="image_tab_text">图像</string>
+    <string name="security_tab_text">安全</string>
+
+    <string name="information_document_type">文件类型</string>
+    <string name="information_issued_by">发行于</string>
+    <string name="information_document_number">文件号码</string>
+    <string name="information_date_of_expiry">到期日期</string>
+    <string name="information_gender">性别</string>
+    <string name="information_gender_male">男</string>
+    <string name="information_gender_female">女</string>
+    <string name="information_nationality">国籍</string>
+    <string name="information_surname">姓</string>
+    <string name="information_given_names">名</string>
+    <string name="information_date_of_birth">出生日期</string>
+
+    <string name="information_issuer_country">发行国家</string>
+    <string name="information_certification_authority">认证机构</string>
+    <string name="information_issuer_organization">发行组织</string>
+    <string name="information_issuer_organizational_unit">组织单位</string>
+    <string name="information_signature_algorithm">签署算法</string>
+    <string name="information_lds_hash_algorithm">LDS哈希算法</string>
+    <string name="information_valid_from">证书有效期始于</string>
+    <string name="information_valid_until">证书有效期至</string>
+
+    <string name="error_dg1_is_null">应用程序错误\'DG1 \'，请重试。 如果问题仍然存在，请发送电子邮件至panda@panda.cat</string>
+    <string name="error_dg2_is_null">应用程序错误\'DG2 \'，请重试。 如果问题仍然存在，请发送电子邮件至panda@panda.cat</string>
+    <string name="error_mutual_authentication_failed">认证失败，请检查护照号码/出生日期/有效期。 如果问题仍然存在，请发送电子邮件至panda@panda.cat</string>
+    <string name="error_lost_connexion">连接中断, 请重试</string>
+    <string name="error_nfc_exception">错误，请重试。如果问题仍然存在，请发送电子邮件至panda@panda.cat</string>
+
+    <string name="error_qr_code">错误</string>
+    <string name="error_unsupported">不支持的二维码</string>
+    <string name="add_new_private_key">添加新的私钥</string>
+    <string name="warning_this_is_your_private_key_don_t_share_it">重要提示：请备份您的私钥，不要与他人共享</string>
+    <string name="it_appears_that_you_are_not_receiving_a_ubi">看起来您没有收到UBI。 注册护照即可获得UBI。如果您刚刚注册了您的护照，请稍等几分钟</string>
+    <string name="register_a_passport">注册护照</string>
+    <string name="register_another_passport">注册其他护照</string>
+    <string name="no_internet_connectivity">无网络连接 :-(</string>
+    <string name="set_as_default_button">设为默认</string>
+    <string name="copy_to_clipboard_button">复制到剪贴板</string>
+    <string name="ubic_address_placeholder">UBIC 地址</string>
+    <string name="generate_new_private_key_button">生成新的私钥</string>
+    <string name="private_key_placeholder">私钥...</string>
+    <string name="import_button">导入</string>
+    <string name="ok">Ok</string>
+
+    <string name="cannot_import_invalid_privatekey">私钥无效，无法导入</string>
+    <string name="not_enough_space_for_import">出于安全考虑，至少需要50MB的可用磁盘储存空间才能导入新的私钥</string>
+    <string name="error">错误</string>
+
+    <string name="copied_to_clipboard">已复制到剪贴板</string>
+    <string name="message">信息</string>
+    <string name="private_key">私钥:</string>
+    <string name="other_private_keys">其他私钥</string>
+
+    <string name="cannot_import_privatekey_unknown_error">未知原因导致私钥无法导入</string>
+    <string name="private_key_was_imported">私钥已成功导入</string>
+    <string name="successfully_set_the_new_default_privatekey">成功设置新的默认秘钥</string>
+
+    <string name="private_key_shared_pref">private_key_shared_pref</string>
+    <string name="private_key_shared_pref_new">wallet_shared_pref_new</string>
+    <string name="iv_key_shared_pref">iv_key_shared_pref</string>
+    <string name="iv_key_shared_pref_new">iv_key_shared_pref_new</string>
+    <string name="passport_info_shared_pref">passport_info_shared_pref</string>
+    <string name="passport_number_shared_pref">passport_number_shared_pref</string>
+    <string name="passport_date_of_birth_shared_pref">passport_date_of_birth_shared_pref</string>
+    <string name="passport_date_of_expiry_shared_pref">passport_date_of_expiry_shared_pref</string>
+    <string name="passport_challenge_shared_pref">passport_challenge_shared_pref</string>
+</resources>

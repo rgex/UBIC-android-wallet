@@ -10,6 +10,7 @@ import android.util.Base64;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.spongycastle.util.encoders.Hex;
 
 import java.security.KeyStore;
 import java.security.SecureRandom;
@@ -185,11 +186,10 @@ public class PrivateKeyStore {
 
                 System.out.println("privateKey.isEmpty");
                 try {
-                    String privateKeyString = Base64.encodeToString(firstPrivateKey, Base64.DEFAULT);
+                    String privateKeyString = new String(Hex.encode(firstPrivateKey));
 
                     JSONObject jsonWallet = new JSONObject();
                     JSONArray allPrivKeyList = new JSONArray();
-                    allPrivKeyList.put(privateKeyString);
 
                     jsonWallet.put("current", privateKeyString);
                     jsonWallet.put("all", (Object)allPrivKeyList);
@@ -217,7 +217,6 @@ public class PrivateKeyStore {
     public byte[] getPrivateKey(Context context) {
         System.out.println("called getPrivateKey()");
         try {
-
             SharedPreferences sharedPref = context.getSharedPreferences(
                     context.getResources().getString(
                             R.string.private_key_shared_pref_new),
@@ -234,7 +233,7 @@ public class PrivateKeyStore {
             }
 
             JSONObject wallet = getWallet(context);
-            byte[] currentPrivateKey = Base64.decode(wallet.getString("current").getBytes(), Base64.DEFAULT);
+            byte[] currentPrivateKey = Hex.decode(wallet.getString("current").getBytes());
 
             return currentPrivateKey;
 
@@ -249,7 +248,7 @@ public class PrivateKeyStore {
 
     public boolean addPrivateKey(Context context, byte[] newKey) {
         try {
-            String privateKeyString = Base64.encodeToString(newKey, Base64.DEFAULT);
+            String privateKeyString = new String(Hex.encode(newKey));
             JSONObject wallet = getWallet(context);
             wallet.getJSONArray("all").put(privateKeyString);
             insertWallet(context, wallet);
@@ -258,6 +257,38 @@ public class PrivateKeyStore {
             return false;
         }
     }
+
+    public boolean setAsDefault(Context context, String newDefault) {
+        try {
+            JSONObject wallet = getWallet(context);
+            String oldCurrent = wallet.getString("current");
+            wallet.put("current", newDefault);
+
+            // replace new default in array list
+
+            JSONArray allList = wallet.getJSONArray("all");
+
+            boolean foundOldKey = false;
+            for (int i = 0; i < allList.length(); i++) {
+                String privKey = allList.getString(i);
+                if (privKey.equals(newDefault)) {
+                    allList.put(i, oldCurrent); // place the old primary key back in the pool where the new current key was
+                    foundOldKey = true;
+                    break;
+                }
+            }
+            if (!foundOldKey) {
+                return false;
+            }
+
+            wallet.put("", allList);
+
+            return  insertWallet(context, wallet);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
     public byte[] generateNewKey() {
         SecureRandom random = new SecureRandom();

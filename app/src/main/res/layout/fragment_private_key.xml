@@ -5,131 +5,136 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     tools:context=".Fragments.PrivateKeyFragment">
-
-    <LinearLayout
-        android:id="@+id/private_key_layout"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/private_key_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:background="@color/ubicDarkBlue"
+                android:weightSum="1"
+                android:padding="6dp">
+
+                <ImageView
+                    android:layout_width="67dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imageView"
+                    android:src="@drawable/ic_info_outline_white_48px" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/warning_this_is_your_private_key_don_t_share_it"
+                    android:id="@+id/textView5"
+                    android:textSize="16sp"
+                    android:textColor="@color/ubicWhite"
+                    android:paddingLeft="14dp"
+                    android:paddingTop="4dp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/addNewPrivateKeyButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/ubicWhite"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:padding="16sp"
+                android:text="@string/add_new_private_key"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="16dp" />
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="74dp"
+            android:layout_height="wrap_content"
             android:background="@color/ubicDarkBlue"
             android:weightSum="1"
             android:padding="6dp">
-
-            <ImageView
-                android:layout_width="67dp"
-                android:layout_height="match_parent"
-                android:id="@+id/imageView"
-                android:src="@drawable/ic_info_outline_white_48px" />
-
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/warning_this_is_your_private_key_don_t_share_it"
-                android:id="@+id/textView5"
-                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:text="Currently in use"
+                android:textAlignment="center"
                 android:textColor="@color/ubicWhite"
-                android:paddingLeft="14dp"
-                android:paddingTop="4dp" />
-        </LinearLayout>
+                android:textSize="16sp"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                />
 
-        <Button
-            android:id="@+id/addNewPrivateKeyButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/ubicWhite"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:padding="16sp"
-            android:text="@string/add_new_private_key"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="16dp" />
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/ubicDarkBlue"
-        android:weightSum="1"
-        android:padding="6dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Currently in use"
-            android:textAlignment="center"
-            android:textColor="@color/ubicWhite"
-            android:textSize="16sp"
-            android:paddingTop="10sp"
-            android:paddingBottom="10sp"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:orientation="vertical">
-
-            <TextView
-                    android:id="@+id/address_preview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="qxxxxxx"
-                    android:textColor="@color/ubicWhite"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/private_key_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
-                    android:text="@string/private_key"
-                    android:textColor="@color/ubicWhite"
-                    android:textSize="13sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/private_key_preview_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
-                    android:text="afafff ffafff"
-                    android:textColor="@color/ubicWhite"
-                    android:textSize="13sp" />
-
-                    <Button
-                        android:theme="@style/ButtonStyle"
-                        android:id="@+id/copyCurrentPrivateKeyToClipboard"
+                        android:id="@+id/address_preview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14dp"
-                        android:text="@string/copy_to_clipboard_button" />
-                </LinearLayout>
-        </LinearLayout>
+                        android:text="qxxxxxx"
+                        android:textColor="@color/ubicWhite"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/private_key_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:text="@string/private_key"
+                        android:textColor="@color/ubicWhite"
+                        android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/other_private_keys_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/other_private_keys"
-            android:textAlignment="center"
-            android:textColor="@color/ubicWhite"
-            android:textSize="16sp"
-            android:paddingTop="10sp"
-            android:paddingBottom="10sp"
-        />
+                    <TextView
+                        android:id="@+id/private_key_preview_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/ubicDarkRed"
+                        android:padding="1pt"
+                        android:paddingLeft="4dp"
+                        android:text="afafff ffafff"
+                        android:textColor="@color/ubicWhite"
+                        android:textSize="13sp" />
 
-        <ListView
-            android:id="@+id/private_key_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@null"
+                        <Button
+                            android:theme="@style/ButtonStyle"
+                            android:id="@+id/copyCurrentPrivateKeyToClipboard"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14dp"
+                            android:text="@string/copy_to_clipboard_button" />
+                    </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/other_private_keys_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/other_private_keys"
+                android:textAlignment="center"
+                android:textColor="@color/ubicWhite"
+                android:textSize="16sp"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
             />
 
-    </LinearLayout>
+            <ListView
+                android:id="@+id/private_key_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                />
+
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

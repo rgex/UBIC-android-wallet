@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -137,16 +138,20 @@ public class PrivateKeyFragment extends Fragment implements OnPrivateKeyFragment
             for (int i = 0; i < allList.length(); i++) {
                 String privKey = allList.getString(i);
                 PrivateKeyListItem entryItem = new PrivateKeyListItem();
-                entryItem.setPrivateKey(bytesToHex(Base64.decode(privKey, Base64.DEFAULT)));
-                entryItem.setAddress(getAddress(Base64.decode(privKey, Base64.DEFAULT)));
+                entryItem.setPrivateKey(privKey);
+                entryItem.setAddress(getAddress(Hex.decode(privKey)));
                 privateKeyListItems.add(entryItem);
             }
 
+            if(allList.length() == 0) {
+                view.findViewById(R.id.other_private_keys_textview).setVisibility(View.GONE);
+            }
 
             PrivateKeyListAdapter privateKeyListAdapter = new PrivateKeyListAdapter(
                     getActivity(),
                     R.layout.private_key_list_item,
-                    privateKeyListItems
+                    privateKeyListItems,
+                    ((MainActivity)getActivity())
             );
 
             ListView privateKeyListView = view.findViewById(R.id.private_key_list_view);
@@ -216,6 +221,7 @@ public class PrivateKeyFragment extends Fragment implements OnPrivateKeyFragment
         }
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        System.out.println("new height: " + params.height);
         listView.setLayoutParams(params);
     }
 

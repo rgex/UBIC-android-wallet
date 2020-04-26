@@ -42,6 +42,8 @@
                 android:id="@+id/private_key_preview_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/ubicDarkRed"
+                android:padding="1pt"
                 android:paddingLeft="4dp"
                 android:text="afafff ffafff"
                 android:textColor="@color/ubicWhite"
@@ -63,7 +65,7 @@
 
                 <Button
                     android:theme="@style/ButtonStyle"
-                    android:id="@+id/exportToK"
+                    android:id="@+id/copyPrivateKeyToClipboard"
                     android:layout_width="0dp"
                     android:layout_weight=".5"
                     android:layout_height="wrap_content"

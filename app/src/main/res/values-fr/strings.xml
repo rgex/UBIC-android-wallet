@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">UBIC Wallet</string>
+    <string name="nav_header_title">UBIC</string>
+    <string name="nav_header_subtitle">Beta wallet</string>
+    <string name="no_funds_info">Vous ne pouvez pas faire de transfert, fonds insuffisants</string>
+
+    <string name="empty_balance_message">Votre Wallet est vide, Enregistrez un passport pour recevoir des UBICs</string>
+    <string name="empty_balance_passport_pending">Votre enregistrement est en cours de vérification par la Blockchain, vous allez prochainement recevoir des UBICs, pendant ce temps vous pouvez faire une sauvegarde de votre clé privée</string>
+
+    <string name="error_error">Erreur</string>
+    <string name="error_nfc_is_disabled">Vous devez activer l\'NFC pour utiliser cette fonctionnalité</string>
+    <string name="go_to_nfc_settings">Aller dans les paramètres pour activer l\'NFC</string>
+    <string name="error_cannot_get_fees">L\'application n\'a pas pu téléchager les frais de transaction, vérifiez votre connexion internet</string>
+    <string name="error_no_selected_currency">Aucune monnaie n\'a été sélectionnée</string>
+    <string name="error_empty_address">Le champs adresse ne peut pas être vide</string>
+    <string name="error_invalid_amount">Montant invalide</string>
+    <string name="error_unknown_error">Erreur inconnue</string>
+    <string name="error_invalid_server_response">Réponse invalide du serveur</string>
+    <string name="error_passport_unknown_error">Erreur inconnue (2)</string>
+    <string name="error_passport_invalid_server_response">Réponse invalide du serveur (2)</string>
+
+    <string name="success">Succès</string>
+    <string name="transaction_was_send">La transaction a été envoyée</string>
+
+    <string name="title_activity_result_display">Données</string>
+    <string name="title_activity_waiting_for_nfc">En attente du Tag NFC</string>
+    <string name="title_activity_reading_passport">Lecture</string>
+
+    <string name="passport_info_alert_text">La puce NFC du passeport est protégée par mot de passe, vous devez fournir les informations suivantes</string>
+
+    <string name="passport_number_text">N° du passport</string>
+    <string name="date_of_birth_text">Date de naissance</string>
+    <string name="date_of_expiry_text">Date d\'expiration</string>
+
+    <string name="uploading_kyc_transaction">Téléchargement de la transaction KYC</string>
+    <string name="uploading_passport_transaction">Téléchargement de la transaction d\'enregistrement du passeport</string>
+    <string name="uploading_passport_transaction_done">Terminé! dans quelques minutes, vous devriez commencer à recevoir vos Coins</string>
+
+    <string name="next_button_text">Suivant</string>
+
+    <string name="waiting_for_nfc_text">Veuillez placer votre appareil sur la couverture intérieure du passeport</string>
+    <string name="found_nfc_text">Tag NFC trouvé!</string>
+
+    <string name="congratulation_ubi">Félicitation! vous recevez un UBI</string>
+
+    <string name="reading_passport_progress">Lecture de la puce NFC du passeport</string>
+
+    <string name="error_dg1_is_null">Erreur d\'application \'DG1\', veuillez réessayer. Si le problème persiste, signalez-le nous à panda@panda.cat</string>
+    <string name="error_dg2_is_null">Erreur d\'application \'DG2\', veuillez réessayer. Si le problème persiste, signalez-le nous à panda@panda.cat</string>
+    <string name="error_mutual_authentication_failed">L\'authentification a échoué, veuillez vérifier le numéro de passeport / la date de naissance / la date d\'expiration. Si le problème persiste, écrivez-nous à panda@panda.cat</string>
+    <string name="error_lost_connexion">Connexion perdue, veuillez réessayer</string>
+    <string name="error_nfc_exception">Une erreur s\'est produite, veuillez réessayer. Si le problème persiste, écrivez-nous à panda@panda.cat</string>
+
+    <string name="error_qr_code">Erreur</string>
+    <string name="error_unsupported">QrCode non pris en charge</string>
+    <string name="add_new_private_key">Ajouter une nouvelle clé privée</string>
+    <string name="warning_this_is_your_private_key_don_t_share_it">Important: veuillez faire une sauvegarde de votre clé privée et ne la partagez pas avec les autres</string>
+    <string name="it_appears_that_you_are_not_receiving_a_ubi">Il semble que vous ne receviez pas d\'UBIC. Enregistrez un passeport pour en obtenir un. Si vous venez d\'enregistrer votre passeport, veuillez patienter quelques minutes</string>
+    <string name="register_a_passport">Enregistrer un passeport</string>
+    <string name="register_another_passport">Enregistrer un autre passeport</string>
+    <string name="no_internet_connectivity">Pas de connectivité Internet :-(</string>
+    <string name="set_as_default_button">Définir par défaut</string>
+    <string name="copy_to_clipboard_button">copier dans le presse-papier</string>
+    <string name="ubic_address_placeholder">Adresse UBIC</string>
+    <string name="generate_new_private_key_button">Générer une nouvelle clé privée</string>
+    <string name="private_key_placeholder">Clé privée...</string>
+    <string name="import_button">Importer</string>
+    <string name="ok">Ok</string>
+
+    <string name="cannot_import_invalid_privatekey">Impossible d\'importer la clé privée, elle n\'est pas valide</string>
+    <string name="not_enough_space_for_import">Pour des raisons de sécurité, au moins 50 Mo d\'espace disque libre sont nécessaires pour importer une nouvelle clé privée</string>
+    <string name="error">Erreur</string>
+
+    <string name="copied_to_clipboard">Copié dans le presse-papier</string>
+    <string name="message">message</string>
+    <string name="private_key">Clé privée:</string>
+    <string name="other_private_keys">Autres clés privées:</string>
+
+    <string name="cannot_import_privatekey_unknown_error">Impossible d\'importer la clé privée pour une raison inconnue</string>
+    <string name="private_key_was_imported">La clé privée a été importée avec succès</string>
+    <string name="successfully_set_the_new_default_privatekey">Le changement de clé privée par défaut a été effectué</string>
+
+    <string name="private_key_shared_pref">private_key_shared_pref</string>
+    <string name="private_key_shared_pref_new">wallet_shared_pref_new</string>
+    <string name="iv_key_shared_pref">iv_key_shared_pref</string>
+    <string name="iv_key_shared_pref_new">iv_key_shared_pref_new</string>
+    <string name="passport_info_shared_pref">passport_info_shared_pref</string>
+    <string name="passport_number_shared_pref">passport_number_shared_pref</string>
+    <string name="passport_date_of_birth_shared_pref">passport_date_of_birth_shared_pref</string>
+    <string name="passport_date_of_expiry_shared_pref">passport_date_of_expiry_shared_pref</string>
+    <string name="passport_challenge_shared_pref">passport_challenge_shared_pref</string>
+
+</resources>
