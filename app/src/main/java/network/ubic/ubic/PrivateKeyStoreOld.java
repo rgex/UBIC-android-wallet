@@ -93,8 +93,6 @@ public class PrivateKeyStoreOld {
                     byte[] newKey = getNewKey();
 
                     System.out.println("ivLength:" + iv.length);
-                    System.out.println("privateKeyStr:");
-                    System.out.println(Base64.encodeToString(newKey, Base64.DEFAULT));
                     SharedPreferences.Editor editor = sharedPref.edit();
 
                     String privateKeyEncrypted = Base64.encodeToString(inCipher.doFinal(newKey), Base64.DEFAULT);

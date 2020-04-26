@@ -19,7 +19,7 @@ import network.ubic.ubic.MainActivity;
 
 public class SendTransaction extends AsyncTask<Void, Void, Void> {
 
-    private String baseUrl = "https://ubic.network/api/send";
+    private String overWriteUrl = "";
     //private String baseUrl = "http://192.168.178.35:8888/ubic.network/api/send";
 
     private String TAG = MainActivity.class.getSimpleName();
@@ -33,8 +33,8 @@ public class SendTransaction extends AsyncTask<Void, Void, Void> {
         this.transaction = transaction;
     }
 
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
+    public void setOverwriteUrl(String overWriteUrl) {
+        this.overWriteUrl = overWriteUrl;
     }
 
     @Override
@@ -52,7 +52,11 @@ public class SendTransaction extends AsyncTask<Void, Void, Void> {
         OutputStream out;
         try {
 
-            URL url = new URL(baseUrl);
+            URL url = new URL(APIServerSelector.getBestServer() + "/api/send");
+            if(!this.overWriteUrl.isEmpty()) {
+                url = new URL(overWriteUrl);
+                this.overWriteUrl = "";
+            }
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             out = new BufferedOutputStream(urlConnection.getOutputStream());

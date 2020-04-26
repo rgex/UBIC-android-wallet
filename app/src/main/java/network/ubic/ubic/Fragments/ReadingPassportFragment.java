@@ -237,7 +237,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
         ((TextView)this.view.findViewById(R.id.readingPassportTextView)).setText(R.string.uploading_kyc_transaction);
 
         SendTransaction sendTransaction = new SendTransaction(ReadingPassportFragment.this, kycTx64);
-        sendTransaction.setBaseUrl(challengeParser.getUrl());
+        sendTransaction.setOverwriteUrl(challengeParser.getUrl());
         sendTransaction.execute();
     }
 

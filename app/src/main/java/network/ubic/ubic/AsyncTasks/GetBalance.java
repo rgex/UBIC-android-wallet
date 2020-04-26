@@ -20,9 +20,6 @@ import network.ubic.ubic.MainActivity;
 
 public class GetBalance extends AsyncTask<Void, Void, Void> {
 
-    private String baseUrl = "https://ubic.network";
-    //private String baseUrl = "http://192.168.178.35:8888/ubic.network";
-
     private byte[] privateKey;
 
     private String TAG = MainActivity.class.getSimpleName();
@@ -50,7 +47,7 @@ public class GetBalance extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... arg0) {
         HttpHandler sh = new HttpHandler();
         // Making a request to url and getting response
-        String url = baseUrl + "/api/addresses/" + getAddress(privateKey);
+        String url = APIServerSelector.getBestServer() + "/api/addresses/" + getAddress(privateKey);
         //String url = baseUrl + "/api/addresses/qZAYqtWvaKcrvgsG8wY4H7Ezyg2aVWkdm";
         String jsonStr = sh.makeServiceCall(url);
 

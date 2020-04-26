@@ -14,7 +14,6 @@ import network.ubic.ubic.MainActivity;
 
 public class GetTransactionFees extends AsyncTask<Void, Void, Void> {
 
-    private String baseUrl = "https://ubic.network";
     //private String baseUrl = "http://192.168.178.35:8888/ubic.network";
 
     private String TAG = MainActivity.class.getSimpleName();
@@ -35,7 +34,7 @@ public class GetTransactionFees extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... arg0) {
         HttpHandler sh = new HttpHandler();
         // Making a request to url and getting response
-        String url = baseUrl + "/api/fees";
+        String url = APIServerSelector.getBestServer() + "/api/fees";
         String jsonStr = sh.makeServiceCall(url);
 
         Log.e(TAG, "Response from url: " + jsonStr);
