@@ -64,7 +64,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Currently in use"
+                android:text="@string/currently_in_use"
                 android:textAlignment="center"
                 android:textColor="@color/ubicWhite"
                 android:textSize="16sp"

@@ -26,7 +26,7 @@
             android:id="@+id/address_tap_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Double tap to copy to clipboard"
+            android:text="@string/double_tap_to_copy_to_clipboard"
             android:textAlignment="center"
             android:textColor="@color/ubicBlueGrey"
             android:textSize="18sp" />

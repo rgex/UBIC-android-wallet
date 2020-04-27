@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:drawableStart="@mipmap/qr_scan_48"
-                android:text="SCAN QR CODE"
+                android:text="@string/scan_qr_code"
                 android:theme="@style/ButtonStyle" />
 
                 <android.support.design.widget.TextInputLayout
@@ -90,7 +90,7 @@
                                     android:layout_width="90dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".70"
-                                    android:hint="Amount"
+                                    android:hint="@string/amount"
                                     android:theme="@style/EditTextStyle" />
 
                                 <Spinner

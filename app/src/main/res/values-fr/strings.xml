@@ -90,4 +90,19 @@
     <string name="passport_date_of_expiry_shared_pref">passport_date_of_expiry_shared_pref</string>
     <string name="passport_challenge_shared_pref">passport_challenge_shared_pref</string>
 
+    <string name="balance">Balance</string>
+    <string name="my_ubi">Mon UBI</string>
+    <string name="kyc_verification">Verification KYC</string>
+    <string name="send">Envoyer</string>
+    <string name="receive">Recevoir</string>
+    <string name="manage_my_private_keys">Gérer mes clés privés</string>
+    <string name="currently_in_use">Actuellement utilisé</string>
+
+    <string name="scan_qr_code">SCAN QR CODE</string>
+    <string name="amount">Montant</string>
+    <string name="pending">En attente</string>
+    <string name="transactions">Transactions</string>
+    <string name="or_enter_the_challenge_here">ou entrez le défi de vérification ici</string>
+    <string name="verify">Vérifier</string>
+    <string name="double_tap_to_copy_to_clipboard">Appuyez deux fois pour copier dans le presse-papiers</string>
 </resources>

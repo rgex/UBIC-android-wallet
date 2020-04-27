@@ -18,7 +18,7 @@
             android:id="@+id/scanQrCodeButton"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="SCAN QR CODE" />
+            android:text="@string/scan_qr_code" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                         android:id="@+id/challenge_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="or enter the challenge here" />
+                        android:hint="@string/or_enter_the_challenge_here" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                         android:id="@+id/verifyKYCButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Verify" />
+                        android:text="@string/verify" />
 
 
                 </LinearLayout>
