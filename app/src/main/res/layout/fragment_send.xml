@@ -89,7 +89,7 @@
                                     android:id="@+id/send_amount"
                                     android:layout_width="90dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".70"
+                                    android:layout_weight=".62"
                                     android:hint="@string/amount"
                                     android:theme="@style/EditTextStyle" />
 
@@ -97,7 +97,7 @@
                                     android:id="@+id/currency_spinner"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:layout_weight=".30"
+                                    android:layout_weight=".38"
                                     android:gravity="center" />
                             </LinearLayout>
                         </LinearLayout>

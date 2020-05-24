@@ -44,7 +44,7 @@
     <string name="waiting_for_nfc_text">请把您的设备放在护照的封面内页上</string>
     <string name="found_nfc_text">找到NFC标签！</string>
 
-    <string name="congratulation_ubi">恭喜！ 您已在接收UBI</string>
+    <string name="congratulation_ubi">恭喜！你即将收到ubi，如果你还想注册另外一个护照，请创建新的私钥。</string>
 
     <string name="reading_passport_progress">读取护照内容中</string>
 

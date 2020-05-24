@@ -6,8 +6,8 @@ android {
         applicationId "network.ubic.ubic"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 17
-        versionName "6.3"
+        versionCode 19
+        versionName "8.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -49,4 +49,6 @@ dependencies {
 
     api 'com.madgag.spongycastle:core:1.54.0.0'
     api 'com.madgag.spongycastle:pkix:1.54.0.0'
+    implementation 'org.jmrtd:jmrtd:0.7.18'
+    implementation 'net.sf.scuba:scuba-sc-android:0.0.18'
 }

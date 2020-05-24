@@ -173,9 +173,9 @@ public class MainActivity extends AbstractNfcActivity
             goToNavSend();
         } else if (id == R.id.nav_private_keys) {
             goToNavPrivateKey();
-        } else if (id == R.id.nav_my_kyc) {
+        } /*else if (id == R.id.nav_my_kyc) {
             goToNavKYC();
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -12,10 +12,11 @@
             android:id="@+id/nav_my_ubi"
             android:icon="@drawable/menu_my_ubi"
             android:title="@string/my_ubi" />
+        <!--
         <item
             android:id="@+id/nav_my_kyc"
             android:icon="@drawable/menu_kyc"
-            android:title="@string/kyc_verification" />
+            android:title="@string/kyc_verification" />-->
         <item
             android:id="@+id/nav_send"
             android:icon="@drawable/ic_menu_send"

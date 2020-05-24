@@ -41,7 +41,7 @@
     <string name="waiting_for_nfc_text">Veuillez placer votre appareil sur la couverture intérieure du passeport</string>
     <string name="found_nfc_text">Tag NFC trouvé!</string>
 
-    <string name="congratulation_ubi">Félicitation! vous recevez un UBI</string>
+    <string name="congratulation_ubi">Félicitation! vous recevez un UBI, si vous voulez enregistrer un nouveau passport vous devez créer une nouvelle clé privée</string>
 
     <string name="reading_passport_progress">Lecture de la puce NFC du passeport</string>
 

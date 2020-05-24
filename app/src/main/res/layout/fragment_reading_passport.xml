@@ -25,8 +25,12 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:indeterminateOnly="true"
+        android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
+        android:max="100"
+        android:indeterminateDuration="8"
         android:progress="1" />
 
     <ProgressBar
@@ -36,8 +40,12 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:indeterminateOnly="true"
+        android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
+        android:max="100"
+        android:indeterminateDuration="8"
         android:visibility="invisible"
         />
 
@@ -58,15 +66,5 @@
         android:textSize="20sp"
         />
 
-        <TextView
-            android:id="@+id/percentageDisplay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/uploadPassportTransactionProgressBar"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:text="0 %"
-            android:textColor="@color/ubicWhite"
-            android:textSize="20sp" />
     </RelativeLayout>
 </FrameLayout>

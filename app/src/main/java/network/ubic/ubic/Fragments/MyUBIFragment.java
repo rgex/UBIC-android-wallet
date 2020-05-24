@@ -73,6 +73,8 @@ public class MyUBIFragment extends Fragment implements OnGetBalanceCompleted {
                 }
         );
 
+        this.view.findViewById(R.id.registerAnotherPassportButton).setVisibility(View.INVISIBLE);
+
         this.view.findViewById(R.id.registerAnotherPassportButton).setOnClickListener(
                 new View.OnClickListener() {
                     @Override

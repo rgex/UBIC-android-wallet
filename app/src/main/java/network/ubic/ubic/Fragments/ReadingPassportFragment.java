@@ -20,9 +20,21 @@ import android.widget.ProgressBar;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import net.sf.scuba.smartcards.CardFileInputStream;
+import net.sf.scuba.smartcards.CardService;
+
+import org.jmrtd.BACKey;
+import org.jmrtd.BACKeySpec;
+import org.jmrtd.PassportService;
+import org.jmrtd.lds.CardAccessFile;
+import org.jmrtd.lds.CardSecurityFile;
+import org.jmrtd.lds.PACEInfo;
+import org.jmrtd.lds.SODFile;
+import org.jmrtd.lds.SecurityInfo;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 
 import network.ubic.ubic.AsyncTasks.OnSendTransactionCompleted;
 import network.ubic.ubic.AsyncTasks.SendTransaction;
@@ -41,6 +53,8 @@ import network.ubic.ubic.MainActivity;
 import network.ubic.ubic.PassportStore;
 import network.ubic.ubic.PrivateKeyStore;
 import network.ubic.ubic.R;
+import static org.jmrtd.PassportService.DEFAULT_MAX_BLOCKSIZE;
+import static org.jmrtd.PassportService.NORMAL_MAX_TRANCEIVE_LENGTH;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -158,7 +172,6 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
         this.challenge = passportStore.getChallenge();
 
         this.mrtdProgressBar = this.view.findViewById(R.id.mrtdProgressBar);
-        this.percentageDisplay = this.view.findViewById(R.id.percentageDisplay);
 
         System.out.println("this.passportNumber: " + this.passportNumber);
         System.out.println("this.dateOfBirth: " + this.dateOfBirth);
@@ -214,7 +227,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
     );
 
     public void createAndSendKYCTransaction() {
-        this.setMrtdProgressBarPercentage(100);
+        //this.setMrtdProgressBarPercentage(100);
         ChallengeParser challengeParser = new ChallengeParser(this.challenge);
 
         System.out.println("this.sod: " + this.sod);
@@ -232,7 +245,6 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
         System.out.println("kycTx64: " + kycTx64);
 
         this.view.findViewById(R.id.mrtdProgressBar).setVisibility(View.GONE);
-        this.view.findViewById(R.id.percentageDisplay).setVisibility(View.GONE);
         this.view.findViewById(R.id.uploadPassportTransactionProgressBar).setVisibility(View.VISIBLE);
         ((TextView)this.view.findViewById(R.id.readingPassportTextView)).setText(R.string.uploading_kyc_transaction);
 
@@ -242,7 +254,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
     }
 
     public void createAndSendRegisterPassportTransaction() {
-        this.setMrtdProgressBarPercentage(100);
+        //this.setMrtdProgressBarPercentage(100);
 
 
         TagParser tagParser = new TagParser(this.sod);
@@ -255,7 +267,6 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
         System.out.println("passportTx64: " + passportTx64);
 
         this.view.findViewById(R.id.mrtdProgressBar).setVisibility(View.GONE);
-        this.view.findViewById(R.id.percentageDisplay).setVisibility(View.GONE);
         this.view.findViewById(R.id.uploadPassportTransactionProgressBar).setVisibility(View.VISIBLE);
         ((TextView)this.view.findViewById(R.id.readingPassportTextView)).setText(R.string.uploading_passport_transaction);
 
@@ -343,6 +354,60 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
             try {
                 if (TagProvider.getTag() != null) {
 
+                    BACKeySpec bacKey = new BACKey(passportNumber, dateOfBirth, dateOfExpiration);
+
+                    CardService cardService = CardService.getInstance(TagProvider.getTag());
+                    cardService.open();
+
+                    PassportService service = new PassportService(cardService, NORMAL_MAX_TRANCEIVE_LENGTH, DEFAULT_MAX_BLOCKSIZE, true, false);
+                    service.open();
+
+                    boolean paceSucceeded = false;
+                    try {
+                        CardAccessFile cardSecurityFile = new CardAccessFile(service.getInputStream(PassportService.EF_CARD_ACCESS));
+                        Collection<SecurityInfo> securityInfoCollection = cardSecurityFile.getSecurityInfos();
+                        for (SecurityInfo securityInfo : securityInfoCollection) {
+                            if (securityInfo instanceof PACEInfo) {
+                                PACEInfo paceInfo = (PACEInfo) securityInfo;
+                                service.doPACE(bacKey, paceInfo.getObjectIdentifier(), PACEInfo.toParameterSpec(paceInfo.getParameterId()), null);
+                                paceSucceeded = true;
+                                System.out.println("PACE succeeded");
+                            } else {
+                                System.out.println("PACE failed");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    service.sendSelectApplet(paceSucceeded);
+
+                    if (!paceSucceeded) {
+                        try {
+                            service.getInputStream(PassportService.EF_COM).read();
+                        } catch (Exception e) {
+                            service.doBAC(bacKey);
+                        }
+                    }
+
+                    CardFileInputStream sodStream = service.getInputStream(PassportService.EF_SOD);
+                    //SODFile sodFile = new SODFile(sodStream);
+
+                    //sodStream.read();
+                    int sodLength = sodStream.getLength();
+                    sod = new byte[sodLength];
+                    sodStream.read(sod);
+
+                    this.readingPassportActivity.get().setSOD(sod);
+
+                    if (sod != null) {
+                        this.success = true;
+                    } else {
+                        return false;
+                    }
+
+
+                    /*
                     System.out.println("GOT TAG");
 
                     BacInfo bacInfo = new BacInfo();
@@ -389,7 +454,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
                         this.readingPassportActivity.get().showError(getResources().getString(R.string.error_mutual_authentication_failed));
                         TagProvider.closeTag();
                         return false;
-                    }
+                    }*/
                 } else {
                     System.out.println("Couldn't get Tag from intent");
                     this.readingPassportActivity.get().showError(getResources().getString(R.string.error_lost_connexion));
@@ -409,7 +474,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
                 this.readingPassportActivity.get().showError(getResources().getString(R.string.error_nfc_exception));
             }
 
-            this.readingPassportActivity.get().setMrtdProgressBarPercentage(95);
+            //this.readingPassportActivity.get().setMrtdProgressBarPercentage(95);
 
             return true;
         }
@@ -436,7 +501,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
         }
 
         public void updateProgress(int progress) {
-            this.readingPassportActivity.get().setMrtdProgressBarPercentage(progress);
+            //this.readingPassportActivity.get().setMrtdProgressBarPercentage(progress);
         }
 
         public void cancel() {

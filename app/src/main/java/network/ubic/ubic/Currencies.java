@@ -37,6 +37,14 @@ public class Currencies {
         currencies.add(26, "UIS");
         currencies.add(27, "UHK");
         currencies.add(28, "UES");
+        currencies.add(29, "URU");
+        currencies.add(30, "UIL");
+        currencies.add(31, "UPT");
+        currencies.add(32, "UDK");
+        currencies.add(33, "UTR");
+        currencies.add(34, "URO");
+        currencies.add(35, "UPL");
+        currencies.add(36, "UNL");
     }
 
     public ArrayList<String> getCurrencies() {

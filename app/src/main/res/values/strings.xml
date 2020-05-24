@@ -44,7 +44,7 @@
     <string name="waiting_for_nfc_text">Please place your device on the inner cover of the passport</string>
     <string name="found_nfc_text">Found NFC Tag!</string>
 
-    <string name="congratulation_ubi">Congratulation! you are receiving a UBI</string>
+    <string name="congratulation_ubi">Congratulation! you are receiving a UBI, if you want to register another passport, please create a new private key</string>
 
     <string name="reading_passport_progress">Reading passport content</string>
 
