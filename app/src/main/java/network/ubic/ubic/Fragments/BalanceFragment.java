@@ -176,134 +176,139 @@ public class BalanceFragment extends Fragment implements
 
         view.findViewById(R.id.loading_balance_layout).setVisibility(View.GONE);
 
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE));
-        if(!(connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected())) {
-            view.findViewById(R.id.no_internet_balance_layout).setVisibility(View.VISIBLE);
-        } else {
+        try {
+            final ConnectivityManager connectivityManager = ((ConnectivityManager) this.getContext().getSystemService(Context.CONNECTIVITY_SERVICE));
+            if (!(connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected())) {
+                view.findViewById(R.id.no_internet_balance_layout).setVisibility(View.VISIBLE);
 
-            if (balanceMap == null || balanceMap.isEmpty() || isEmptyAddress) {
-                view.findViewById(R.id.balance_is_empty_layout).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.transaction_layout).setVisibility(View.GONE);
+                return;
+            }
+        } catch (Exception ignored) {
+            // getSystemService failed
+        }
 
-                view.findViewById(R.id.balance_register_passport_button).setVisibility(View.VISIBLE);
-                ((TextView)view.findViewById(R.id.empty_balance_text_view)).setText(getResources().getString(R.string.empty_balance_message));
+        if (balanceMap == null || balanceMap.isEmpty() || isEmptyAddress) {
+            view.findViewById(R.id.balance_is_empty_layout).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.transaction_layout).setVisibility(View.GONE);
 
-                if (pendingTransactions.size() > 0) {
-                    for(HashMap.Entry<Integer, Pair<String, HashMap<Integer, BigInteger>>> pendingTransaction  : pendingTransactions.entrySet()) {
-                        if(pendingTransaction.getValue().first.equals("registerPassport")) {
-                            ((TextView)view.findViewById(R.id.empty_balance_text_view)).setText(getResources().getString(R.string.empty_balance_passport_pending));
-                            view.findViewById(R.id.balance_register_passport_button).setVisibility(View.GONE);
-                        }
+            view.findViewById(R.id.balance_register_passport_button).setVisibility(View.VISIBLE);
+            ((TextView)view.findViewById(R.id.empty_balance_text_view)).setText(getResources().getString(R.string.empty_balance_message));
+
+            if (pendingTransactions.size() > 0) {
+                for(HashMap.Entry<Integer, Pair<String, HashMap<Integer, BigInteger>>> pendingTransaction  : pendingTransactions.entrySet()) {
+                    if(pendingTransaction.getValue().first.equals("registerPassport")) {
+                        ((TextView)view.findViewById(R.id.empty_balance_text_view)).setText(getResources().getString(R.string.empty_balance_passport_pending));
+                        view.findViewById(R.id.balance_register_passport_button).setVisibility(View.GONE);
                     }
                 }
-                if(isReceivingUBI) {
-                    ((TextView)view.findViewById(R.id.empty_balance_text_view)).setText(getResources().getString(R.string.empty_balance_passport_pending));
-                    view.findViewById(R.id.balance_register_passport_button).setVisibility(View.GONE);
-                }
-                swipeRefreshLayout.setRefreshing(false);
-                return;
-            } else {
-                view.findViewById(R.id.balance_is_empty_layout).setVisibility(View.GONE);
-                view.findViewById(R.id.transaction_layout).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.balance_layout).setVisibility(View.VISIBLE);
             }
-
-            ListView balanceListView = view.findViewById(R.id.balance_list_view);
-            ArrayList<BalanceListItem> balanceList = new ArrayList<>();
-
-            Currencies currencies = new Currencies();
-
-            //System.out.println(key + " : " + value);
-            for (HashMap.Entry<Integer, BigInteger> entry : balanceMap.entrySet()) {
-                if (!currenciesInWallet.contains(entry.getKey())) {
-                    currenciesInWallet.add(entry.getKey());
-                }
-                BalanceListItem balanceListItem = new BalanceListItem();
-                BigDecimal entryDec = new BigDecimal(entry.getValue().abs());
-                balanceListItem.setBalanceAmount((entryDec.divide(BigDecimal.valueOf(1000000), 2, BigDecimal.ROUND_DOWN) + " " + currencies.getCurrency(entry.getKey())));
-                balanceListItem.setCurrencyCode(currencies.getCurrency(Integer.valueOf(entry.getKey())));
-                balanceList.add(balanceListItem);
+            if(isReceivingUBI) {
+                ((TextView)view.findViewById(R.id.empty_balance_text_view)).setText(getResources().getString(R.string.empty_balance_passport_pending));
+                view.findViewById(R.id.balance_register_passport_button).setVisibility(View.GONE);
             }
-
-            BalanceListAdapter balanceListAdapter = new BalanceListAdapter(
-                    getActivity(),
-                    R.layout.balance_list_item,
-                    balanceList
-            );
-
-            balanceListView.setAdapter(balanceListAdapter);
-            setListViewHeightBasedOnChildren(balanceListView);
-
-            ((MainActivity) getActivity()).setCurrenciesInWallet(currenciesInWallet);
-
-
-            // Pending Transactions
-            ListView pendingTransactionListView = view.findViewById(R.id.pending_transaction_list_view);
-            ArrayList<TransactionListItem> pendingTransactionList = new ArrayList();
-
-            System.out.println("pending transactions.size():" + pendingTransactions.size());
-
-            if(pendingTransactions.size() == 0) {
-                view.findViewById(R.id.pendingTransactionTextView).setVisibility(View.GONE);
-            } else {
-                view.findViewById(R.id.pendingTransactionTextView).setVisibility(View.VISIBLE);
-            }
-
-            NavigableMap<Integer, Pair<String, HashMap<Integer, BigInteger>>> reveresedPendingTransactions = ((TreeMap)pendingTransactions).descendingMap();
-
-            for (HashMap.Entry<Integer, Pair<String, HashMap<Integer, BigInteger>>> entry : reveresedPendingTransactions.entrySet()) {
-                TransactionListItem entryItem = new TransactionListItem();
-                for (HashMap.Entry<Integer, BigInteger> entry2 : entry.getValue().second.entrySet()) {
-                    BigDecimal entryDec = new BigDecimal(entry2.getValue().abs());
-                    entryItem.setTransactionSign(entry2.getValue().signum());
-                    entryItem.setTransactionAmount((entryDec.divide(BigDecimal.valueOf(1000000), 2, BigDecimal.ROUND_DOWN) + " " + currencies.getCurrency(entry2.getKey())));
-                }
-                long now = System.currentTimeMillis();
-                entryItem.setTransactionDate(DateUtils.getRelativeTimeSpanString((long)entry.getKey() * 1000, now, DateUtils.DAY_IN_MILLIS).toString());
-                entryItem.setTransactionType(entry.getValue().first);
-                pendingTransactionList.add(entryItem);
-            }
-
-            TransactionListAdapter pendingTransactionListAdapter = new TransactionListAdapter(
-                    getActivity(),
-                    R.layout.transaction_list_item,
-                    pendingTransactionList
-            );
-
-            pendingTransactionListView.setAdapter(pendingTransactionListAdapter);
-            setListViewHeightBasedOnChildren(pendingTransactionListView);
-
-            // Last Transactions
-            ListView lastTransactionListView = view.findViewById(R.id.last_transaction_list_view);
-            ArrayList<TransactionListItem> transactionList = new ArrayList();
-
-            System.out.println("transactions.size():" + transactions.size());
-            NavigableMap<Integer, Pair<String, HashMap<Integer, BigInteger>>> reveresedTransactions = ((TreeMap)transactions).descendingMap();
-
-            for (HashMap.Entry<Integer, Pair<String, HashMap<Integer, BigInteger>>> entry : reveresedTransactions.entrySet()) {
-                TransactionListItem entryItem = new TransactionListItem();
-                for (HashMap.Entry<Integer, BigInteger> entry2 : entry.getValue().second.entrySet()) {
-                    BigDecimal entryDec = new BigDecimal(entry2.getValue().abs());
-                    entryItem.setTransactionSign(entry2.getValue().signum());
-                    entryItem.setTransactionAmount((entryDec.divide(BigDecimal.valueOf(1000000), 2, BigDecimal.ROUND_DOWN) + " " + currencies.getCurrency(entry2.getKey())));
-                }
-                long now = System.currentTimeMillis();
-                entryItem.setTransactionDate(DateUtils.getRelativeTimeSpanString((long)entry.getKey() * 1000, now, DateUtils.DAY_IN_MILLIS).toString());
-                entryItem.setTransactionType(entry.getValue().first);
-                transactionList.add(entryItem);
-            }
-
-            TransactionListAdapter transactionListAdapter = new TransactionListAdapter(
-                    getActivity(),
-                    R.layout.transaction_list_item,
-                    transactionList
-            );
-
-            lastTransactionListView.setAdapter(transactionListAdapter);
-            setListViewHeightBasedOnChildren(lastTransactionListView);
-
             swipeRefreshLayout.setRefreshing(false);
+            return;
+        } else {
+            view.findViewById(R.id.balance_is_empty_layout).setVisibility(View.GONE);
+            view.findViewById(R.id.transaction_layout).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.balance_layout).setVisibility(View.VISIBLE);
         }
+
+        ListView balanceListView = view.findViewById(R.id.balance_list_view);
+        ArrayList<BalanceListItem> balanceList = new ArrayList<>();
+
+        Currencies currencies = new Currencies();
+
+        //System.out.println(key + " : " + value);
+        for (HashMap.Entry<Integer, BigInteger> entry : balanceMap.entrySet()) {
+            if (!currenciesInWallet.contains(entry.getKey())) {
+                currenciesInWallet.add(entry.getKey());
+            }
+            BalanceListItem balanceListItem = new BalanceListItem();
+            BigDecimal entryDec = new BigDecimal(entry.getValue().abs());
+            balanceListItem.setBalanceAmount((entryDec.divide(BigDecimal.valueOf(1000000), 2, BigDecimal.ROUND_DOWN) + " " + currencies.getCurrency(entry.getKey())));
+            balanceListItem.setCurrencyCode(currencies.getCurrency(Integer.valueOf(entry.getKey())));
+            balanceList.add(balanceListItem);
+        }
+
+        BalanceListAdapter balanceListAdapter = new BalanceListAdapter(
+                getActivity(),
+                R.layout.balance_list_item,
+                balanceList
+        );
+
+        balanceListView.setAdapter(balanceListAdapter);
+        setListViewHeightBasedOnChildren(balanceListView);
+
+        ((MainActivity) getActivity()).setCurrenciesInWallet(currenciesInWallet);
+
+
+        // Pending Transactions
+        ListView pendingTransactionListView = view.findViewById(R.id.pending_transaction_list_view);
+        ArrayList<TransactionListItem> pendingTransactionList = new ArrayList();
+
+        System.out.println("pending transactions.size():" + pendingTransactions.size());
+
+        if(pendingTransactions.size() == 0) {
+            view.findViewById(R.id.pendingTransactionTextView).setVisibility(View.GONE);
+        } else {
+            view.findViewById(R.id.pendingTransactionTextView).setVisibility(View.VISIBLE);
+        }
+
+        NavigableMap<Integer, Pair<String, HashMap<Integer, BigInteger>>> reveresedPendingTransactions = ((TreeMap)pendingTransactions).descendingMap();
+
+        for (HashMap.Entry<Integer, Pair<String, HashMap<Integer, BigInteger>>> entry : reveresedPendingTransactions.entrySet()) {
+            TransactionListItem entryItem = new TransactionListItem();
+            for (HashMap.Entry<Integer, BigInteger> entry2 : entry.getValue().second.entrySet()) {
+                BigDecimal entryDec = new BigDecimal(entry2.getValue().abs());
+                entryItem.setTransactionSign(entry2.getValue().signum());
+                entryItem.setTransactionAmount((entryDec.divide(BigDecimal.valueOf(1000000), 2, BigDecimal.ROUND_DOWN) + " " + currencies.getCurrency(entry2.getKey())));
+            }
+            long now = System.currentTimeMillis();
+            entryItem.setTransactionDate(DateUtils.getRelativeTimeSpanString((long)entry.getKey() * 1000, now, DateUtils.DAY_IN_MILLIS).toString());
+            entryItem.setTransactionType(entry.getValue().first);
+            pendingTransactionList.add(entryItem);
+        }
+
+        TransactionListAdapter pendingTransactionListAdapter = new TransactionListAdapter(
+                getActivity(),
+                R.layout.transaction_list_item,
+                pendingTransactionList
+        );
+
+        pendingTransactionListView.setAdapter(pendingTransactionListAdapter);
+        setListViewHeightBasedOnChildren(pendingTransactionListView);
+
+        // Last Transactions
+        ListView lastTransactionListView = view.findViewById(R.id.last_transaction_list_view);
+        ArrayList<TransactionListItem> transactionList = new ArrayList();
+
+        System.out.println("transactions.size():" + transactions.size());
+        NavigableMap<Integer, Pair<String, HashMap<Integer, BigInteger>>> reveresedTransactions = ((TreeMap)transactions).descendingMap();
+
+        for (HashMap.Entry<Integer, Pair<String, HashMap<Integer, BigInteger>>> entry : reveresedTransactions.entrySet()) {
+            TransactionListItem entryItem = new TransactionListItem();
+            for (HashMap.Entry<Integer, BigInteger> entry2 : entry.getValue().second.entrySet()) {
+                BigDecimal entryDec = new BigDecimal(entry2.getValue().abs());
+                entryItem.setTransactionSign(entry2.getValue().signum());
+                entryItem.setTransactionAmount((entryDec.divide(BigDecimal.valueOf(1000000), 2, BigDecimal.ROUND_DOWN) + " " + currencies.getCurrency(entry2.getKey())));
+            }
+            long now = System.currentTimeMillis();
+            entryItem.setTransactionDate(DateUtils.getRelativeTimeSpanString((long)entry.getKey() * 1000, now, DateUtils.DAY_IN_MILLIS).toString());
+            entryItem.setTransactionType(entry.getValue().first);
+            transactionList.add(entryItem);
+        }
+
+        TransactionListAdapter transactionListAdapter = new TransactionListAdapter(
+                getActivity(),
+                R.layout.transaction_list_item,
+                transactionList
+        );
+
+        lastTransactionListView.setAdapter(transactionListAdapter);
+        setListViewHeightBasedOnChildren(lastTransactionListView);
+
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     public interface OnFragmentInteractionListener {
