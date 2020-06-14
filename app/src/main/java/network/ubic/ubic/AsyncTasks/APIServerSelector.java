@@ -5,7 +5,6 @@ import android.os.Build;
 
 public class APIServerSelector {
     public static String getBestServer() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             TimeZone tz = TimeZone.getDefault();
             String tzShort = tz.getDisplayName(false, TimeZone.SHORT);

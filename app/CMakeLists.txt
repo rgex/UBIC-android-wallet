@@ -30,8 +30,10 @@ add_library( # Sets the name of the library.
         src/main/cpp/NtpEsk/NtpEskSignatureRequestObject.h
         src/main/cpp/NtpEsk/NtpEskSignatureVerificationObject.h
 
-        src/main/cpp/serialize.h
-        src/main/cpp/streams.h
+        src/main/cpp/Serialization/serialize.h
+        src/main/cpp/Serialization/streams.h
+        src/main/cpp/Serialization/prevector.h
+
         src/main/cpp/Wallet.cpp
         src/main/cpp/Wallet.h
 
@@ -58,8 +60,6 @@ add_library( # Sets the name of the library.
         src/main/cpp/Scripts/PkhInScript.h
         src/main/cpp/Scripts/UScript.h
 
-        src/main/cpp/prevector.h
-
         src/main/cpp/FS/FS.cpp
         src/main/cpp/FS/FS.h
 
@@ -67,6 +67,8 @@ add_library( # Sets the name of the library.
         src/main/cpp/Tools/Hexdump.h
         src/main/cpp/Tools/Log.h
         src/main/cpp/Tools/Log.cpp
+        src/main/cpp/Tools/VectorTool.cpp
+        src/main/cpp/Tools/VectorTool.h
 
         src/main/cpp/Transaction/Transaction.cpp
         src/main/cpp/Transaction/Transaction.h

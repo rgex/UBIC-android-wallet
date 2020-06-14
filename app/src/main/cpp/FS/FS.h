@@ -3,7 +3,7 @@
 #define TX_FS_H
 
 #include <vector>
-#include "../streams.h"
+#include "../Serialization/streams.h"
 #include "../Tools/Log.h"
 #include "../ChainParams.h"
 

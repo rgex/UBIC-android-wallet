@@ -10,6 +10,7 @@
 #include "Base64.h"
 #include "AddressHelper.h"
 #include <android/log.h>
+#include <src/main/cpp/Serialization/streams.h>
 #include "Scripts/NtpskAlreadyUsedScript.h"
 #include "Scripts/KycRequestScript.h"
 
@@ -168,7 +169,7 @@ Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getPassportTransaction(
         NtpRskSignatureRequestObject *ntpRskSignatureRequestObject = pkcs7Parser->getNtpRsk();
 
         // @TODO perhaps add padding to txId
-        ntpRskSignatureRequestObject->setNm(ECCtools::vectorToBn(txId));
+        ntpRskSignatureRequestObject->setNm(txId);
 
         NtpRskSignatureVerificationObject *ntpRskSignatureVerificationObject = NtpRsk::signWithNtpRsk(
                 ntpRskSignatureRequestObject
@@ -408,7 +409,7 @@ Java_network_ubic_ubic_Fragments_ReadingPassportFragment_getKycTransaction(
         NtpRskSignatureRequestObject *ntpRskSignatureRequestObject = pkcs7Parser->getNtpRsk();
 
         // @TODO perhaps add padding to txId
-        ntpRskSignatureRequestObject->setNm(ECCtools::vectorToBn(txId));
+        ntpRskSignatureRequestObject->setNm(txId);
 
         NtpRskSignatureVerificationObject *ntpRskSignatureVerificationObject = NtpRsk::signWithNtpRsk(
                 ntpRskSignatureRequestObject

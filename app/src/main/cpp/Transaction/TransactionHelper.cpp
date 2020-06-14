@@ -1,6 +1,6 @@
 
 #include "TransactionHelper.h"
-#include "../streams.h"
+#include "../Serialization/streams.h"
 #include "../Tools/Log.h"
 #include "../Crypto/Hash256.h"
 #include "../NtpEsk/NtpEskSignatureVerificationObject.h"
