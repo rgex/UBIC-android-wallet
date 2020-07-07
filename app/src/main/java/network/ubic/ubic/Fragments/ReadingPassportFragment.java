@@ -299,12 +299,13 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
         this.mrtdProgressBar.setProgress(progress);
         final int finalProgress = progress;
 
+        /*
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 percentageDisplay.setText(finalProgress + " %");
             }
-        });
+        });*/
 
     }
 
@@ -352,62 +353,9 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
 
 
             try {
+
                 if (TagProvider.getTag() != null) {
-
-                    BACKeySpec bacKey = new BACKey(passportNumber, dateOfBirth, dateOfExpiration);
-
-                    CardService cardService = CardService.getInstance(TagProvider.getTag());
-                    cardService.open();
-
-                    PassportService service = new PassportService(cardService, NORMAL_MAX_TRANCEIVE_LENGTH, DEFAULT_MAX_BLOCKSIZE, true, false);
-                    service.open();
-
-                    boolean paceSucceeded = false;
-                    try {
-                        CardAccessFile cardSecurityFile = new CardAccessFile(service.getInputStream(PassportService.EF_CARD_ACCESS));
-                        Collection<SecurityInfo> securityInfoCollection = cardSecurityFile.getSecurityInfos();
-                        for (SecurityInfo securityInfo : securityInfoCollection) {
-                            if (securityInfo instanceof PACEInfo) {
-                                PACEInfo paceInfo = (PACEInfo) securityInfo;
-                                service.doPACE(bacKey, paceInfo.getObjectIdentifier(), PACEInfo.toParameterSpec(paceInfo.getParameterId()), null);
-                                paceSucceeded = true;
-                                System.out.println("PACE succeeded");
-                            } else {
-                                System.out.println("PACE failed");
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    service.sendSelectApplet(paceSucceeded);
-
-                    if (!paceSucceeded) {
-                        try {
-                            service.getInputStream(PassportService.EF_COM).read();
-                        } catch (Exception e) {
-                            service.doBAC(bacKey);
-                        }
-                    }
-
-                    CardFileInputStream sodStream = service.getInputStream(PassportService.EF_SOD);
-                    //SODFile sodFile = new SODFile(sodStream);
-
-                    //sodStream.read();
-                    int sodLength = sodStream.getLength();
-                    sod = new byte[sodLength];
-                    sodStream.read(sod);
-
-                    this.readingPassportActivity.get().setSOD(sod);
-
-                    if (sod != null) {
-                        this.success = true;
-                    } else {
-                        return false;
-                    }
-
-
-                    /*
+                    // we first try with our own reading software as it is the most reliable
                     System.out.println("GOT TAG");
 
                     BacInfo bacInfo = new BacInfo();
@@ -450,11 +398,59 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
                         }
 
                     } else {
-                        System.out.println("Failed to init session");
-                        this.readingPassportActivity.get().showError(getResources().getString(R.string.error_mutual_authentication_failed));
-                        TagProvider.closeTag();
-                        return false;
-                    }*/
+                        // Then we try with JMRTD which also supports PACE
+                        BACKeySpec bacKey = new BACKey(passportNumber, dateOfBirth, dateOfExpiration);
+
+                        CardService cardService = CardService.getInstance(TagProvider.getTag());
+                        cardService.open();
+
+                        PassportService service = new PassportService(cardService, NORMAL_MAX_TRANCEIVE_LENGTH, DEFAULT_MAX_BLOCKSIZE, true, false);
+                        service.open();
+
+                        boolean paceSucceeded = false;
+                        try {
+                            CardAccessFile cardSecurityFile = new CardAccessFile(service.getInputStream(PassportService.EF_CARD_ACCESS));
+                            Collection<SecurityInfo> securityInfoCollection = cardSecurityFile.getSecurityInfos();
+                            for (SecurityInfo securityInfo : securityInfoCollection) {
+                                if (securityInfo instanceof PACEInfo) {
+                                    PACEInfo paceInfo = (PACEInfo) securityInfo;
+                                    service.doPACE(bacKey, paceInfo.getObjectIdentifier(), PACEInfo.toParameterSpec(paceInfo.getParameterId()), null);
+                                    paceSucceeded = true;
+                                    System.out.println("PACE succeeded");
+                                } else {
+                                    System.out.println("PACE failed");
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        service.sendSelectApplet(paceSucceeded);
+
+                        if (!paceSucceeded) {
+                            try {
+                                service.getInputStream(PassportService.EF_COM).read();
+                            } catch (Exception e) {
+                                service.doBAC(bacKey);
+                            }
+                        }
+
+                        CardFileInputStream sodStream = service.getInputStream(PassportService.EF_SOD);
+                        //SODFile sodFile = new SODFile(sodStream);
+
+                        //sodStream.read();
+                        int sodLength = sodStream.getLength();
+                        sod = new byte[sodLength];
+                        sodStream.read(sod);
+
+                        this.readingPassportActivity.get().setSOD(sod);
+
+                        if (sod != null) {
+                            this.success = true;
+                        } else {
+                            return false;
+                        }
+                    }
                 } else {
                     System.out.println("Couldn't get Tag from intent");
                     this.readingPassportActivity.get().showError(getResources().getString(R.string.error_lost_connexion));
