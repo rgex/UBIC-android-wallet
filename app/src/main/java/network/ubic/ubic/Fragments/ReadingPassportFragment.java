@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,6 +79,7 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
     private byte[] sod;
     private byte[] dg1;
     private byte[] dg2;
+    public static FragmentActivity activity;
 
     private AsyncReader asyncReader;
 
@@ -274,23 +276,27 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
     }
 
     public void showError(final String message) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(ReadingPassportFragment.this.isActivityRunning) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle(getResources().getString(R.string.error_error))
-                            .setMessage(message)
-                            .setCancelable(false)
-                            .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //@TODO
-                                }
-                            }).create().show();
+        ReadingPassportFragment.activity = getActivity();
+
+        if(ReadingPassportFragment.activity != null) {
+            ReadingPassportFragment.activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (ReadingPassportFragment.this.isActivityRunning && ReadingPassportFragment.activity != null) {
+                        new AlertDialog.Builder(ReadingPassportFragment.activity)
+                                .setTitle(getResources().getString(R.string.error_error))
+                                .setMessage(message)
+                                .setCancelable(false)
+                                .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //@TODO
+                                    }
+                                }).create().show();
+                    }
                 }
-            }
-        });
+            });
+        }
 
     }
 
@@ -454,6 +460,11 @@ public class ReadingPassportFragment extends Fragment implements OnSendTransacti
                 } else {
                     System.out.println("Couldn't get Tag from intent");
                     this.readingPassportActivity.get().showError(getResources().getString(R.string.error_lost_connexion));
+                    try {
+                        ((MainActivity) getActivity()).goToNavWaitForNfc();
+                    } catch (Exception e) {
+
+                    }
                     return false;
                 }
             } catch (Exception e) {
